@@ -46,12 +46,201 @@
     .manual-divider { display:flex; align-items:center; gap:12px; color:#a1a7b2; font-size:9px; font-weight:800; letter-spacing:.12em; }
     .manual-divider::before, .manual-divider::after { content:''; height:1px; flex:1; background:#eef1f5; }
     .manual-input { height: 38px; border: 1px solid #e7ebf1; border-radius: 8px; font-size: 12px; box-shadow: inset 0 1px 2px rgba(0,0,0,.02); }
+    .manual-search-wrap { position: relative; min-width: 0; }
+    .manual-suggestion-box { position:absolute; left:0; right:0; top:calc(100% + 7px); z-index:35; max-height:238px; overflow-y:auto; background:#fff; border:1px solid #edf1f6; border-radius:10px; box-shadow:0 12px 24px rgba(15,23,42,.14); }
+    .manual-suggestion-box::-webkit-scrollbar { width:4px; }
+    .manual-suggestion-box::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:8px; }
+    .manual-suggestion-item { width:100%; display:flex; align-items:center; gap:10px; padding:9px 12px; text-align:left; border-bottom:1px solid #f0f3f7; background:#fff; transition:.15s ease; }
+    .manual-suggestion-item:last-child { border-bottom:0; }
+    .manual-suggestion-item:hover, .manual-suggestion-item.active { background:#f7fbff; }
+    .manual-suggestion-photo { width:30px; height:30px; border-radius:999px; object-fit:cover; background:#eef4ff; color:#6d8dff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
+    .manual-suggestion-name { display:block; color:#0f172a; font-size:12px; font-weight:800; line-height:1.15; }
+    .manual-suggestion-meta { display:block; margin-top:3px; color:#0369a1; font-size:10px; font-weight:700; line-height:1.1; }
     .send-btn { width:43px; height:43px; border-radius:9px; background:#1f2937; color:#fff; box-shadow:0 5px 12px rgba(31,41,55,.20); }
     .absent-panel { border:1px solid #eef2f7; border-radius:10px; max-height:168px; overflow-y:auto; background:#fff; }
     .absent-panel::-webkit-scrollbar { width:4px; }
     .absent-panel::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:8px; }
     .student-avatar { width:25px; height:25px; border-radius:999px; background:#f2f5fb; color:#7e9dff; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; flex-shrink:0; }
     .admin-outline { border:1px solid #d9eefc; color:#075176; border-radius:8px; }
+    .admin-login-card { background:#fff; border-radius:14px; box-shadow:0 10px 25px rgba(15,23,42,.12); }
+    .admin-icon-circle { width:80px; height:80px; border-radius:999px; background:#f1f9fd; color:#0574a5; display:flex; align-items:center; justify-content:center; margin:0 auto; }
+    .admin-login-input { height:57px; border:1px solid #e1e7ee; border-radius:12px; background:#fff; box-shadow:inset 0 1px 2px rgba(15,23,42,.04); letter-spacing:.25em; }
+    .admin-login-btn { height:51px; border-radius:10px; background:#066b9b; box-shadow:0 10px 20px rgba(6,107,155,.24); }
+    .app-footer { color:#7b8797; }
+
+    body.dark-mode { background:#07111d; }
+    body.dark-mode .home-shell { background:#071a2a; color:#e5edf5; }
+    body.dark-mode .home-topbar { background:#042d47; box-shadow:0 3px 14px rgba(0,0,0,.35); }
+    body.dark-mode .home-card,
+    body.dark-mode .admin-login-card { background:#0f2435; color:#e5edf5; box-shadow:0 10px 25px rgba(0,0,0,.32); border:1px solid rgba(148,163,184,.16); }
+    body.dark-mode .school-logo { filter: drop-shadow(0 5px 9px rgba(0,0,0,.35)); }
+    body.dark-mode .scanner-frame { background:#10283a; border-color:#18a8e8; }
+    body.dark-mode .manual-input,
+    body.dark-mode .admin-login-input { background:#10283a; border-color:#2f4c62; color:#edf5ff; }
+    body.dark-mode .manual-input::placeholder,
+    body.dark-mode .admin-login-input::placeholder { color:#7f91a5; }
+    body.dark-mode .manual-suggestion-box { background:#0f2435; border-color:#1f3a4d; box-shadow:0 12px 24px rgba(0,0,0,.36); }
+    body.dark-mode .manual-suggestion-item { background:#0f2435; border-color:#1f3a4d; }
+    body.dark-mode .manual-suggestion-item:hover,
+    body.dark-mode .manual-suggestion-item.active { background:#143249; }
+    body.dark-mode .manual-suggestion-photo { background:#193449; color:#9fc7ff; }
+    body.dark-mode .manual-suggestion-name { color:#e5edf5; }
+    body.dark-mode .manual-suggestion-meta { color:#7dd3fc; }
+    body.dark-mode .absent-panel { background:#0f2435; border-color:#1f3a4d; }
+    body.dark-mode .student-avatar { background:#193449; color:#9fc7ff; }
+    body.dark-mode .admin-outline { background:#10283a; border-color:#1c5574; color:#b7e5ff; }
+    body.dark-mode .admin-outline:hover { background:#143249; }
+    body.dark-mode .admin-icon-circle { background:#102f46; color:#70d3ff; }
+    body.dark-mode .app-footer { color:#9ba9b8; }
+    body.dark-mode .text-slate-500 { color:#9ba9b8 !important; }
+    body.dark-mode .text-slate-600 { color:#b7c3d0 !important; }
+    body.dark-mode .text-slate-700 { color:#d9e2ec !important; }
+    body.dark-mode .text-slate-400 { color:#7d8ea1 !important; }
+    body.dark-mode .bg-slate-100 { background:#183246 !important; }
+    body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color:#1f3a4d !important; }
+
+
+
+    /* Tampilan awal versi mobile dibuat lebih besar dan proporsional seperti desain referensi. */
+    @media (max-width: 640px) {
+      #app { max-width: 100% !important; }
+      #view-home .home-topbar {
+        min-height: 78px;
+        padding-left: clamp(16px, 4.5vw, 24px) !important;
+        padding-right: clamp(16px, 4.5vw, 24px) !important;
+      }
+      #view-home .brand-mark {
+        width: clamp(48px, 12vw, 60px);
+        height: clamp(48px, 12vw, 60px);
+        box-shadow: 0 0 0 4px rgba(255,255,255,.88), 0 8px 18px rgba(0,0,0,.10);
+      }
+      #view-home .brand-mark::after {
+        border-left-width: clamp(8px, 2vw, 11px);
+        border-right-width: clamp(8px, 2vw, 11px);
+        border-bottom-width: clamp(25px, 6vw, 32px);
+      }
+      #view-home .home-topbar h1 {
+        font-size: clamp(24px, 6.2vw, 32px) !important;
+        line-height: 1.05 !important;
+        letter-spacing: .03em !important;
+      }
+      #view-home .home-topbar p {
+        margin-top: 4px;
+        font-size: clamp(8px, 2.2vw, 11px) !important;
+        letter-spacing: .28em !important;
+      }
+      #view-home .moon-btn {
+        width: clamp(46px, 11vw, 58px);
+        height: clamp(46px, 11vw, 58px);
+        font-size: 18px;
+      }
+      #view-home .moon-btn i { font-size: 18px !important; }
+      #view-home > .px-4 {
+        padding-left: clamp(18px, 5vw, 32px) !important;
+        padding-right: clamp(18px, 5vw, 32px) !important;
+        padding-top: clamp(26px, 6vw, 46px) !important;
+      }
+      #view-home .home-card {
+        border-radius: clamp(20px, 5vw, 30px);
+        padding: clamp(34px, 8vw, 54px) clamp(24px, 7vw, 46px) clamp(28px, 7vw, 44px) !important;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, .12);
+      }
+      #view-home .school-logo {
+        width: clamp(76px, 20vw, 106px);
+        height: clamp(76px, 20vw, 106px);
+      }
+      #view-home .home-card .text-center .mt-2 {
+        margin-top: clamp(14px, 3vw, 22px) !important;
+        gap: clamp(8px, 2.5vw, 14px) !important;
+        font-size: clamp(18px, 5vw, 26px) !important;
+        line-height: 1.22 !important;
+      }
+      #view-home .home-card .text-center .mt-2 i {
+        font-size: clamp(11px, 2.8vw, 16px) !important;
+      }
+      #view-home .home-card .text-center p {
+        margin-top: clamp(8px, 2.4vw, 14px) !important;
+        font-size: clamp(13px, 3.4vw, 17px) !important;
+        line-height: 1.45 !important;
+      }
+      #view-home .scanner-frame {
+        width: 100%;
+        max-width: min(100%, 360px) !important;
+        height: clamp(210px, 55vw, 265px);
+        margin-top: clamp(34px, 8vw, 52px) !important;
+        border-width: 3px;
+        border-radius: clamp(24px, 5vw, 34px);
+      }
+      #view-home .scanner-bars {
+        transform: scale(1.55);
+      }
+      #view-home .mt-6.grid {
+        margin-top: clamp(34px, 8vw, 54px) !important;
+        gap: clamp(14px, 4vw, 28px) !important;
+      }
+      #view-home .scan-btn {
+        min-height: clamp(58px, 14vw, 72px);
+        border-radius: clamp(14px, 4vw, 22px);
+        font-size: clamp(14px, 4.1vw, 20px);
+        letter-spacing: .04em;
+        box-shadow: 0 10px 22px rgba(0,0,0,.13);
+      }
+      #view-home .scan-btn i {
+        margin-right: clamp(7px, 2vw, 12px) !important;
+        font-size: clamp(12px, 3.4vw, 17px) !important;
+      }
+      #view-home .manual-divider {
+        margin-top: clamp(28px, 7vw, 42px) !important;
+        margin-bottom: clamp(20px, 5vw, 30px) !important;
+        gap: clamp(12px, 3vw, 22px);
+        font-size: clamp(11px, 3vw, 15px);
+      }
+      #view-home .manual-input {
+        height: clamp(48px, 12vw, 60px);
+        border-radius: clamp(12px, 3vw, 18px);
+        font-size: clamp(13px, 3.4vw, 16px);
+      }
+      #view-home .send-btn {
+        width: clamp(50px, 12vw, 62px);
+        height: clamp(50px, 12vw, 62px);
+        border-radius: clamp(12px, 3vw, 18px);
+      }
+      #view-home .send-btn i { font-size: clamp(14px, 3.6vw, 18px) !important; }
+      #view-home .absent-panel {
+        margin-top: clamp(28px, 7vw, 42px) !important;
+        border-radius: clamp(14px, 4vw, 22px);
+        max-height: 190px;
+        padding: clamp(13px, 3.8vw, 18px) !important;
+      }
+      #view-home .absent-panel .mb-2 {
+        font-size: clamp(10px, 2.8vw, 13px) !important;
+      }
+      #view-home .student-avatar {
+        width: clamp(30px, 8vw, 38px);
+        height: clamp(30px, 8vw, 38px);
+        font-size: clamp(11px, 3vw, 14px);
+      }
+      #view-home #absentTodayContainer b { font-size: clamp(11px, 3.2vw, 14px) !important; }
+      #view-home #absentTodayContainer span { font-size: clamp(9px, 2.6vw, 12px) !important; }
+      #view-home .my-5 { margin-top: clamp(24px, 6vw, 34px) !important; margin-bottom: clamp(24px, 6vw, 34px) !important; }
+      #view-home .admin-outline {
+        padding-top: clamp(16px, 4.5vw, 22px) !important;
+        padding-bottom: clamp(16px, 4.5vw, 22px) !important;
+        border-radius: clamp(14px, 4vw, 20px);
+        font-size: clamp(15px, 4.4vw, 21px) !important;
+      }
+      #view-home .app-footer {
+        margin-top: clamp(34px, 8vw, 54px) !important;
+        padding-bottom: 18px;
+        font-size: clamp(13px, 3.5vw, 17px) !important;
+      }
+    }
+
+    @media (max-width: 380px) {
+      #view-home .home-card { padding-left: 22px !important; padding-right: 22px !important; }
+      #view-home .scan-btn { font-size: 13px; letter-spacing: 0; }
+      #view-home .scanner-frame { height: 198px; }
+    }
 
     @media print {
       .no-print { display:none !important; }
@@ -99,7 +288,7 @@
             <p class="text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
           </div>
         </div>
-        <button type="button" class="moon-btn" title="Mode tampilan">
+        <button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
           <i class="fa-solid fa-moon text-xs"></i>
         </button>
       </div>
@@ -134,8 +323,11 @@
 
           <div class="manual-divider my-5">ATAU MANUAL</div>
 
-          <form onsubmit="event.preventDefault(); catatAbsensi();" class="flex items-center gap-2">
-            <input id="aksesInput" autocomplete="off" inputmode="text" class="manual-input flex-1 px-3 text-center font-semibold text-slate-700 outline-none focus:border-sky-400" placeholder="Ketik Nama Siswa atau NISN..." />
+          <form onsubmit="event.preventDefault(); catatAbsensi();" class="relative flex items-center gap-2">
+            <div class="manual-search-wrap flex-1">
+              <input id="aksesInput" autocomplete="off" inputmode="text" onfocus="openManualSuggestions()" oninput="debounceManualSuggestions()" onkeydown="handleManualSuggestionKey(event)" class="manual-input w-full px-3 text-center font-semibold text-slate-700 outline-none focus:border-sky-400" placeholder="Ketik Nama Siswa atau NISN..." />
+              <div id="manualSuggestionBox" class="manual-suggestion-box hidden"></div>
+            </div>
             <button class="send-btn btn" title="Catat kehadiran" aria-label="Catat kehadiran">
               <i class="fa-solid fa-paper-plane text-sm"></i>
             </button>
@@ -144,7 +336,7 @@
           <div class="absent-panel mt-6 p-3">
             <div class="mb-2 flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wide text-slate-600">
               <i class="fa-solid fa-user-minus text-rose-500"></i>
-              <span>Tidak Hadir Hari Ini</span>
+              <span>Siswa Tidak Masuk Hari Ini</span>
             </div>
             <div id="absentTodayContainer" class="divide-y divide-slate-100 text-[11px]"></div>
           </div>
@@ -161,23 +353,47 @@
           </div>
         </div>
 
-        <p class="mt-7 text-center text-[11px] font-semibold text-slate-400">Made with <span class="text-rose-300">♥</span> Kabag IT MTs. Hidayatullah</p>
+        <p class="app-footer mt-7 text-center text-[11px] font-semibold">Made With Love <span class="text-rose-400">♥</span> Biro IT P2S Abu Zairi</p>
       </div>
     </section>
 
     <!-- LOGIN ADMIN -->
-    <section id="view-admin-login" class="view min-h-screen p-5">
-      <button onclick="openView('view-home')" class="mb-4 text-white"><i class="fa-solid fa-arrow-left mr-2"></i> Kembali</button>
-      <div class="glass rounded-3xl p-6 shadow-xl">
-        <div class="mb-6 text-center">
-          <i class="fa-solid fa-user-shield mb-3 text-5xl text-indigo-600"></i>
-          <h2 class="text-2xl font-extrabold">Login Admin</h2>
-          <p class="text-xs text-slate-500">Masukkan NIY admin yang ada di tabel <b>admin_user</b>.</p>
+    <section id="view-admin-login" class="view min-h-screen home-shell pb-8">
+      <div class="home-topbar flex items-center justify-between px-4 text-white">
+        <div class="flex items-center gap-3">
+          <div class="brand-mark" aria-label="Logo aplikasi"></div>
+          <div class="leading-tight">
+            <h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
+            <p class="text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
+          </div>
         </div>
-        <form onsubmit="event.preventDefault(); loginAdmin();">
-          <input id="adminNiy" class="w-full rounded-2xl border bg-white px-4 py-4 text-center text-lg font-bold outline-none focus:border-indigo-500" placeholder="NIY Admin" autocomplete="off" />
-          <button class="btn mt-4 w-full rounded-2xl bg-indigo-600 py-4 font-extrabold text-white shadow-lg hover:bg-indigo-700">Masuk</button>
-        </form>
+        <button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
+          <i class="fa-solid fa-moon text-xs"></i>
+        </button>
+      </div>
+
+      <div class="px-5 pt-10">
+        <div class="admin-login-card px-8 pb-9 pt-9">
+          <div class="mb-8 text-center">
+            <div class="admin-icon-circle">
+              <i class="fa-solid fa-user-shield text-[30px]"></i>
+            </div>
+            <h2 class="mt-5 text-[26px] font-extrabold leading-tight text-slate-800">Akses Admin</h2>
+            <p class="mt-2 text-[14px] font-medium text-slate-500">Sistem Rekapitulasi &amp; Manajemen</p>
+          </div>
+
+          <form onsubmit="event.preventDefault(); loginAdmin();">
+            <label class="mb-2 block text-[12px] font-extrabold uppercase tracking-wide text-slate-600">Nomor Induk Yayasan (NIY)</label>
+            <input id="adminNiy" type="password" inputmode="text" class="admin-login-input mb-6 w-full px-4 text-center text-lg font-extrabold outline-none focus:border-sky-500" autocomplete="off" />
+            <button class="admin-login-btn btn w-full font-extrabold text-white hover:bg-[#075f89]">Masuk Dashboard</button>
+          </form>
+
+          <button onclick="openView('view-home')" class="btn mt-7 flex w-full items-center justify-center gap-2 text-[13px] font-extrabold uppercase text-slate-400 hover:text-slate-600">
+            <i class="fa-solid fa-arrow-left"></i> Kembali
+          </button>
+        </div>
+
+        <p class="app-footer mt-[240px] text-center text-[12px] font-semibold">Made With Love <span class="text-rose-400">♥</span> Biro IT P2S Abu Zairi</p>
       </div>
     </section>
 
@@ -302,6 +518,9 @@
     let barcodeScanner = null;
     let scannerRunning = false;
     let nfcReader = null;
+    let manualSuggestionTimer = null;
+    let manualSuggestionRows = [];
+    let manualSuggestionActiveIndex = -1;
     const refreshTimers = {};
 
     // Komponen header sederhana agar HTML tetap ringkas.
@@ -320,6 +539,7 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       validateConfig();
+      syncThemeButtons();
       await refreshInitialData();
       initRealtimeSubscriptions();
       setDefaultMonth();
@@ -327,6 +547,10 @@
         if (!document.hidden) refreshActiveView();
       });
       window.addEventListener('focus', refreshActiveView);
+      document.addEventListener('pointerdown', event => {
+        const wrap = event.target.closest?.('.manual-search-wrap');
+        if (!wrap) hideManualSuggestions();
+      });
       document.getElementById('aksesInput').focus();
     });
 
@@ -334,6 +558,20 @@
       if (SUPABASE_URL.includes('ISI_') || SUPABASE_ANON_KEY.includes('ISI_')) {
         showToast('Isi SUPABASE_URL dan SUPABASE_ANON_KEY di bagian atas index.html');
       }
+    }
+
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      syncThemeButtons();
+    }
+
+    function syncThemeButtons() {
+      const isDark = document.body.classList.contains('dark-mode');
+      document.querySelectorAll('.theme-toggle i').forEach(icon => {
+        icon.className = isDark ? 'fa-solid fa-sun text-xs' : 'fa-solid fa-moon text-xs';
+      });
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#042d47' : '#4f46e5');
     }
 
     async function refreshInitialData() {
@@ -372,6 +610,7 @@
         .on('postgres_changes', { event: '*', schema: 'public', table: 'siswa' }, () => {
           debounceRefresh('siswa', async () => {
             await loadTidakHadirHariIni();
+            if (isManualSuggestionsOpen()) await loadManualSuggestions(false);
             if (activeViewId() === 'view-siswa') await loadSiswa(false);
             if (activeViewId() === 'view-izin') await prepareIzin(false);
             if (currentAdmin) loadDashboardFromGAS();
@@ -616,44 +855,177 @@
       }
     }
 
+    function isManualSuggestionsOpen() {
+      return !document.getElementById('manualSuggestionBox')?.classList.contains('hidden');
+    }
+
+    function hideManualSuggestions() {
+      const box = document.getElementById('manualSuggestionBox');
+      if (box) box.classList.add('hidden');
+      manualSuggestionActiveIndex = -1;
+    }
+
+    async function openManualSuggestions() {
+      await loadManualSuggestions(true);
+    }
+
+    function debounceManualSuggestions() {
+      clearTimeout(manualSuggestionTimer);
+      manualSuggestionTimer = setTimeout(() => loadManualSuggestions(true), 220);
+    }
+
+    async function fetchSiswaSuggestions(keyword = '') {
+      const columns = 'nisn,nama_siswa,kelas,url_foto,rfid_uid';
+      const q = String(keyword || '').trim();
+
+      if (!q) {
+        const { data, error } = await sb.from('siswa')
+          .select(columns)
+          .order('nama_siswa', { ascending: true })
+          .limit(40);
+        if (error) throw error;
+        return data || [];
+      }
+
+      const like = `%${q}%`;
+      const [byName, byNisn, byRfid] = await Promise.all([
+        sb.from('siswa').select(columns).ilike('nama_siswa', like).order('nama_siswa', { ascending: true }).limit(25),
+        sb.from('siswa').select(columns).ilike('nisn', like).order('nama_siswa', { ascending: true }).limit(25),
+        sb.from('siswa').select(columns).ilike('rfid_uid', like).order('nama_siswa', { ascending: true }).limit(25)
+      ]);
+      for (const res of [byName, byNisn, byRfid]) {
+        if (res.error) throw res.error;
+      }
+      const map = new Map();
+      [...(byName.data || []), ...(byNisn.data || []), ...(byRfid.data || [])].forEach(row => {
+        if (row?.nisn && !map.has(row.nisn)) map.set(row.nisn, row);
+      });
+      return Array.from(map.values())
+        .sort((a, b) => String(a.nama_siswa || '').localeCompare(String(b.nama_siswa || ''), 'id'))
+        .slice(0, 40);
+    }
+
+    async function loadManualSuggestions(showBox = true) {
+      const input = document.getElementById('aksesInput');
+      const box = document.getElementById('manualSuggestionBox');
+      if (!input || !box) return;
+      if (showBox) {
+        box.classList.remove('hidden');
+        box.innerHTML = '<p class="px-4 py-3 text-center text-[11px] font-semibold text-slate-400">Memuat data siswa...</p>';
+      }
+
+      try {
+        manualSuggestionRows = await fetchSiswaSuggestions(input.value);
+        manualSuggestionActiveIndex = -1;
+        renderManualSuggestions();
+      } catch (error) {
+        if (showBox) {
+          box.classList.remove('hidden');
+          box.innerHTML = `<p class="px-4 py-3 text-center text-[11px] font-semibold text-red-500">${escapeHtml(error.message || 'Gagal memuat siswa.')}</p>`;
+        }
+      }
+    }
+
+    function renderManualSuggestions() {
+      const box = document.getElementById('manualSuggestionBox');
+      if (!box) return;
+      if (!manualSuggestionRows.length) {
+        box.innerHTML = '<p class="px-4 py-3 text-center text-[11px] font-semibold text-slate-400">Siswa tidak ditemukan.</p>';
+        return;
+      }
+
+      box.innerHTML = manualSuggestionRows.map((s, index) => {
+        const active = index === manualSuggestionActiveIndex ? ' active' : '';
+        const initial = (s.nama_siswa || '?').trim().charAt(0).toUpperCase();
+        const photo = s.url_foto
+          ? `<img class="manual-suggestion-photo" src="${escapeAttr(s.url_foto)}" alt="Foto ${escapeAttr(s.nama_siswa || 'siswa')}" onerror="this.outerHTML='<div class=&quot;manual-suggestion-photo&quot;>${escapeHtml(initial)}</div>'">`
+          : `<div class="manual-suggestion-photo">${escapeHtml(initial)}</div>`;
+        return `<button type="button" class="manual-suggestion-item${active}" onmousedown="event.preventDefault()" onclick="selectManualSuggestion('${escapeAttr(s.nisn)}')">
+          ${photo}
+          <span class="min-w-0">
+            <span class="manual-suggestion-name truncate">${escapeHtml(s.nama_siswa || '-')}</span>
+            <span class="manual-suggestion-meta truncate">${escapeHtml(s.nisn || '-')} • ${escapeHtml(s.kelas || '-')}</span>
+          </span>
+        </button>`;
+      }).join('');
+    }
+
+    function selectManualSuggestion(nisn) {
+      const selected = manualSuggestionRows.find(s => String(s.nisn) === String(nisn));
+      const input = document.getElementById('aksesInput');
+      if (input) {
+        input.value = selected?.nisn || nisn;
+        input.focus();
+      }
+      hideManualSuggestions();
+    }
+
+    function handleManualSuggestionKey(event) {
+      const box = document.getElementById('manualSuggestionBox');
+      if (!box || box.classList.contains('hidden') || !manualSuggestionRows.length) return;
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        manualSuggestionActiveIndex = Math.min(manualSuggestionActiveIndex + 1, manualSuggestionRows.length - 1);
+        renderManualSuggestions();
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        manualSuggestionActiveIndex = Math.max(manualSuggestionActiveIndex - 1, 0);
+        renderManualSuggestions();
+      } else if (event.key === 'Enter' && manualSuggestionActiveIndex >= 0) {
+        event.preventDefault();
+        selectManualSuggestion(manualSuggestionRows[manualSuggestionActiveIndex].nisn);
+      } else if (event.key === 'Escape') {
+        hideManualSuggestions();
+      }
+    }
+
     async function loadTidakHadirHariIni() {
       const el = document.getElementById('absentTodayContainer');
       if (!el) return;
       const tanggal = todayISO();
-      const [siswaRes, absenRes] = await Promise.all([
-        sb.from('siswa').select('nisn,nama_siswa,kelas').order('nama_siswa'),
-        sb.from('absensi').select('siswa_nisn,status').eq('tanggal', tanggal)
-      ]);
+      const { data, error } = await sb.from('absensi')
+        .select('siswa_nisn,nama_siswa,kelas,status,waktu')
+        .eq('tanggal', tanggal)
+        .order('waktu', { ascending: false });
 
-      if (siswaRes.error || absenRes.error) {
-        el.innerHTML = `<p class="py-5 text-center text-[11px] text-red-500">${escapeHtml(siswaRes.error?.message || absenRes.error?.message)}</p>`;
+      if (error) {
+        el.innerHTML = `<p class="py-5 text-center text-[11px] text-red-500">${escapeHtml(error.message)}</p>`;
         return;
       }
 
-      const statusMap = new Map((absenRes.data || []).map(a => [a.siswa_nisn, a.status]));
+      // Yang ditampilkan di depan hanya siswa yang memang tercatat tidak masuk,
+      // misalnya Sakit, Izin, Alpa, atau status non-kehadiran lain.
+      // Siswa yang belum melakukan absen tidak ikut dimunculkan.
       const hadirStatus = new Set(['Hadir Tepat Waktu', 'Terlambat']);
-      const rows = (siswaRes.data || [])
-        .map(s => ({ ...s, status: statusMap.get(s.nisn) || 'Belum Absen' }))
-        .filter(s => !hadirStatus.has(s.status))
+      const rows = (data || [])
+        .filter(r => {
+          const status = String(r.status || '').trim();
+          if (!status) return false;
+          if (hadirStatus.has(status)) return false;
+          if (status.toLowerCase() === 'belum absen') return false;
+          return true;
+        })
         .slice(0, 30);
 
       if (!rows.length) {
-        el.innerHTML = '<p class="py-5 text-center text-[11px] font-semibold text-slate-400">Semua siswa sudah hadir.</p>';
+        el.innerHTML = '<p class="py-5 text-center text-[11px] font-semibold text-slate-400">Belum ada siswa sakit, izin, alpa, atau tidak masuk hari ini.</p>';
         return;
       }
 
       el.innerHTML = rows.map(s => {
         const initial = (s.nama_siswa || '?').trim().charAt(0).toUpperCase();
-        const status = String(s.status || 'Belum Absen').toUpperCase();
+        const status = String(s.status || '-').toUpperCase();
+        const badgeClass = status === 'SAKIT' ? 'text-blue-700' : status === 'IZIN' ? 'text-amber-700' : status === 'ALPA' ? 'text-rose-700' : 'text-slate-600';
         return `<div class="flex items-center justify-between gap-2 py-2">
           <div class="flex min-w-0 items-center gap-3">
             <div class="student-avatar">${escapeHtml(initial)}</div>
             <div class="min-w-0">
-              <b class="block truncate text-[11px] text-slate-700">${escapeHtml(s.nama_siswa)}</b>
+              <b class="block truncate text-[11px] text-slate-700">${escapeHtml(s.nama_siswa || s.siswa_nisn || '-')}</b>
               <span class="block text-[10px] font-semibold text-slate-400">${escapeHtml(s.kelas || '-')}</span>
             </div>
           </div>
-          <span class="shrink-0 text-[9px] font-extrabold uppercase text-blue-700">${escapeHtml(status)}</span>
+          <span class="shrink-0 text-[9px] font-extrabold uppercase ${badgeClass}">${escapeHtml(status)}</span>
         </div>`;
       }).join('');
     }
@@ -680,7 +1052,7 @@
 
     async function catatAbsensi() {
       const akses = document.getElementById('aksesInput').value.trim();
-      if (!akses) return showToast('NISN/RFID belum diisi.');
+      if (!akses) return showToast('Nama/NISN/RFID belum diisi.');
       await loadConfig();
 
       const jam = nowTime();
@@ -722,6 +1094,7 @@
       if (insertError) return showToast(insertError.message);
       showToast(`Berhasil: ${siswa.nama_siswa} - ${status}`);
       document.getElementById('aksesInput').value = '';
+      hideManualSuggestions();
       document.getElementById('aksesInput').focus();
       await Promise.all([loadRecentAbsensi(), loadTidakHadirHariIni()]);
       if (ENABLE_WA_BY_GAS) sendWANotification({ nisn: siswa.nisn, nama: siswa.nama_siswa, kelas: siswa.kelas, status });
