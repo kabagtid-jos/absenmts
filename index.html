@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#4f46e5" />
-  <title>SMARTIS Supabase - Absensi Siswa</title>
+  <title>Abzensi MTs. Hidayatullah - Absensi Siswa</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -58,8 +61,8 @@
       <div class="mb-6 flex items-center justify-between text-white">
         <div>
           <p class="text-xs font-medium opacity-80">Sistem Absensi Siswa</p>
-          <h1 class="text-3xl font-extrabold leading-tight">SMARTIS</h1>
-          <p class="text-xs opacity-90">SMP Unggulan Abu Zairi</p>
+          <h1 class="text-3xl font-extrabold leading-tight">Abzensi</h1>
+          <p class="text-xs opacity-90">MTs. Hidayatullah</p>
         </div>
         <button onclick="openView('view-admin-login')" class="btn rounded-full bg-white/20 px-4 py-2 text-xs font-bold backdrop-blur hover:bg-white/30">
           <i class="fa-solid fa-user-shield mr-1"></i> Admin
@@ -199,7 +202,7 @@
     <section id="view-setting" class="view min-h-screen bg-slate-50 p-5 pb-24">
       <Header title="Pengaturan Jam"></Header>
       <div class="rounded-3xl bg-white p-5 shadow">
-        <p class="mb-4 text-xs text-slate-500">Yang disimpan di browser hanya pengaturan non-rahasia. Token Fonnte disimpan di Apps Script Properties.</p>
+        <p class="mb-4 text-xs text-slate-500">Aplikasi selalu mengambil data terbaru dari Supabase. Token Fonnte tetap disimpan di Apps Script Properties.</p>
         <label class="text-xs font-bold text-slate-500">Batas Mulai</label>
         <input type="time" id="setMulai" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3" />
         <label class="text-xs font-bold text-slate-500">Batas Tepat Waktu</label>
@@ -238,8 +241,10 @@
   <script>
     let currentAdmin = null;
     let appConfig = { batas_mulai: '06:00', batas_waktu: '07:00', batas_akhir: '08:00' };
-    let siswaCache = [];
-    let kelasCache = [];
+    let siswaData = [];
+    let kelasData = [];
+    let realtimeChannel = null;
+    const refreshTimers = {};
 
     // Komponen header sederhana agar HTML tetap ringkas.
     class Header extends HTMLElement {
@@ -257,11 +262,13 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       validateConfig();
-      await loadConfig();
-      await loadKelas();
-      await loadRecentAbsensi();
+      await refreshInitialData();
+      initRealtimeSubscriptions();
       setDefaultMonth();
-      setInterval(loadRecentAbsensi, 60000);
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) refreshActiveView();
+      });
+      window.addEventListener('focus', refreshActiveView);
       document.getElementById('aksesInput').focus();
     });
 
@@ -269,6 +276,64 @@
       if (SUPABASE_URL.includes('ISI_') || SUPABASE_ANON_KEY.includes('ISI_')) {
         showToast('Isi SUPABASE_URL dan SUPABASE_ANON_KEY di bagian atas index.html');
       }
+    }
+
+    async function refreshInitialData() {
+      await Promise.all([loadConfig(), loadKelas(), loadRecentAbsensi()]);
+    }
+
+    function activeViewId() {
+      return document.querySelector('.view.active')?.id || 'view-home';
+    }
+
+    function debounceRefresh(key, fn, delay = 350) {
+      clearTimeout(refreshTimers[key]);
+      refreshTimers[key] = setTimeout(fn, delay);
+    }
+
+    async function refreshActiveView() {
+      await Promise.all([loadConfig(), loadKelas(), loadRecentAbsensi()]);
+      const active = activeViewId();
+      if (active === 'view-siswa') await loadSiswa(false);
+      if (active === 'view-izin') await prepareIzin(false);
+      if (active === 'view-admin') await loadDashboardFromGAS();
+      if (active === 'view-rekap') await prepareRekap();
+      if (active === 'view-setting') loadConfigToForm();
+    }
+
+    function initRealtimeSubscriptions() {
+      if (realtimeChannel) sb.removeChannel(realtimeChannel);
+      realtimeChannel = sb.channel('abzensi-mts-hidayatullah-live')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'absensi' }, () => {
+          debounceRefresh('absensi', async () => {
+            await loadRecentAbsensi();
+            if (activeViewId() === 'view-rekap') loadRekapBulanan();
+            if (currentAdmin) loadDashboardFromGAS();
+          });
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'siswa' }, () => {
+          debounceRefresh('siswa', async () => {
+            if (activeViewId() === 'view-siswa') await loadSiswa(false);
+            if (activeViewId() === 'view-izin') await prepareIzin(false);
+            if (currentAdmin) loadDashboardFromGAS();
+          });
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'kelas' }, () => {
+          debounceRefresh('kelas', async () => {
+            await loadKelas();
+            if (activeViewId() === 'view-izin') await prepareIzin(false);
+            if (currentAdmin) loadDashboardFromGAS();
+          });
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'app_config' }, () => {
+          debounceRefresh('app_config', async () => {
+            await loadConfig();
+            if (activeViewId() === 'view-setting') loadConfigToForm();
+          });
+        })
+        .subscribe(status => {
+          if (status === 'SUBSCRIBED') console.log('Realtime Supabase aktif.');
+        });
     }
 
     function openView(id) {
@@ -368,14 +433,19 @@
 
     async function loadKelas() {
       const { data, error } = await sb.from('kelas').select('nama_kelas').order('nama_kelas');
-      if (!error && data) kelasCache = data.map(x => x.nama_kelas);
+      if (error) return showToast(error.message);
+      kelasData = (data || []).map(x => x.nama_kelas);
       fillKelasSelects();
     }
 
     function fillKelasSelects() {
-      const options = kelasCache.map(k => `<option value="${escapeHtml(k)}">${escapeHtml(k)}</option>`).join('');
+      const formKelasValue = document.getElementById('formKelas')?.value || '';
+      const rekapKelasValue = document.getElementById('rekapKelas')?.value || 'Semua';
+      const options = kelasData.map(k => `<option value="${escapeHtml(k)}">${escapeHtml(k)}</option>`).join('');
       document.getElementById('formKelas').innerHTML = options || '<option value="">Belum ada kelas</option>';
       document.getElementById('rekapKelas').innerHTML = '<option>Semua</option>' + options;
+      if (kelasData.includes(formKelasValue)) document.getElementById('formKelas').value = formKelasValue;
+      if (rekapKelasValue === 'Semua' || kelasData.includes(rekapKelasValue)) document.getElementById('rekapKelas').value = rekapKelasValue;
     }
 
     async function catatAbsensi() {
@@ -454,18 +524,18 @@
       }).join('');
     }
 
-    async function loadSiswa() {
-      showLoader('Memuat siswa...');
+    async function loadSiswa(showLoading = true) {
+      if (showLoading) showLoader('Memuat siswa...');
       const { data, error } = await sb.from('siswa').select('nisn,nama_siswa,kelas,no_wa_ortu,url_foto,rfid_uid').order('nama_siswa');
-      hideLoader();
+      if (showLoading) hideLoader();
       if (error) return showToast(error.message);
-      siswaCache = data || [];
+      siswaData = data || [];
       renderSiswa();
     }
 
     function renderSiswa() {
       const q = (document.getElementById('searchSiswa').value || '').toLowerCase();
-      const rows = siswaCache.filter(s => `${s.nisn} ${s.nama_siswa} ${s.kelas}`.toLowerCase().includes(q));
+      const rows = siswaData.filter(s => `${s.nisn} ${s.nama_siswa} ${s.kelas}`.toLowerCase().includes(q));
       const el = document.getElementById('siswaList');
       if (!rows.length) { el.innerHTML = '<p class="py-10 text-center text-sm text-slate-400">Data tidak ditemukan.</p>'; return; }
       el.innerHTML = rows.map(s => `<div class="rounded-2xl bg-white p-4 shadow"><div class="flex items-start justify-between gap-3"><div><b>${escapeHtml(s.nama_siswa)}</b><p class="text-xs text-slate-500">NISN: ${escapeHtml(s.nisn)} · ${escapeHtml(s.kelas)}</p><p class="mt-1 text-xs text-slate-400">RFID: ${escapeHtml(s.rfid_uid || '-')} · WA: ${escapeHtml(s.no_wa_ortu || '-')}</p></div><div class="flex gap-2"><button onclick='openSiswaForm(${JSON.stringify(s)})' class="rounded-xl bg-indigo-50 px-3 py-2 text-indigo-600"><i class="fa-solid fa-pen"></i></button><button onclick="deleteSiswa('${escapeAttr(s.nisn)}')" class="rounded-xl bg-red-50 px-3 py-2 text-red-600"><i class="fa-solid fa-trash"></i></button></div></div></div>`).join('');
@@ -476,7 +546,7 @@
       document.getElementById('nisnLama').value = s?.nisn || '';
       document.getElementById('formNisn').value = s?.nisn || '';
       document.getElementById('formNama').value = s?.nama_siswa || '';
-      document.getElementById('formKelas').value = s?.kelas || kelasCache[0] || '';
+      document.getElementById('formKelas').value = s?.kelas || kelasData[0] || '';
       document.getElementById('formWa').value = s?.no_wa_ortu || '';
       document.getElementById('formFoto').value = s?.url_foto || '';
       document.getElementById('formRfid').value = s?.rfid_uid || '';
@@ -527,17 +597,23 @@
       await loadSiswa();
     }
 
-    async function prepareIzin() {
-      if (!siswaCache.length) await loadSiswa();
-      document.getElementById('izinNisn').innerHTML = siswaCache.map(s => `<option value="${escapeAttr(s.nisn)}">${escapeHtml(s.nama_siswa)} - ${escapeHtml(s.kelas)}</option>`).join('');
+    async function prepareIzin(showLoading = true) {
+      if (showLoading) showLoader('Memuat data siswa terbaru...');
+      const { data, error } = await sb.from('siswa').select('nisn,nama_siswa,kelas').order('nama_siswa');
+      if (showLoading) hideLoader();
+      if (error) return showToast(error.message);
+      siswaData = data || [];
+      document.getElementById('izinNisn').innerHTML = siswaData.map(s => `<option value="${escapeAttr(s.nisn)}">${escapeHtml(s.nama_siswa)} - ${escapeHtml(s.kelas)}</option>`).join('');
     }
 
     async function inputIzinSiswa() {
       const nisn = document.getElementById('izinNisn').value;
-      const siswa = siswaCache.find(s => s.nisn === nisn);
-      if (!siswa) return showToast('Pilih siswa terlebih dahulu.');
+      if (!nisn) return showToast('Pilih siswa terlebih dahulu.');
       const tanggal = todayISO();
       showLoader('Menyimpan izin...');
+      const { data: siswa, error: siswaError } = await sb.from('siswa').select('nisn,nama_siswa,kelas').eq('nisn', nisn).maybeSingle();
+      if (siswaError) { hideLoader(); return showToast(siswaError.message); }
+      if (!siswa) { hideLoader(); await prepareIzin(false); return showToast('Siswa tidak ditemukan atau sudah berubah di Supabase.'); }
       const { data: existing, error: cekError } = await sb.from('absensi').select('id,status').eq('siswa_nisn', nisn).eq('tanggal', tanggal).maybeSingle();
       if (cekError) { hideLoader(); return showToast(cekError.message); }
       if (existing) { hideLoader(); return showToast(`Siswa sudah punya data hari ini: ${existing.status}`); }
@@ -556,7 +632,7 @@
 
     async function prepareRekap() {
       setDefaultMonth();
-      if (!kelasCache.length) await loadKelas();
+      await loadKelas();
     }
 
     function setDefaultMonth() {
