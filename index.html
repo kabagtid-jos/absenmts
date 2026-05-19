@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta name="theme-color" content="#4f46e5" />
-<meta name="application-name" content="Abzensi Abu Zairi Presensi" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Abzensi" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="msapplication-TileColor" content="#075176" />
-<link rel="manifest" href="./manifest.webmanifest" />
-<link rel="apple-touch-icon" href="./icons/icon-192.png" />
-<title>Abzensi Abu Zairi Presensi - Absensi Siswa</title>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-<style>
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /><meta name="theme-color" content="#4f46e5" /><meta name="application-name" content="Abzensi Abu Zairi Presensi" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /><meta name="apple-mobile-web-app-title" content="Abzensi" /><meta name="mobile-web-app-capable" content="yes" /><meta name="msapplication-TileColor" content="#075176" /><link rel="manifest" href="./manifest.webmanifest" /><link rel="apple-touch-icon" href="./icons/icon-192.png" /><title>Abzensi Abu Zairi Presensi - Absensi Siswa</title><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" /><meta http-equiv="Pragma" content="no-cache" /><meta http-equiv="Expires" content="0" /><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" /><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" /><style>
 * { font-family: 'Poppins', sans-serif; }
 body { background:var(--home-bg); }
 #app { width:100%; max-width:none !important; min-height:100vh; background:var(--home-bg) !important; box-shadow:none !important; }
@@ -644,16 +621,50 @@ body { background:white !important; }
 #app { max-width:100% !important; box-shadow:none !important; }
 .print-card { box-shadow:none !important; border:0 !important; }
 }
-</style>
-</head>
-<body class="min-h-screen text-slate-800">
-<!-- =========================================================
-KONFIGURASI WAJIB DIISI
-1) SUPABASE_URL       : Project URL dari Supabase
-2) SUPABASE_ANON_KEY  : anon public key dari Supabase
-3) GAS_REKAP_URL      : URL Web App Apps Script, untuk laporan/WA opsional
-========================================================= -->
-<script>
+/* Tampilan menu siswa versi master table seperti dashboard awal. */
+#view-siswa.admin-student-view{max-width:none!important;margin:0!important;background:#eef5fb;color:#1f2937;}
+.student-master-wrap{width:min(100%,1180px);margin:0 auto;padding:40px 22px 50px;}
+.student-master-card{margin-top:24px;background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(15,23,42,.07);padding:24px;}
+.student-master-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;}
+.student-master-title{display:flex;align-items:center;gap:10px;margin:0;color:#111827;font-size:24px;font-weight:900;line-height:1;}
+.student-master-title i{color:#0b9bd7;font-size:20px;}
+.student-add-btn{min-height:40px;border-radius:10px;background:#0693cf;color:#fff;padding:0 18px;font-weight:900;font-size:14px;box-shadow:0 8px 18px rgba(6,147,207,.22);}
+.student-add-btn:hover{background:#047fb4;}
+.student-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}
+.student-search{width:320px;max-width:100%;height:40px;border:1px solid #e5eaf0;border-radius:10px;background:#f8fafc;padding:0 14px;font-size:13px;font-weight:700;color:#334155;outline:none;}
+.student-search:focus{border-color:#38bdf8;background:#fff;box-shadow:0 0 0 3px rgba(14,165,233,.12);}
+.student-count{font-size:12px;font-weight:800;color:#64748b;}
+.student-table-wrap{overflow:auto;border:1px solid #e5eaf0;border-radius:12px;background:#fff;}
+.student-table{width:100%;min-width:980px;border-collapse:collapse;}
+.student-table thead th{height:54px;background:#f3f4f6;color:#4b5563;font-size:12px;font-weight:900;text-align:left;text-transform:uppercase;letter-spacing:.02em;border-bottom:1px solid #e5e7eb;padding:0 16px;white-space:nowrap;}
+.student-table tbody td{height:62px;border-bottom:1px solid #eef2f7;padding:0 16px;color:#334155;font-size:14px;vertical-align:middle;}
+.student-table tbody tr:last-child td{border-bottom:none;}
+.student-table tbody tr:hover td{background:#f8fbfe;}
+.student-check{width:16px;height:16px;border-radius:3px;accent-color:#0ea5e9;}
+.student-photo{width:42px;height:42px;border-radius:999px;object-fit:cover;background:#e0f2fe;box-shadow:0 0 0 1px #dbeafe;}
+.student-photo-fallback{width:42px;height:42px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#e0f2fe;color:#0369a1;font-size:14px;font-weight:900;}
+.student-name-cell{font-weight:900;color:#1f2937;}
+.student-nisn-cell{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13px;color:#475569;}
+.student-wa-cell{font-size:15px;color:#475569;}
+.student-action-cell{display:flex;align-items:center;gap:8px;}
+.student-action-btn{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.student-edit-btn{background:#eaf7ff;color:#0ea5e9;}
+.student-edit-btn:hover{background:#d9f0ff;}
+.student-delete-btn{background:#ffecef;color:#f43f5e;}
+.student-delete-btn:hover{background:#ffe1e7;}
+.student-empty{padding:44px 16px;text-align:center;color:#94a3b8;font-size:13px;font-weight:800;}
+body.dark-mode #view-siswa.admin-student-view{background:#071a2a;color:#e5edf5;}
+body.dark-mode .student-master-card,body.dark-mode .student-table-wrap{background:#0f2435;border-color:#1f3a4d;box-shadow:0 10px 25px rgba(0,0,0,.32);}
+body.dark-mode .student-master-title,body.dark-mode .student-name-cell{color:#eef6ff;}
+body.dark-mode .student-search{background:#10283a;border-color:#24465c;color:#e5edf5;}
+body.dark-mode .student-table thead th{background:#10283a;color:#cbd5e1;border-color:#1f3a4d;}
+body.dark-mode .student-table tbody td{border-color:#1f3a4d;color:#cbd5e1;}
+body.dark-mode .student-table tbody tr:hover td{background:#143249;}
+body.dark-mode .student-nisn-cell,body.dark-mode .student-wa-cell,body.dark-mode .student-count{color:#9ba9b8;}
+body.dark-mode .student-photo,body.dark-mode .student-photo-fallback{background:#183246;box-shadow:0 0 0 1px #24465c;color:#7dd3fc;}
+@media (max-width:980px){.student-master-wrap{padding:22px 14px 36px;}.student-master-card{padding:18px 14px;}.student-master-head{align-items:flex-start;flex-direction:column;}.student-add-btn{width:100%;}.student-toolbar{align-items:stretch;flex-direction:column;}.student-search{width:100%;}.student-table{min-width:860px;}.student-master-title{font-size:20px;}}
+@media (max-width:640px){#view-siswa .home-topbar{min-height:72px;}.student-master-wrap{padding-top:18px;}.student-master-card{margin-top:16px;border-radius:16px;}.student-table thead th{font-size:11px;padding:0 12px;}.student-table tbody td{height:58px;padding:0 12px;font-size:13px;}.student-photo,.student-photo-fallback{width:36px;height:36px;}.student-action-btn{width:32px;height:32px;}.student-table{min-width:760px;}}
+</style></head><body class="min-h-screen text-slate-800"><script>
 const SUPABASE_URL = "https://euxawjyekgthzrjrhhmp.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eGF3anlla2d0aHpyanJoaG1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxOTg2MTUsImV4cCI6MjA5NDc3NDYxNX0.6Kumg3mlrD7hOXniTgoq16kCwlcGl3C7q88qIPf9DW8";
 const GAS_REKAP_URL = "https://script.google.com/macros/s/AKfycbxXX8EzRJ0UgU8AiTSoznev2V6me76w0cE-ck8pS-CzdOa_4ETPR-uNGXcRzVgc1Xyp/exec";
@@ -661,318 +672,11 @@ const GAS_REKAP_URL = "https://script.google.com/macros/s/AKfycbxXX8EzRJ0UgU8AiT
 // dan isi FONNTE_TOKEN di Script Properties Apps Script.
 const ENABLE_WA_BY_GAS = false;
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-</script>
-<div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden max-w-[92%] rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-xl"></div>
-<div id="loader" class="fixed inset-0 z-40 hidden items-center justify-center bg-white/70 backdrop-blur-sm">
-<div class="rounded-2xl bg-white px-5 py-4 text-center shadow-xl">
-<i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-600"></i>
-<p id="loaderText" class="mt-2 text-sm font-semibold text-indigo-700">Memproses...</p>
-</div>
-</div>
-<main id="app" class="mx-auto min-h-screen max-w-md bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-700 shadow-2xl">
-<!-- LOGIN / ABSENSI PUBLIK -->
-<section id="view-home" class="view active min-h-screen home-shell pb-8">
-<div class="home-topbar text-white">
-<div class="home-topbar-inner">
-<div class="flex items-center gap-3">
-<div class="brand-mark" aria-label="Logo aplikasi"></div>
-<div class="leading-tight">
-<h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
-<p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p>
-</div>
-</div>
-<div class="topbar-actions">
-<button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
-<i class="fa-solid fa-moon text-xs"></i>
-</button>
-</div>
-</div>
-</div>
-<div class="home-content">
-<div class="home-card px-6 pb-6 pt-7">
-<div class="text-center">
-<img class="school-logo mx-auto" src="https://i.ibb.co.com/39WQv2Cx/Logo-MTs-Hidayatullah-2023.png" alt="Logo MTs. Hidayatullah" />
-<h2 class="home-title mt-4">ABZENSI</h2>
-<div class="school-name-line mt-2 flex items-center justify-center gap-2 text-[13px] font-extrabold text-[#075176]">
-<i class="fa-solid fa-star text-[9px] text-amber-400"></i>
-<span>Abu Zairi Presensi</span>
-<i class="fa-solid fa-star text-[9px] text-amber-400"></i>
-</div>
-<p class="mt-1 text-[10px] font-medium text-slate-500">Arahkan QR Code ke Kamera atau tap NFC.</p>
-</div>
-<div class="scanner-frame mx-auto mt-6">
-<div id="scannerPlaceholder" class="scanner-bars" aria-hidden="true">
-<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-</div>
-<div id="scannerReader"></div>
-</div>
-<div class="mt-6 grid grid-cols-2 gap-3">
-<button type="button" onclick="startBarcodeScan()" class="scan-btn btn bg-[#069ddb] text-white hover:bg-[#038ac2]">
-<i class="fa-solid fa-camera mr-1.5 text-[11px]"></i> Scan QR Code
-</button>
-<button type="button" onclick="tapNfcOrFocus()" class="scan-btn btn bg-[#5942df] text-white hover:bg-[#4d39c7]">
-<i class="fa-solid fa-id-card-clip mr-1.5 text-[11px]"></i> Tap NFC/RFID
-</button>
-</div>
-<div class="manual-divider my-5">ATAU MANUAL</div>
-<form onsubmit="event.preventDefault(); catatAbsensi();" class="relative flex items-center gap-2">
-<div class="manual-search-wrap flex-1">
-<input id="aksesInput" autocomplete="off" inputmode="text" onfocus="openManualSuggestions()" oninput="debounceManualSuggestions()" onkeydown="handleManualSuggestionKey(event)" class="manual-input w-full px-3 text-center font-semibold text-slate-700 outline-none focus:border-sky-400" placeholder="Ketik Nama Siswa atau NISN..." />
-<div id="manualSuggestionBox" class="manual-suggestion-box hidden"></div>
-</div>
-<button class="send-btn btn" title="Catat kehadiran" aria-label="Catat kehadiran">
-<i class="fa-solid fa-paper-plane text-sm"></i>
-</button>
-</form>
-<div class="absent-panel mt-6 p-3">
-<div class="mb-2 flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wide text-slate-600">
-<i class="fa-solid fa-user-minus text-rose-500"></i>
-<span>Siswa Tidak Masuk Hari Ini</span>
-</div>
-<div id="absentTodayContainer" class="divide-y divide-slate-100 text-[11px]"></div>
-</div>
-<div class="my-5 h-px bg-slate-100"></div>
-<button onclick="openView('view-admin-login')" class="admin-outline btn flex w-full items-center justify-center gap-2 py-3 text-xs font-extrabold hover:bg-sky-50">
-<i class="fa-solid fa-lock"></i> Akses Admin
-</button>
-<div class="hidden">
-<b id="cfgMulai">06:00</b><b id="cfgTepat">07:00</b><b id="cfgAkhir">08:00</b>
-<p id="dashHadir">0</p><p id="dashTelat">0</p><div id="recentContainer"></div>
-</div>
-</div>
-<p class="app-footer mt-7 text-center text-[11px] font-semibold">Made With Love <span class="text-rose-400">♥</span> Biro IT P2S Abu Zairi</p>
-</div>
-</section>
-<!-- LOGIN ADMIN -->
-<section id="view-admin-login" class="view min-h-screen home-shell pb-8">
-<div class="home-topbar text-white">
-<div class="home-topbar-inner">
-<div class="flex items-center gap-3">
-<div class="brand-mark" aria-label="Logo aplikasi"></div>
-<div class="leading-tight">
-<h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
-<p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p>
-</div>
-</div>
-<div class="topbar-actions">
-<button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
-<i class="fa-solid fa-moon text-xs"></i>
-</button>
-</div>
-</div>
-</div>
-<div class="admin-login-content">
-<div class="admin-login-card px-8 pb-9 pt-9">
-<div class="mb-8 text-center">
-<div class="admin-icon-circle">
-<i class="fa-solid fa-user-shield text-[30px]"></i>
-</div>
-<h2 class="mt-5 text-[26px] font-extrabold leading-tight text-slate-800">Akses Admin</h2>
-<p class="mt-2 text-[14px] font-medium text-slate-500">Sistem Rekapitulasi &amp; Manajemen</p>
-</div>
-<form onsubmit="event.preventDefault(); loginAdmin();">
-<label class="mb-2 block text-[12px] font-extrabold uppercase tracking-wide text-slate-600">Nomor Induk Yayasan (NIY)</label>
-<input id="adminNiy" type="password" inputmode="text" class="admin-login-input mb-6 w-full px-4 text-center text-lg font-extrabold outline-none focus:border-sky-500" autocomplete="off" />
-<button class="admin-login-btn btn w-full font-extrabold text-white hover:bg-[#075f89]">Masuk Dashboard</button>
-</form>
-<button onclick="openView('view-home')" class="btn mt-7 flex w-full items-center justify-center gap-2 text-[13px] font-extrabold uppercase text-slate-400 hover:text-slate-600">
-<i class="fa-solid fa-arrow-left"></i> Kembali
-</button>
-</div>
-<p class="app-footer mt-[240px] text-center text-[12px] font-semibold">Made With Love <span class="text-rose-400">♥</span> Biro IT P2S Abu Zairi</p>
-</div>
-</section>
-<!-- ADMIN DASHBOARD -->
-<section id="view-admin" class="view admin-dashboard-view min-h-screen pb-10">
-<div class="home-topbar text-white">
-<div class="home-topbar-inner">
-<div class="flex items-center gap-3">
-<div class="brand-mark" aria-label="Logo aplikasi"></div>
-<div class="leading-tight">
-<h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
-<p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p>
-</div>
-</div>
-<div class="topbar-actions">
-<button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
-<i class="fa-solid fa-moon text-xs"></i>
-</button>
-</div>
-</div>
-</div>
-<div class="admin-dash-wrap">
-<div class="admin-profile-nav">
-<div class="admin-profile-left">
-<div class="admin-avatar"><i class="fa-solid fa-user-tie"></i></div>
-<div>
-<p class="admin-hello">Halo, <span id="adminName">Admin</span></p>
-<p id="adminRole" class="admin-role">SUPER ADMIN</p>
-</div>
-</div>
-<div class="admin-nav-pills">
-<button type="button" class="admin-tab active" onclick="openView('view-admin'); loadDashboardFromGAS();"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
-<button type="button" class="admin-tab" onclick="openView('view-siswa'); loadSiswa();"><i class="fa-solid fa-users"></i> Siswa</button>
-<button type="button" class="admin-tab" onclick="openView('view-rekap'); prepareRekap();"><i class="fa-solid fa-clipboard-list"></i> Rekap Absen</button>
-<button type="button" class="admin-tab" onclick="openView('view-setting'); loadConfigToForm();"><i class="fa-solid fa-gear"></i> Set up</button>
-<button type="button" class="admin-tab logout-tab" onclick="logoutAdmin()" title="Logout"><i class="fa-solid fa-power-off"></i></button>
-</div>
-</div>
-<div class="dash-title-row">
-<div class="dash-title-left">
-<h2><i class="fa-solid fa-chart-pie"></i> Dashboard</h2>
-<button type="button" onclick="loadDashboardFromGAS()" class="dash-refresh" title="Refresh dashboard"><i class="fa-solid fa-rotate-right"></i></button>
-</div>
-<select id="dashboardYear" onchange="loadDashboardFromGAS()" class="dash-year-select"></select>
-</div>
-<div class="dashboard-card-grid">
-<div class="dash-stat-card card-blue">
-<div>
-<p class="dash-main-number"><span id="dashTepatCount">0</span>/<span id="dashTepatDenom">0</span></p>
-<p id="dashTepatPercent" class="dash-main-label">Presensi Tepat Waktu 0%</p>
-</div>
-<span class="dash-card-icon"><i class="fa-solid fa-check-double"></i></span>
-<div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div>
-</div>
-<div class="dash-stat-card card-green">
-<div>
-<p class="dash-main-number"><span id="dashTelatCount">0</span>/<span id="dashTelatDenom">0</span></p>
-<p id="dashTelatPercent" class="dash-main-label">Terlambat Masuk 0%</p>
-</div>
-<span class="dash-card-icon"><i class="fa-solid fa-clock"></i></span>
-<div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div>
-</div>
-<div class="dash-stat-card card-red">
-<div>
-<p class="dash-main-number"><span id="dashTidakCount">0</span>/<span id="dashTidakDenom">0</span></p>
-<p id="dashTidakPercent" class="dash-main-label">Tidak Absen 0%</p>
-</div>
-<span class="dash-card-icon"><i class="fa-solid fa-user-xmark"></i></span>
-<div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div>
-</div>
-</div>
-<div class="quick-action-card">
-<div>
-<h3><i class="fa-solid fa-bolt"></i> Aksi Cepat</h3>
-<p>Input izin atau sakit siswa secara manual</p>
-</div>
-<button type="button" onclick="openView('view-izin'); prepareIzin();" class="quick-action-btn"><i class="fa-solid fa-square-plus"></i> Input Manual</button>
-</div>
-<div class="mini-stat-grid">
-<div class="mini-stat"><span>Total Siswa</span><b id="sumSiswa">0</b></div>
-<div class="mini-stat"><span>Total Kelas</span><b id="sumKelas" class="text-orange-500">0</b></div>
-<div class="mini-stat"><span>Siswa Putra</span><b id="dashPutra" class="text-sky-600">0</b></div>
-<div class="mini-stat"><span>Siswa Putri</span><b id="dashPutri" class="text-pink-600">0</b></div>
-</div>
-<div class="dashboard-chart-grid">
-<div class="dashboard-chart-card">
-<h3><i class="fa-solid fa-chart-pie"></i> Komposisi Presensi</h3>
-<div id="presenceDonut" class="presence-donut-wrap"></div>
-<div id="presenceLegend" class="presence-legend"></div>
-</div>
-<div class="dashboard-chart-card trend-card">
-<h3><i class="fa-solid fa-chart-column"></i> Tren Kehadiran Bulanan</h3>
-<div id="monthlyTrendChart" class="monthly-trend-chart"></div>
-</div>
-</div>
-</div>
-</section>
-<!-- DATA SISWA -->
-<section id="view-siswa" class="view min-h-screen bg-slate-50 p-5 pb-24">
-<Header title="Data Siswa"></Header>
-<div class="mb-4 flex gap-2">
-<input id="searchSiswa" oninput="renderSiswa()" class="flex-1 rounded-xl border px-3 py-3 text-sm outline-none focus:border-indigo-500" placeholder="Cari nama/NISN/kelas" />
-<button onclick="openSiswaForm()" class="btn rounded-xl bg-indigo-600 px-4 font-bold text-white"><i class="fa-solid fa-plus"></i></button>
-</div>
-<div id="siswaList" class="space-y-3"></div>
-</section>
-<!-- INPUT IZIN -->
-<section id="view-izin" class="view min-h-screen bg-slate-50 p-5 pb-24">
-<Header title="Input Izin Siswa"></Header>
-<div class="rounded-3xl bg-white p-5 shadow">
-<label class="text-xs font-bold text-slate-500">Siswa</label>
-<select id="izinNisn" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"></select>
-<label class="text-xs font-bold text-slate-500">Status</label>
-<select id="izinStatus" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm">
-<option value="Sakit">Sakit</option>
-<option value="Izin">Izin</option>
-<option value="Alpa">Alpa</option>
-</select>
-<label class="text-xs font-bold text-slate-500">Keterangan</label>
-<textarea id="izinKet" rows="3" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="Opsional"></textarea>
-<button onclick="inputIzinSiswa()" class="btn w-full rounded-2xl bg-amber-500 py-4 font-extrabold text-white shadow hover:bg-amber-600">Simpan Izin</button>
-</div>
-</section>
-<!-- REKAP -->
-<section id="view-rekap" class="view min-h-screen bg-slate-50 p-5 pb-24">
-<Header title="Rekap Laporan"></Header>
-<div class="no-print rounded-3xl bg-white p-5 shadow">
-<p class="mb-3 text-xs text-slate-500">Data rekap ini dibaca oleh <b>Apps Script</b> dari Supabase REST API memakai service role key.</p>
-<div class="grid grid-cols-2 gap-2">
-<input type="month" id="rekapMonth" class="rounded-xl border px-3 py-3 text-sm" />
-<select id="rekapKelas" class="rounded-xl border px-3 py-3 text-sm"><option>Semua</option></select>
-</div>
-<button onclick="loadRekapBulanan()" class="btn mt-3 w-full rounded-2xl bg-green-600 py-4 font-extrabold text-white shadow hover:bg-green-700"><i class="fa-solid fa-file-lines mr-2"></i> Ambil Rekap Bulanan</button>
-</div>
-<div id="rekapResult" class="print-card mt-4 rounded-3xl bg-white p-4 shadow"></div>
-</section>
-<!-- SETTING -->
-<section id="view-setting" class="view min-h-screen bg-slate-50 p-5 pb-24">
-<Header title="Pengaturan Jam"></Header>
-<div class="rounded-3xl bg-white p-5 shadow">
-<p class="mb-4 text-xs text-slate-500">Aplikasi selalu mengambil data terbaru dari Supabase. Token Fonnte tetap disimpan di Apps Script Properties.</p>
-<label class="text-xs font-bold text-slate-500">Batas Mulai</label>
-<input type="time" id="setMulai" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3" />
-<label class="text-xs font-bold text-slate-500">Batas Tepat Waktu</label>
-<input type="time" id="setTepat" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3" />
-<label class="text-xs font-bold text-slate-500">Batas Akhir</label>
-<input type="time" id="setAkhir" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3" />
-<button onclick="saveConfig()" class="btn w-full rounded-2xl bg-slate-900 py-4 font-extrabold text-white shadow">Simpan Pengaturan</button>
-</div>
-</section>
-</main>
-<!-- MODAL SISWA -->
-<div id="siswaModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4">
-<div class="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl">
-<div class="mb-4 flex items-center justify-between">
-<h3 id="siswaModalTitle" class="text-lg font-extrabold">Tambah Siswa</h3>
-<button onclick="closeSiswaForm()" class="rounded-full bg-slate-100 px-3 py-2"><i class="fa-solid fa-xmark"></i></button>
-</div>
-<input type="hidden" id="nisnLama" />
-<label class="text-xs font-bold text-slate-500">NISN</label>
-<input id="formNisn" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" />
-<label class="text-xs font-bold text-slate-500">Nama Siswa</label>
-<input id="formNama" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" />
-<label class="text-xs font-bold text-slate-500">Jenis Kelamin</label>
-<select id="formJenisKelamin" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm">
-<option value="">Pilih jenis kelamin</option>
-<option value="Laki-laki">Laki-laki</option>
-<option value="Perempuan">Perempuan</option>
-</select>
-<label class="text-xs font-bold text-slate-500">Kelas</label>
-<select id="formKelas" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"></select>
-<label class="text-xs font-bold text-slate-500">No WA Orang Tua</label>
-<input id="formWa" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="08xxxx" />
-<label class="text-xs font-bold text-slate-500">Link Foto Siswa <span class="font-medium text-slate-400">(Opsional)</span></label>
-<input id="formFoto" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="https://contoh.com/foto-siswa.jpg" />
-<label class="text-xs font-bold text-slate-500">RFID UID</label>
-<input id="formRfid" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="Opsional" />
-<button onclick="saveSiswa()" class="btn w-full rounded-2xl bg-indigo-600 py-4 font-extrabold text-white shadow">Simpan Data</button>
-</div>
-</div>
-<!-- MODAL RFID / NFC -->
-<div id="rfidModal" class="rfid-modal-backdrop fixed inset-0 z-[70] hidden items-center justify-center p-6">
-<div class="rfid-modal-card">
-<div class="rfid-info-circle">i</div>
-<h3 class="rfid-modal-title">Siap Membaca</h3>
-<p class="rfid-modal-text">Silakan tempelkan Kartu RFID / NFC ke bagian belakang HP Anda.</p>
-<input id="rfidReaderInput" class="rfid-hidden-input" autocomplete="off" inputmode="none" enterkeyhint="done" autocapitalize="off" spellcheck="false" onkeydown="handleRfidKeyboard(event)" />
-<div class="rfid-modal-actions">
-<button type="button" onclick="cancelNfcReading()" class="rfid-primary-btn btn">Batal Membaca</button>
-<button type="button" onclick="cancelNfcReading()" class="rfid-secondary-btn btn">Cancel</button>
-</div>
-</div>
-</div>
-<script>
+</script><div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden max-w-[92%] rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-xl"></div><div id="loader" class="fixed inset-0 z-40 hidden items-center justify-center bg-white/70 backdrop-blur-sm"><div class="rounded-2xl bg-white px-5 py-4 text-center shadow-xl"><i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-600"></i><p id="loaderText" class="mt-2 text-sm font-semibold text-indigo-700">Memproses...</p></div></div><main id="app" class="mx-auto min-h-screen max-w-md bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-700 shadow-2xl"><section id="view-home" class="view active min-h-screen home-shell pb-8"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="home-content"><div class="home-card px-6 pb-6 pt-7"><div class="text-center"><img class="school-logo mx-auto" src="https://i.ibb.co.com/39WQv2Cx/Logo-MTs-Hidayatullah-2023.png" alt="Logo MTs. Hidayatullah" /><h2 class="home-title mt-4">ABZENSI</h2><div class="school-name-line mt-2 flex items-center justify-center gap-2 text-[13px] font-extrabold text-[#075176]"><i class="fa-solid fa-star text-[9px] text-amber-400"></i><span>Abu Zairi Presensi</span><i class="fa-solid fa-star text-[9px] text-amber-400"></i></div><p class="mt-1 text-[10px] font-medium text-slate-500">Arahkan QR Code ke Kamera atau tap NFC.</p></div><div class="scanner-frame mx-auto mt-6"><div id="scannerPlaceholder" class="scanner-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div id="scannerReader"></div></div><div class="mt-6 grid grid-cols-2 gap-3"><button type="button" onclick="startBarcodeScan()" class="scan-btn btn bg-[#069ddb] text-white hover:bg-[#038ac2]"><i class="fa-solid fa-camera mr-1.5 text-[11px]"></i> Scan QR Code
+</button><button type="button" onclick="tapNfcOrFocus()" class="scan-btn btn bg-[#5942df] text-white hover:bg-[#4d39c7]"><i class="fa-solid fa-id-card-clip mr-1.5 text-[11px]"></i> Tap NFC/RFID
+</button></div><div class="manual-divider my-5">ATAU MANUAL</div><form onsubmit="event.preventDefault(); catatAbsensi();" class="relative flex items-center gap-2"><div class="manual-search-wrap flex-1"><input id="aksesInput" autocomplete="off" inputmode="text" onfocus="openManualSuggestions()" oninput="debounceManualSuggestions()" onkeydown="handleManualSuggestionKey(event)" class="manual-input w-full px-3 text-center font-semibold text-slate-700 outline-none focus:border-sky-400" placeholder="Ketik Nama Siswa atau NISN..." /><div id="manualSuggestionBox" class="manual-suggestion-box hidden"></div></div><button class="send-btn btn" title="Catat kehadiran" aria-label="Catat kehadiran"><i class="fa-solid fa-paper-plane text-sm"></i></button></form><div class="absent-panel mt-6 p-3"><div class="mb-2 flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wide text-slate-600"><i class="fa-solid fa-user-minus text-rose-500"></i><span>Siswa Tidak Masuk Hari Ini</span></div><div id="absentTodayContainer" class="divide-y divide-slate-100 text-[11px]"></div></div><div class="my-5 h-px bg-slate-100"></div><button onclick="openView('view-admin-login')" class="admin-outline btn flex w-full items-center justify-center gap-2 py-3 text-xs font-extrabold hover:bg-sky-50"><i class="fa-solid fa-lock"></i> Akses Admin
+</button><div class="hidden"><b id="cfgMulai">06:00</b><b id="cfgTepat">07:00</b><b id="cfgAkhir">08:00</b><p id="dashHadir">0</p><p id="dashTelat">0</p><div id="recentContainer"></div></div></div><p class="app-footer mt-7 text-center text-[11px] font-semibold">Made With Love <span class="text-rose-400">♥</span> Biro IT P2S Abu Zairi</p></div></section><section id="view-admin-login" class="view min-h-screen home-shell pb-8"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="admin-login-content"><div class="admin-login-card px-8 pb-9 pt-9"><div class="mb-8 text-center"><div class="admin-icon-circle"><i class="fa-solid fa-user-shield text-[30px]"></i></div><h2 class="mt-5 text-[26px] font-extrabold leading-tight text-slate-800">Akses Admin</h2><p class="mt-2 text-[14px] font-medium text-slate-500">Sistem Rekapitulasi &amp; Manajemen</p></div><form onsubmit="event.preventDefault(); loginAdmin();"><label class="mb-2 block text-[12px] font-extrabold uppercase tracking-wide text-slate-600">Nomor Induk Yayasan (NIY)</label><input id="adminNiy" type="password" inputmode="text" class="admin-login-input mb-6 w-full px-4 text-center text-lg font-extrabold outline-none focus:border-sky-500" autocomplete="off" /><button class="admin-login-btn btn w-full font-extrabold text-white hover:bg-[#075f89]">Masuk Dashboard</button></form><button onclick="openView('view-home')" class="btn mt-7 flex w-full items-center justify-center gap-2 text-[13px] font-extrabold uppercase text-slate-400 hover:text-slate-600"><i class="fa-solid fa-arrow-left"></i> Kembali
+</button></div><p class="app-footer mt-[240px] text-center text-[12px] font-semibold">Made With Love <span class="text-rose-400">♥</span> Biro IT P2S Abu Zairi</p></div></section><section id="view-admin" class="view admin-dashboard-view min-h-screen pb-10"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="admin-dash-wrap"><div class="admin-profile-nav"><div class="admin-profile-left"><div class="admin-avatar"><i class="fa-solid fa-user-tie"></i></div><div><p class="admin-hello">Halo, <span id="adminName">Admin</span></p><p id="adminRole" class="admin-role">SUPER ADMIN</p></div></div><div class="admin-nav-pills"><button type="button" class="admin-tab active" onclick="openView('view-admin'); loadDashboardFromGAS();"><i class="fa-solid fa-chart-pie"></i> Dashboard</button><button type="button" class="admin-tab" onclick="openView('view-siswa'); loadSiswa();"><i class="fa-solid fa-users"></i> Siswa</button><button type="button" class="admin-tab" onclick="openView('view-rekap'); prepareRekap();"><i class="fa-solid fa-clipboard-list"></i> Rekap Absen</button><button type="button" class="admin-tab" onclick="openView('view-setting'); loadConfigToForm();"><i class="fa-solid fa-gear"></i> Set up</button><button type="button" class="admin-tab logout-tab" onclick="logoutAdmin()" title="Logout"><i class="fa-solid fa-power-off"></i></button></div></div><div class="dash-title-row"><div class="dash-title-left"><h2><i class="fa-solid fa-chart-pie"></i> Dashboard</h2><button type="button" onclick="loadDashboardFromGAS()" class="dash-refresh" title="Refresh dashboard"><i class="fa-solid fa-rotate-right"></i></button></div><select id="dashboardYear" onchange="loadDashboardFromGAS()" class="dash-year-select"></select></div><div class="dashboard-card-grid"><div class="dash-stat-card card-blue"><div><p class="dash-main-number"><span id="dashTepatCount">0</span>/<span id="dashTepatDenom">0</span></p><p id="dashTepatPercent" class="dash-main-label">Presensi Tepat Waktu 0%</p></div><span class="dash-card-icon"><i class="fa-solid fa-check-double"></i></span><div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div></div><div class="dash-stat-card card-green"><div><p class="dash-main-number"><span id="dashTelatCount">0</span>/<span id="dashTelatDenom">0</span></p><p id="dashTelatPercent" class="dash-main-label">Terlambat Masuk 0%</p></div><span class="dash-card-icon"><i class="fa-solid fa-clock"></i></span><div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div></div><div class="dash-stat-card card-red"><div><p class="dash-main-number"><span id="dashTidakCount">0</span>/<span id="dashTidakDenom">0</span></p><p id="dashTidakPercent" class="dash-main-label">Tidak Absen 0%</p></div><span class="dash-card-icon"><i class="fa-solid fa-user-xmark"></i></span><div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div></div></div><div class="quick-action-card"><div><h3><i class="fa-solid fa-bolt"></i> Aksi Cepat</h3><p>Input izin atau sakit siswa secara manual</p></div><button type="button" onclick="openView('view-izin'); prepareIzin();" class="quick-action-btn"><i class="fa-solid fa-square-plus"></i> Input Manual</button></div><div class="mini-stat-grid"><div class="mini-stat"><span>Total Siswa</span><b id="sumSiswa">0</b></div><div class="mini-stat"><span>Total Kelas</span><b id="sumKelas" class="text-orange-500">0</b></div><div class="mini-stat"><span>Siswa Putra</span><b id="dashPutra" class="text-sky-600">0</b></div><div class="mini-stat"><span>Siswa Putri</span><b id="dashPutri" class="text-pink-600">0</b></div></div><div class="dashboard-chart-grid"><div class="dashboard-chart-card"><h3><i class="fa-solid fa-chart-pie"></i> Komposisi Presensi</h3><div id="presenceDonut" class="presence-donut-wrap"></div><div id="presenceLegend" class="presence-legend"></div></div><div class="dashboard-chart-card trend-card"><h3><i class="fa-solid fa-chart-column"></i> Tren Kehadiran Bulanan</h3><div id="monthlyTrendChart" class="monthly-trend-chart"></div></div></div></div></section><section id="view-siswa" class="view admin-student-view min-h-screen pb-10"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="student-master-wrap"><div class="admin-profile-nav"><div class="admin-profile-left"><div class="admin-avatar"><i class="fa-solid fa-user-tie"></i></div><div><p class="admin-hello">Halo, <span id="adminNameSiswa">Admin</span></p><p id="adminRoleSiswa" class="admin-role">SUPER ADMIN</p></div></div><div class="admin-nav-pills"><button type="button" class="admin-tab" onclick="openView('view-admin'); loadDashboardFromGAS();"><i class="fa-solid fa-chart-pie"></i> Dashboard</button><button type="button" class="admin-tab active" onclick="openView('view-siswa'); loadSiswa();"><i class="fa-solid fa-users"></i> Siswa</button><button type="button" class="admin-tab" onclick="openView('view-rekap'); prepareRekap();"><i class="fa-solid fa-clipboard-list"></i> Rekap Absen</button><button type="button" class="admin-tab" onclick="openView('view-setting'); loadConfigToForm();"><i class="fa-solid fa-gear"></i> Set up</button><button type="button" class="admin-tab logout-tab" onclick="logoutAdmin()" title="Logout"><i class="fa-solid fa-power-off"></i></button></div></div><div class="student-master-card"><div class="student-master-head"><h2 class="student-master-title"><i class="fa-solid fa-users"></i> Data Master Siswa</h2><button type="button" onclick="openSiswaForm()" class="student-add-btn btn"><i class="fa-solid fa-plus mr-1.5"></i> Tambah Siswa</button></div><div class="student-toolbar"><input id="searchSiswa" oninput="renderSiswa()" class="student-search" placeholder="Cari nama, NISN, kelas, atau nomor WA" autocomplete="off" /><div id="studentCount" class="student-count">0 data siswa</div></div><div class="student-table-wrap"><table class="student-table"><thead><tr><th style="width:56px"><input type="checkbox" class="student-check" aria-label="Pilih semua siswa" /></th><th style="width:90px">Foto</th><th style="width:150px">NISN</th><th>Nama Lengkap</th><th style="width:100px">Kelas</th><th style="width:190px">No. Whatsapp</th><th style="width:120px">Aksi</th></tr></thead><tbody id="siswaList"></tbody></table></div></div></div></section><section id="view-izin" class="view min-h-screen bg-slate-50 p-5 pb-24"><Header title="Input Izin Siswa"></Header><div class="rounded-3xl bg-white p-5 shadow"><label class="text-xs font-bold text-slate-500">Siswa</label><select id="izinNisn" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"></select><label class="text-xs font-bold text-slate-500">Status</label><select id="izinStatus" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"><option value="Sakit">Sakit</option><option value="Izin">Izin</option><option value="Alpa">Alpa</option></select><label class="text-xs font-bold text-slate-500">Keterangan</label><textarea id="izinKet" rows="3" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="Opsional"></textarea><button onclick="inputIzinSiswa()" class="btn w-full rounded-2xl bg-amber-500 py-4 font-extrabold text-white shadow hover:bg-amber-600">Simpan Izin</button></div></section><section id="view-rekap" class="view min-h-screen bg-slate-50 p-5 pb-24"><Header title="Rekap Laporan"></Header><div class="no-print rounded-3xl bg-white p-5 shadow"><p class="mb-3 text-xs text-slate-500">Data rekap ini dibaca oleh <b>Apps Script</b> dari Supabase REST API memakai service role key.</p><div class="grid grid-cols-2 gap-2"><input type="month" id="rekapMonth" class="rounded-xl border px-3 py-3 text-sm" /><select id="rekapKelas" class="rounded-xl border px-3 py-3 text-sm"><option>Semua</option></select></div><button onclick="loadRekapBulanan()" class="btn mt-3 w-full rounded-2xl bg-green-600 py-4 font-extrabold text-white shadow hover:bg-green-700"><i class="fa-solid fa-file-lines mr-2"></i> Ambil Rekap Bulanan</button></div><div id="rekapResult" class="print-card mt-4 rounded-3xl bg-white p-4 shadow"></div></section><section id="view-setting" class="view min-h-screen bg-slate-50 p-5 pb-24"><Header title="Pengaturan Jam"></Header><div class="rounded-3xl bg-white p-5 shadow"><p class="mb-4 text-xs text-slate-500">Aplikasi selalu mengambil data terbaru dari Supabase. Token Fonnte tetap disimpan di Apps Script Properties.</p><label class="text-xs font-bold text-slate-500">Batas Mulai</label><input type="time" id="setMulai" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3" /><label class="text-xs font-bold text-slate-500">Batas Tepat Waktu</label><input type="time" id="setTepat" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3" /><label class="text-xs font-bold text-slate-500">Batas Akhir</label><input type="time" id="setAkhir" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3" /><button onclick="saveConfig()" class="btn w-full rounded-2xl bg-slate-900 py-4 font-extrabold text-white shadow">Simpan Pengaturan</button></div></section></main><div id="siswaModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"><div class="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl"><div class="mb-4 flex items-center justify-between"><h3 id="siswaModalTitle" class="text-lg font-extrabold">Tambah Siswa</h3><button onclick="closeSiswaForm()" class="rounded-full bg-slate-100 px-3 py-2"><i class="fa-solid fa-xmark"></i></button></div><input type="hidden" id="nisnLama" /><label class="text-xs font-bold text-slate-500">NISN</label><input id="formNisn" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" /><label class="text-xs font-bold text-slate-500">Nama Siswa</label><input id="formNama" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" /><label class="text-xs font-bold text-slate-500">Jenis Kelamin</label><select id="formJenisKelamin" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"><option value="">Pilih jenis kelamin</option><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select><label class="text-xs font-bold text-slate-500">Kelas</label><select id="formKelas" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"></select><label class="text-xs font-bold text-slate-500">No WA Orang Tua</label><input id="formWa" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="08xxxx" /><label class="text-xs font-bold text-slate-500">Link Foto Siswa <span class="font-medium text-slate-400">(Opsional)</span></label><input id="formFoto" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="https://contoh.com/foto-siswa.jpg" /><label class="text-xs font-bold text-slate-500">RFID UID</label><input id="formRfid" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="Opsional" /><button onclick="saveSiswa()" class="btn w-full rounded-2xl bg-indigo-600 py-4 font-extrabold text-white shadow">Simpan Data</button></div></div><div id="rfidModal" class="rfid-modal-backdrop fixed inset-0 z-[70] hidden items-center justify-center p-6"><div class="rfid-modal-card"><div class="rfid-info-circle">i</div><h3 class="rfid-modal-title">Siap Membaca</h3><p class="rfid-modal-text">Silakan tempelkan Kartu RFID / NFC ke bagian belakang HP Anda.</p><input id="rfidReaderInput" class="rfid-hidden-input" autocomplete="off" inputmode="none" enterkeyhint="done" autocapitalize="off" spellcheck="false" onkeydown="handleRfidKeyboard(event)" /><div class="rfid-modal-actions"><button type="button" onclick="cancelNfcReading()" class="rfid-primary-btn btn">Batal Membaca</button><button type="button" onclick="cancelNfcReading()" class="rfid-secondary-btn btn">Cancel</button></div></div></div><script>
 let currentAdmin = null;
 let appConfig = { batas_mulai: '06:00', batas_waktu: '07:00', batas_akhir: '08:00' };
 let deferredPwaPrompt = null;
@@ -1224,6 +928,10 @@ if (!data) return showToast('NIY tidak terdaftar.');
 currentAdmin = data;
 document.getElementById('adminName').textContent = data.nama_admin;
 document.getElementById('adminRole').textContent = data.role || 'Admin';
+const adminNameSiswaEl = document.getElementById('adminNameSiswa');
+const adminRoleSiswaEl = document.getElementById('adminRoleSiswa');
+if (adminNameSiswaEl) adminNameSiswaEl.textContent = data.nama_admin;
+if (adminRoleSiswaEl) adminRoleSiswaEl.textContent = data.role || 'Admin';
 openView('view-admin');
 await loadDashboardFromGAS();
 }
@@ -1497,11 +1205,7 @@ const photo = s.url_foto
 : `<div class="manual-suggestion-photo">${escapeHtml(initial)}</div>`;
 return `<button type="button" class="manual-suggestion-item${active}" onmousedown="event.preventDefault()" onclick="selectManualSuggestion('${escapeAttr(s.nisn)}')">
 ${photo}
-<span class="min-w-0">
-<span class="manual-suggestion-name truncate">${escapeHtml(s.nama_siswa || '-')}</span>
-<span class="manual-suggestion-meta truncate">${escapeHtml(s.nisn || '-')} • ${escapeHtml(s.kelas || '-')}${s.jenis_kelamin ? ' • ' + escapeHtml(s.jenis_kelamin) : ''}</span>
-</span>
-</button>`;
+<span class="min-w-0"><span class="manual-suggestion-name truncate">${escapeHtml(s.nama_siswa || '-')}</span><span class="manual-suggestion-meta truncate">${escapeHtml(s.nisn || '-')} • ${escapeHtml(s.kelas || '-')}${s.jenis_kelamin ? ' • ' + escapeHtml(s.jenis_kelamin) : ''}</span></span></button>`;
 }).join('');
 }
 function selectManualSuggestion(nisn) {
@@ -1568,16 +1272,7 @@ el.innerHTML = rows.map(s => {
 const initial = (s.nama_siswa || '?').trim().charAt(0).toUpperCase();
 const status = String(s.status || '-').toUpperCase();
 const badgeClass = status === 'SAKIT' ? 'text-blue-700' : status === 'IZIN' ? 'text-amber-700' : status === 'ALPA' ? 'text-rose-700' : 'text-slate-600';
-return `<div class="flex items-center justify-between gap-2 py-2">
-<div class="flex min-w-0 items-center gap-3">
-<div class="student-avatar">${escapeHtml(initial)}</div>
-<div class="min-w-0">
-<b class="block truncate text-[11px] text-slate-700">${escapeHtml(s.nama_siswa || s.siswa_nisn || '-')}</b>
-<span class="block text-[10px] font-semibold text-slate-400">${escapeHtml(s.kelas || '-')}</span>
-</div>
-</div>
-<span class="shrink-0 text-[9px] font-extrabold uppercase ${badgeClass}">${escapeHtml(status)}</span>
-</div>`;
+return `<div class="flex items-center justify-between gap-2 py-2"><div class="flex min-w-0 items-center gap-3"><div class="student-avatar">${escapeHtml(initial)}</div><div class="min-w-0"><b class="block truncate text-[11px] text-slate-700">${escapeHtml(s.nama_siswa || s.siswa_nisn || '-')}</b><span class="block text-[10px] font-semibold text-slate-400">${escapeHtml(s.kelas || '-')}</span></div></div><span class="shrink-0 text-[9px] font-extrabold uppercase ${badgeClass}">${escapeHtml(status)}</span></div>`;
 }).join('');
 }
 async function findSiswaByAkses(akses) {
@@ -1671,16 +1366,20 @@ siswaData = data || [];
 renderSiswa();
 }
 function renderSiswa() {
-const q = (document.getElementById('searchSiswa').value || '').toLowerCase();
-const rows = siswaData.filter(s => `${s.nisn} ${s.nama_siswa} ${s.kelas}`.toLowerCase().includes(q));
+const searchEl = document.getElementById('searchSiswa');
+const q = (searchEl?.value || '').toLowerCase();
+const rows = siswaData.filter(s => `${s.nisn || ''} ${s.nama_siswa || ''} ${s.kelas || ''} ${s.no_wa_ortu || ''}`.toLowerCase().includes(q));
 const el = document.getElementById('siswaList');
-if (!rows.length) { el.innerHTML = '<p class="py-10 text-center text-sm text-slate-400">Data tidak ditemukan.</p>'; return; }
+const countEl = document.getElementById('studentCount');
+if (countEl) countEl.textContent = `${rows.length} data siswa`;
+if (!el) return;
+if (!rows.length) { el.innerHTML = '<tr><td colspan="7" class="student-empty">Data siswa tidak ditemukan.</td></tr>'; return; }
 el.innerHTML = rows.map(s => {
 const initial = (s.nama_siswa || '?').trim().charAt(0).toUpperCase();
 const photo = s.url_foto
-? `<img class="h-11 w-11 flex-none rounded-2xl object-cover ring-1 ring-slate-200" src="${escapeAttr(s.url_foto)}" alt="Foto ${escapeAttr(s.nama_siswa || 'siswa')}" onerror="this.outerHTML='<div class=&quot;flex h-11 w-11 flex-none items-center justify-center rounded-2xl bg-indigo-100 text-sm font-extrabold text-indigo-700&quot;>${escapeHtml(initial)}</div>'">`
-: `<div class="flex h-11 w-11 flex-none items-center justify-center rounded-2xl bg-indigo-100 text-sm font-extrabold text-indigo-700">${escapeHtml(initial)}</div>`;
-return `<div class="rounded-2xl bg-white p-4 shadow"><div class="flex items-start justify-between gap-3"><div class="flex min-w-0 gap-3">${photo}<div class="min-w-0"><b class="block truncate">${escapeHtml(s.nama_siswa)}</b><p class="text-xs text-slate-500">NISN: ${escapeHtml(s.nisn)} · ${escapeHtml(s.kelas)}</p><p class="mt-1 text-xs text-slate-400">JK: ${escapeHtml(s.jenis_kelamin || '-')} · RFID: ${escapeHtml(s.rfid_uid || '-')} · WA: ${escapeHtml(s.no_wa_ortu || '-')}</p><p class="mt-1 truncate text-[11px] text-slate-300">Foto: ${escapeHtml(s.url_foto || '-')}</p></div></div><div class="flex flex-none gap-2"><button onclick='openSiswaForm(${JSON.stringify(s)})' class="rounded-xl bg-indigo-50 px-3 py-2 text-indigo-600"><i class="fa-solid fa-pen"></i></button><button onclick="deleteSiswa('${escapeAttr(s.nisn)}')" class="rounded-xl bg-red-50 px-3 py-2 text-red-600"><i class="fa-solid fa-trash"></i></button></div></div></div>`;
+? `<img class="student-photo" src="${escapeAttr(s.url_foto)}" alt="Foto ${escapeAttr(s.nama_siswa || 'siswa')}" onerror="this.outerHTML='<div class=&quot;student-photo-fallback&quot;>${escapeHtml(initial)}</div>'">`
+: `<div class="student-photo-fallback">${escapeHtml(initial)}</div>`;
+return `<tr><td><input type="checkbox" class="student-check" aria-label="Pilih ${escapeAttr(s.nama_siswa || 'siswa')}"></td><td>${photo}</td><td class="student-nisn-cell">${escapeHtml(s.nisn || '-')}</td><td class="student-name-cell">${escapeHtml(s.nama_siswa || '-')}</td><td>${escapeHtml(s.kelas || '-')}</td><td class="student-wa-cell">${escapeHtml(s.no_wa_ortu || '-')}</td><td><div class="student-action-cell"><button type="button" onclick='openSiswaForm(${JSON.stringify(s)})' class="student-action-btn student-edit-btn" title="Edit siswa"><i class="fa-solid fa-pen-to-square"></i></button><button type="button" onclick="deleteSiswa('${escapeAttr(s.nisn)}')" class="student-action-btn student-delete-btn" title="Hapus siswa"><i class="fa-solid fa-trash"></i></button></div></td></tr>`;
 }).join('');
 }
 function openSiswaForm(s=null) {
@@ -1923,9 +1622,7 @@ const stop1 = pHadir;
 const stop2 = pHadir + pTelat;
 el.innerHTML = `<div class="donut-ring" style="background:conic-gradient(#3b82f6 0 ${stop1}%, #f59e0b ${stop1}% ${stop2}%, #f43f5e ${stop2}% 100%)"><div class="donut-hole"><b>${total}</b><span>Data</span></div></div>`;
 legend.innerHTML = `
-<span><i class="legend-dot" style="background:#3b82f6"></i> Hadir ${hadir}</span>
-<span><i class="legend-dot" style="background:#f59e0b"></i> Terlambat ${telat}</span>
-<span><i class="legend-dot" style="background:#f43f5e"></i> Tidak Absen ${tidak}</span>`;
+<span><i class="legend-dot" style="background:#3b82f6"></i> Hadir ${hadir}</span><span><i class="legend-dot" style="background:#f59e0b"></i> Terlambat ${telat}</span><span><i class="legend-dot" style="background:#f43f5e"></i> Tidak Absen ${tidak}</span>`;
 }
 function renderMonthlyTrend(rows) {
 const el = document.getElementById('monthlyTrendChart');
@@ -1945,28 +1642,14 @@ data[idx].total++;
 });
 const max = Math.max(1, ...data.map(d => d.total));
 el.innerHTML = `
-<div class="trend-legend">
-<span><i class="legend-dot" style="background:#86efac"></i> Tepat Waktu</span>
-<span><i class="legend-dot" style="background:#facc15"></i> Terlambat Masuk</span>
-<span><i class="legend-dot" style="background:#fdba74"></i> Izin / Sakit</span>
-<span><i class="legend-dot" style="background:#fb7185"></i> Tidak Absen (Alpa)</span>
-</div>
-<div class="trend-bars">${data.map((d, idx) => {
+<div class="trend-legend"><span><i class="legend-dot" style="background:#86efac"></i> Tepat Waktu</span><span><i class="legend-dot" style="background:#facc15"></i> Terlambat Masuk</span><span><i class="legend-dot" style="background:#fdba74"></i> Izin / Sakit</span><span><i class="legend-dot" style="background:#fb7185"></i> Tidak Absen (Alpa)</span></div><div class="trend-bars">${data.map((d, idx) => {
 const stackHeight = Math.max(d.total ? 6 : 0, d.total / max * 150);
 const unit = d.total ? stackHeight / d.total : 0;
 const hTepat = d.tepat * unit;
 const hTelat = d.telat * unit;
 const hSakit = d.sakitIzin * unit;
 const hAlpa = d.alpa * unit;
-return `<div class="trend-month" title="${months[idx]}: ${d.total} data">
-<div class="trend-stack" style="height:${stackHeight}px">
-<span class="bar-tepat" style="height:${hTepat}px"></span>
-<span class="bar-telat" style="height:${hTelat}px"></span>
-<span class="bar-izin" style="height:${hSakit}px"></span>
-<span class="bar-alpa" style="height:${hAlpa}px"></span>
-</div>
-<span class="trend-label">${months[idx]}</span>
-</div>`;
+return `<div class="trend-month" title="${months[idx]}: ${d.total} data"><div class="trend-stack" style="height:${stackHeight}px"><span class="bar-tepat" style="height:${hTepat}px"></span><span class="bar-telat" style="height:${hTelat}px"></span><span class="bar-izin" style="height:${hSakit}px"></span><span class="bar-alpa" style="height:${hAlpa}px"></span></div><span class="trend-label">${months[idx]}</span></div>`;
 }).join('')}</div>`;
 }
 function renderDashboardError(message) {
@@ -1988,6 +1671,4 @@ function escapeHtml(v) {
 return String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 }
 function escapeAttr(v) { return escapeHtml(v).replace(/`/g, '&#96;'); }
-</script>
-</body>
-</html>
+</script></body></html>
