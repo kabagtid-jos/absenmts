@@ -591,9 +591,6 @@
             </div>
           </div>
           <div class="topbar-actions">
-            <button id="installPwaBtn" type="button" onclick="installPwa()" class="install-btn pwa-install-btn hidden" title="Install aplikasi" aria-label="Install aplikasi">
-              <i class="fa-solid fa-download text-xs"></i><span class="hidden sm:inline">Install</span>
-            </button>
             <button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
               <i class="fa-solid fa-moon text-xs"></i>
             </button>
@@ -678,9 +675,6 @@
             </div>
           </div>
           <div class="topbar-actions">
-            <button type="button" onclick="installPwa()" class="install-btn pwa-install-btn hidden" title="Install aplikasi" aria-label="Install aplikasi">
-              <i class="fa-solid fa-download text-xs"></i><span class="hidden sm:inline">Install</span>
-            </button>
             <button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
               <i class="fa-solid fa-moon text-xs"></i>
             </button>
@@ -1198,7 +1192,6 @@
           () => {}
         );
         scannerRunning = true;
-        showToast('Scanner aktif. Arahkan QR Code ke kamera.');
       } catch (err) {
         await stopBarcodeScan();
         showToast('Kamera tidak dapat dibuka. Izinkan akses kamera atau input manual.');
@@ -1232,7 +1225,6 @@
       openRfidModal();
 
       if (!('NDEFReader' in window)) {
-        showToast('Reader RFID siap. Tempelkan kartu ke reader atau gunakan input manual.');
         return;
       }
 
@@ -1240,7 +1232,6 @@
         nfcReader = new NDEFReader();
         nfcAbortController = new AbortController();
         await nfcReader.scan({ signal: nfcAbortController.signal });
-        showToast('NFC aktif. Tempelkan kartu ke perangkat.');
         nfcReader.onreading = async event => {
           for (const record of event.message.records) {
             let value = '';
@@ -1257,7 +1248,6 @@
         };
       } catch (err) {
         if (err?.name !== 'AbortError') {
-          showToast('NFC belum aktif. Fokus input sudah siap untuk RFID reader/manual.');
           console.warn(err);
         }
       }
