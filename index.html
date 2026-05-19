@@ -797,7 +797,7 @@
 
   <!-- MODAL SISWA -->
   <div id="siswaModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4">
-    <div class="w-full max-w-md rounded-3xl bg-white p-5 shadow-2xl">
+    <div class="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl">
       <div class="mb-4 flex items-center justify-between">
         <h3 id="siswaModalTitle" class="text-lg font-extrabold">Tambah Siswa</h3>
         <button onclick="closeSiswaForm()" class="rounded-full bg-slate-100 px-3 py-2"><i class="fa-solid fa-xmark"></i></button>
@@ -807,12 +807,18 @@
       <input id="formNisn" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" />
       <label class="text-xs font-bold text-slate-500">Nama Siswa</label>
       <input id="formNama" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" />
+      <label class="text-xs font-bold text-slate-500">Jenis Kelamin</label>
+      <select id="formJenisKelamin" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm">
+        <option value="">Pilih jenis kelamin</option>
+        <option value="Laki-laki">Laki-laki</option>
+        <option value="Perempuan">Perempuan</option>
+      </select>
       <label class="text-xs font-bold text-slate-500">Kelas</label>
       <select id="formKelas" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"></select>
       <label class="text-xs font-bold text-slate-500">No WA Orang Tua</label>
       <input id="formWa" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="08xxxx" />
-      <label class="text-xs font-bold text-slate-500">URL Foto</label>
-      <input id="formFoto" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="Opsional" />
+      <label class="text-xs font-bold text-slate-500">Link Foto Siswa <span class="font-medium text-slate-400">(Opsional)</span></label>
+      <input id="formFoto" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="https://contoh.com/foto-siswa.jpg" />
       <label class="text-xs font-bold text-slate-500">RFID UID</label>
       <input id="formRfid" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="Opsional" />
       <button onclick="saveSiswa()" class="btn w-full rounded-2xl bg-indigo-600 py-4 font-extrabold text-white shadow">Simpan Data</button>
@@ -1350,7 +1356,7 @@
     }
 
     async function fetchSiswaSuggestions(keyword = '') {
-      const columns = 'nisn,nama_siswa,kelas,url_foto,rfid_uid';
+      const columns = 'nisn,nama_siswa,kelas,jenis_kelamin,url_foto,rfid_uid';
       const q = String(keyword || '').trim();
 
       if (!q) {
@@ -1419,7 +1425,7 @@
           ${photo}
           <span class="min-w-0">
             <span class="manual-suggestion-name truncate">${escapeHtml(s.nama_siswa || '-')}</span>
-            <span class="manual-suggestion-meta truncate">${escapeHtml(s.nisn || '-')} • ${escapeHtml(s.kelas || '-')}</span>
+            <span class="manual-suggestion-meta truncate">${escapeHtml(s.nisn || '-')} • ${escapeHtml(s.kelas || '-')}${s.jenis_kelamin ? ' • ' + escapeHtml(s.jenis_kelamin) : ''}</span>
           </span>
         </button>`;
       }).join('');
@@ -1610,7 +1616,7 @@
 
     async function loadSiswa(showLoading = true) {
       if (showLoading) showLoader('Memuat siswa...');
-      const { data, error } = await sb.from('siswa').select('nisn,nama_siswa,kelas,no_wa_ortu,url_foto,rfid_uid').order('nama_siswa');
+      const { data, error } = await sb.from('siswa').select('nisn,nama_siswa,kelas,jenis_kelamin,no_wa_ortu,url_foto,rfid_uid').order('nama_siswa');
       if (showLoading) hideLoader();
       if (error) return showToast(error.message);
       siswaData = data || [];
@@ -1622,7 +1628,13 @@
       const rows = siswaData.filter(s => `${s.nisn} ${s.nama_siswa} ${s.kelas}`.toLowerCase().includes(q));
       const el = document.getElementById('siswaList');
       if (!rows.length) { el.innerHTML = '<p class="py-10 text-center text-sm text-slate-400">Data tidak ditemukan.</p>'; return; }
-      el.innerHTML = rows.map(s => `<div class="rounded-2xl bg-white p-4 shadow"><div class="flex items-start justify-between gap-3"><div><b>${escapeHtml(s.nama_siswa)}</b><p class="text-xs text-slate-500">NISN: ${escapeHtml(s.nisn)} · ${escapeHtml(s.kelas)}</p><p class="mt-1 text-xs text-slate-400">RFID: ${escapeHtml(s.rfid_uid || '-')} · WA: ${escapeHtml(s.no_wa_ortu || '-')}</p></div><div class="flex gap-2"><button onclick='openSiswaForm(${JSON.stringify(s)})' class="rounded-xl bg-indigo-50 px-3 py-2 text-indigo-600"><i class="fa-solid fa-pen"></i></button><button onclick="deleteSiswa('${escapeAttr(s.nisn)}')" class="rounded-xl bg-red-50 px-3 py-2 text-red-600"><i class="fa-solid fa-trash"></i></button></div></div></div>`).join('');
+      el.innerHTML = rows.map(s => {
+        const initial = (s.nama_siswa || '?').trim().charAt(0).toUpperCase();
+        const photo = s.url_foto
+          ? `<img class="h-11 w-11 flex-none rounded-2xl object-cover ring-1 ring-slate-200" src="${escapeAttr(s.url_foto)}" alt="Foto ${escapeAttr(s.nama_siswa || 'siswa')}" onerror="this.outerHTML='<div class=&quot;flex h-11 w-11 flex-none items-center justify-center rounded-2xl bg-indigo-100 text-sm font-extrabold text-indigo-700&quot;>${escapeHtml(initial)}</div>'">`
+          : `<div class="flex h-11 w-11 flex-none items-center justify-center rounded-2xl bg-indigo-100 text-sm font-extrabold text-indigo-700">${escapeHtml(initial)}</div>`;
+        return `<div class="rounded-2xl bg-white p-4 shadow"><div class="flex items-start justify-between gap-3"><div class="flex min-w-0 gap-3">${photo}<div class="min-w-0"><b class="block truncate">${escapeHtml(s.nama_siswa)}</b><p class="text-xs text-slate-500">NISN: ${escapeHtml(s.nisn)} · ${escapeHtml(s.kelas)}</p><p class="mt-1 text-xs text-slate-400">JK: ${escapeHtml(s.jenis_kelamin || '-')} · RFID: ${escapeHtml(s.rfid_uid || '-')} · WA: ${escapeHtml(s.no_wa_ortu || '-')}</p><p class="mt-1 truncate text-[11px] text-slate-300">Foto: ${escapeHtml(s.url_foto || '-')}</p></div></div><div class="flex flex-none gap-2"><button onclick='openSiswaForm(${JSON.stringify(s)})' class="rounded-xl bg-indigo-50 px-3 py-2 text-indigo-600"><i class="fa-solid fa-pen"></i></button><button onclick="deleteSiswa('${escapeAttr(s.nisn)}')" class="rounded-xl bg-red-50 px-3 py-2 text-red-600"><i class="fa-solid fa-trash"></i></button></div></div></div>`;
+      }).join('');
     }
 
     function openSiswaForm(s=null) {
@@ -1630,6 +1642,7 @@
       document.getElementById('nisnLama').value = s?.nisn || '';
       document.getElementById('formNisn').value = s?.nisn || '';
       document.getElementById('formNama').value = s?.nama_siswa || '';
+      document.getElementById('formJenisKelamin').value = s?.jenis_kelamin || '';
       document.getElementById('formKelas').value = s?.kelas || kelasData[0] || '';
       document.getElementById('formWa').value = s?.no_wa_ortu || '';
       document.getElementById('formFoto').value = s?.url_foto || '';
@@ -1648,9 +1661,10 @@
       const row = {
         nisn: document.getElementById('formNisn').value.trim(),
         nama_siswa: document.getElementById('formNama').value.trim(),
+        jenis_kelamin: document.getElementById('formJenisKelamin').value || null,
         kelas: document.getElementById('formKelas').value,
         no_wa_ortu: document.getElementById('formWa').value.trim(),
-        url_foto: document.getElementById('formFoto').value.trim(),
+        url_foto: document.getElementById('formFoto').value.trim() || null,
         rfid_uid: document.getElementById('formRfid').value.trim() || null
       };
       if (!row.nisn || !row.nama_siswa || !row.kelas) return showToast('NISN, nama, dan kelas wajib diisi.');
