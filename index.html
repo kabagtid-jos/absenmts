@@ -15,7 +15,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     * { font-family: 'Poppins', sans-serif; }
-    body { background:#eef2ff; }
+    body { background:var(--home-bg); }
+    #app { width:100%; max-width:none !important; min-height:100vh; background:var(--home-bg) !important; box-shadow:none !important; }
     .view { display:none; }
     .view.active { display:block; }
     .glass { background:rgba(255,255,255,.94); backdrop-filter:blur(10px); }
@@ -29,14 +30,18 @@
       --home-bg: #ecf5fa;
       --home-muted: #8b98aa;
     }
-    .home-shell { background: var(--home-bg); color: #1f2937; }
-    .home-topbar { background: var(--home-navy); min-height: 54px; box-shadow: 0 3px 12px rgba(2, 60, 90, .18); }
+    .home-shell { background: var(--home-bg); color: #1f2937; width:100%; }
+    .home-topbar { background: var(--home-navy); min-height: 72px; box-shadow: 0 3px 12px rgba(2, 60, 90, .18); width:100%; display:flex; align-items:center; }
+    .home-topbar-inner { width:min(100%, 1180px); margin:0 auto; padding:0 18px; display:flex; align-items:center; justify-content:space-between; }
+    .home-content { width:min(100%, 480px); margin:0 auto; padding:28px 16px 0; }
+    .admin-login-content { width:min(100%, 520px); margin:0 auto; padding:48px 20px 0; }
     .brand-mark { width: 33px; height: 33px; border-radius: 999px; display:flex; align-items:center; justify-content:center; background: radial-gradient(circle at 30% 25%, #fff 0 38%, #f4e8ff 40% 63%, #b983ff 64% 100%); box-shadow: 0 0 0 2px rgba(255,255,255,.8); position: relative; }
     .brand-mark::after { content:''; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 18px solid #f6a33a; transform: rotate(-12deg) translateY(-1px); filter: drop-shadow(0 1px 1px rgba(0,0,0,.15)); }
     .moon-btn { width: 29px; height:29px; border-radius:999px; background:rgba(255,255,255,.13); display:flex; align-items:center; justify-content:center; color:#d7f4ff; }
-    .home-card { background:#fff; border-radius: 8px; box-shadow: 0 8px 22px rgba(15, 23, 42, .10); }
-    .school-logo { width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 5px 9px rgba(15,23,42,.15)); }
-    .scanner-frame { height: 145px; border: 2px solid #08a8ef; border-radius: 12px; background:#fbfcfe; overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative; }
+    .home-card { background:#fff; border-radius: 14px; box-shadow: 0 8px 22px rgba(15, 23, 42, .10); }
+    .school-logo { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 5px 9px rgba(15,23,42,.15)); }
+    .home-title { color:#0b86bd; font-size:28px; line-height:1; font-weight:800; letter-spacing:.04em; }
+    .scanner-frame { width:100%; max-width: 320px; height: 240px; border: 2px solid #08a8ef; border-radius: 16px; background:#fbfcfe; overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative; }
     .scanner-bars { height:44px; display:flex; align-items:center; gap:4px; opacity:.55; }
     .scanner-bars span { display:block; width:5px; border-radius:6px; background:#b8c0cb; }
     .scanner-bars span:nth-child(1){height:38px}.scanner-bars span:nth-child(2){height:39px}.scanner-bars span:nth-child(3){height:41px}.scanner-bars span:nth-child(4){height:38px}.scanner-bars span:nth-child(5){height:42px}.scanner-bars span:nth-child(6){height:40px}.scanner-bars span:nth-child(7){height:39px}.scanner-bars span:nth-child(8){height:41px}
@@ -67,8 +72,10 @@
     .admin-login-input { height:57px; border:1px solid #e1e7ee; border-radius:12px; background:#fff; box-shadow:inset 0 1px 2px rgba(15,23,42,.04); letter-spacing:.25em; }
     .admin-login-btn { height:51px; border-radius:10px; background:#066b9b; box-shadow:0 10px 20px rgba(6,107,155,.24); }
     .app-footer { color:#7b8797; }
+    #view-admin, #view-siswa, #view-izin, #view-rekap, #view-setting { max-width:28rem; margin:0 auto; }
 
     body.dark-mode { background:#07111d; }
+    body.dark-mode #app { background:#071a2a !important; }
     body.dark-mode .home-shell { background:#071a2a; color:#e5edf5; }
     body.dark-mode .home-topbar { background:#042d47; box-shadow:0 3px 14px rgba(0,0,0,.35); }
     body.dark-mode .home-card,
@@ -104,8 +111,8 @@
     /* Tampilan awal versi mobile dibuat lebih besar dan proporsional seperti desain referensi. */
     @media (max-width: 640px) {
       #app { max-width: 100% !important; }
-      #view-home .home-topbar {
-        min-height: 78px;
+      #view-home .home-topbar { min-height: 78px; }
+      #view-home .home-topbar-inner {
         padding-left: clamp(16px, 4.5vw, 24px) !important;
         padding-right: clamp(16px, 4.5vw, 24px) !important;
       }
@@ -135,7 +142,7 @@
         font-size: 18px;
       }
       #view-home .moon-btn i { font-size: 18px !important; }
-      #view-home > .px-4 {
+      #view-home .home-content {
         padding-left: clamp(18px, 5vw, 32px) !important;
         padding-right: clamp(18px, 5vw, 32px) !important;
         padding-top: clamp(26px, 6vw, 46px) !important;
@@ -148,6 +155,10 @@
       #view-home .school-logo {
         width: clamp(76px, 20vw, 106px);
         height: clamp(76px, 20vw, 106px);
+      }
+      #view-home .home-title {
+        margin-top: clamp(16px, 4vw, 24px) !important;
+        font-size: clamp(25px, 7vw, 36px) !important;
       }
       #view-home .home-card .text-center .mt-2 {
         margin-top: clamp(14px, 3vw, 22px) !important;
@@ -166,7 +177,7 @@
       #view-home .scanner-frame {
         width: 100%;
         max-width: min(100%, 360px) !important;
-        height: clamp(210px, 55vw, 265px);
+        height: clamp(230px, 60vw, 300px);
         margin-top: clamp(34px, 8vw, 52px) !important;
         border-width: 3px;
         border-radius: clamp(24px, 5vw, 34px);
@@ -239,7 +250,7 @@
     @media (max-width: 380px) {
       #view-home .home-card { padding-left: 22px !important; padding-right: 22px !important; }
       #view-home .scan-btn { font-size: 13px; letter-spacing: 0; }
-      #view-home .scanner-frame { height: 198px; }
+      #view-home .scanner-frame { height: 220px; }
     }
 
     @media print {
@@ -280,32 +291,35 @@
   <main id="app" class="mx-auto min-h-screen max-w-md bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-700 shadow-2xl">
     <!-- LOGIN / ABSENSI PUBLIK -->
     <section id="view-home" class="view active min-h-screen home-shell pb-8">
-      <div class="home-topbar flex items-center justify-between px-4 text-white">
-        <div class="flex items-center gap-3">
-          <div class="brand-mark" aria-label="Logo aplikasi"></div>
-          <div class="leading-tight">
-            <h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
-            <p class="text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
+      <div class="home-topbar text-white">
+        <div class="home-topbar-inner">
+          <div class="flex items-center gap-3">
+            <div class="brand-mark" aria-label="Logo aplikasi"></div>
+            <div class="leading-tight">
+              <h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
+              <p class="text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
+            </div>
           </div>
+          <button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
+            <i class="fa-solid fa-moon text-xs"></i>
+          </button>
         </div>
-        <button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
-          <i class="fa-solid fa-moon text-xs"></i>
-        </button>
       </div>
 
-      <div class="px-4 pt-[18px]">
+      <div class="home-content">
         <div class="home-card px-6 pb-6 pt-7">
           <div class="text-center">
             <img class="school-logo mx-auto" src="https://i.ibb.co.com/39WQv2Cx/Logo-MTs-Hidayatullah-2023.png" alt="Logo MTs. Hidayatullah" />
+            <h2 class="home-title mt-4">ABZENSI</h2>
             <div class="mt-2 flex items-center justify-center gap-2 text-[13px] font-extrabold text-[#075176]">
               <i class="fa-solid fa-star text-[9px] text-amber-400"></i>
               <span>MTs. Hidayatullah</span>
               <i class="fa-solid fa-star text-[9px] text-amber-400"></i>
             </div>
-            <p class="mt-1 text-[10px] font-medium text-slate-500">Arahkan QR Code/Barcode ke Kamera atau tap NFC.</p>
+            <p class="mt-1 text-[10px] font-medium text-slate-500">Arahkan QR Code ke Kamera atau tap NFC.</p>
           </div>
 
-          <div class="scanner-frame mx-auto mt-6 max-w-[230px]">
+          <div class="scanner-frame mx-auto mt-6">
             <div id="scannerPlaceholder" class="scanner-bars" aria-hidden="true">
               <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
             </div>
@@ -314,7 +328,7 @@
 
           <div class="mt-6 grid grid-cols-2 gap-3">
             <button type="button" onclick="startBarcodeScan()" class="scan-btn btn bg-[#069ddb] text-white hover:bg-[#038ac2]">
-              <i class="fa-solid fa-camera mr-1.5 text-[11px]"></i> Scan Barcode
+              <i class="fa-solid fa-camera mr-1.5 text-[11px]"></i> Scan QR Code
             </button>
             <button type="button" onclick="tapNfcOrFocus()" class="scan-btn btn bg-[#5942df] text-white hover:bg-[#4d39c7]">
               <i class="fa-solid fa-id-card-clip mr-1.5 text-[11px]"></i> Tap NFC/RFID
@@ -359,20 +373,22 @@
 
     <!-- LOGIN ADMIN -->
     <section id="view-admin-login" class="view min-h-screen home-shell pb-8">
-      <div class="home-topbar flex items-center justify-between px-4 text-white">
-        <div class="flex items-center gap-3">
-          <div class="brand-mark" aria-label="Logo aplikasi"></div>
-          <div class="leading-tight">
-            <h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
-            <p class="text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
+      <div class="home-topbar text-white">
+        <div class="home-topbar-inner">
+          <div class="flex items-center gap-3">
+            <div class="brand-mark" aria-label="Logo aplikasi"></div>
+            <div class="leading-tight">
+              <h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
+              <p class="text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
+            </div>
           </div>
+          <button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
+            <i class="fa-solid fa-moon text-xs"></i>
+          </button>
         </div>
-        <button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
-          <i class="fa-solid fa-moon text-xs"></i>
-        </button>
       </div>
 
-      <div class="px-5 pt-10">
+      <div class="admin-login-content">
         <div class="admin-login-card px-8 pb-9 pt-9">
           <div class="mb-8 text-center">
             <div class="admin-icon-circle">
@@ -763,10 +779,12 @@
         placeholderEl.style.display = 'none';
         readerEl.style.display = 'block';
         const supportedFormats = window.Html5QrcodeSupportedFormats;
+        const availableSize = Math.min(readerEl.clientWidth || 280, readerEl.clientHeight || 280);
+        const qrSize = Math.max(190, Math.min(280, availableSize - 24));
         const config = {
-          fps: 10,
-          qrbox: { width: 210, height: 118 },
-          aspectRatio: 1.58
+          fps: 12,
+          qrbox: { width: qrSize, height: qrSize },
+          aspectRatio: 1.0
         };
         if (supportedFormats) {
           config.formatsToSupport = [
@@ -793,7 +811,7 @@
           () => {}
         );
         scannerRunning = true;
-        showToast('Scanner aktif. Arahkan barcode/QR ke kamera.');
+        showToast('Scanner aktif. Arahkan QR Code ke kamera.');
       } catch (err) {
         await stopBarcodeScan();
         showToast('Kamera tidak dapat dibuka. Izinkan akses kamera atau input manual.');
