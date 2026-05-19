@@ -10,6 +10,7 @@
   <meta http-equiv="Expires" content="0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
@@ -20,6 +21,38 @@
     .glass { background:rgba(255,255,255,.94); backdrop-filter:blur(10px); }
     .btn { transition:.18s ease; }
     .btn:active { transform:scale(.98); }
+
+    :root {
+      --home-navy: #075176;
+      --home-blue: #0399d6;
+      --home-purple: #5d44e8;
+      --home-bg: #ecf5fa;
+      --home-muted: #8b98aa;
+    }
+    .home-shell { background: var(--home-bg); color: #1f2937; }
+    .home-topbar { background: var(--home-navy); min-height: 54px; box-shadow: 0 3px 12px rgba(2, 60, 90, .18); }
+    .brand-mark { width: 33px; height: 33px; border-radius: 999px; display:flex; align-items:center; justify-content:center; background: radial-gradient(circle at 30% 25%, #fff 0 38%, #f4e8ff 40% 63%, #b983ff 64% 100%); box-shadow: 0 0 0 2px rgba(255,255,255,.8); position: relative; }
+    .brand-mark::after { content:''; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 18px solid #f6a33a; transform: rotate(-12deg) translateY(-1px); filter: drop-shadow(0 1px 1px rgba(0,0,0,.15)); }
+    .moon-btn { width: 29px; height:29px; border-radius:999px; background:rgba(255,255,255,.13); display:flex; align-items:center; justify-content:center; color:#d7f4ff; }
+    .home-card { background:#fff; border-radius: 8px; box-shadow: 0 8px 22px rgba(15, 23, 42, .10); }
+    .school-logo { width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 5px 9px rgba(15,23,42,.15)); }
+    .scanner-frame { height: 145px; border: 2px solid #08a8ef; border-radius: 12px; background:#fbfcfe; overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative; }
+    .scanner-bars { height:44px; display:flex; align-items:center; gap:4px; opacity:.55; }
+    .scanner-bars span { display:block; width:5px; border-radius:6px; background:#b8c0cb; }
+    .scanner-bars span:nth-child(1){height:38px}.scanner-bars span:nth-child(2){height:39px}.scanner-bars span:nth-child(3){height:41px}.scanner-bars span:nth-child(4){height:38px}.scanner-bars span:nth-child(5){height:42px}.scanner-bars span:nth-child(6){height:40px}.scanner-bars span:nth-child(7){height:39px}.scanner-bars span:nth-child(8){height:41px}
+    #scannerReader, #scannerReader video { width:100% !important; height:100% !important; object-fit:cover; border:0 !important; }
+    #scannerReader { display:none; }
+    .scan-btn { border-radius: 8px; min-height: 42px; font-size: 12px; font-weight: 800; box-shadow: 0 5px 12px rgba(0,0,0,.10); }
+    .manual-divider { display:flex; align-items:center; gap:12px; color:#a1a7b2; font-size:9px; font-weight:800; letter-spacing:.12em; }
+    .manual-divider::before, .manual-divider::after { content:''; height:1px; flex:1; background:#eef1f5; }
+    .manual-input { height: 38px; border: 1px solid #e7ebf1; border-radius: 8px; font-size: 12px; box-shadow: inset 0 1px 2px rgba(0,0,0,.02); }
+    .send-btn { width:43px; height:43px; border-radius:9px; background:#1f2937; color:#fff; box-shadow:0 5px 12px rgba(31,41,55,.20); }
+    .absent-panel { border:1px solid #eef2f7; border-radius:10px; max-height:168px; overflow-y:auto; background:#fff; }
+    .absent-panel::-webkit-scrollbar { width:4px; }
+    .absent-panel::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:8px; }
+    .student-avatar { width:25px; height:25px; border-radius:999px; background:#f2f5fb; color:#7e9dff; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; flex-shrink:0; }
+    .admin-outline { border:1px solid #d9eefc; color:#075176; border-radius:8px; }
+
     @media print {
       .no-print { display:none !important; }
       body { background:white !important; }
@@ -57,56 +90,78 @@
 
   <main id="app" class="mx-auto min-h-screen max-w-md bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-700 shadow-2xl">
     <!-- LOGIN / ABSENSI PUBLIK -->
-    <section id="view-home" class="view active min-h-screen p-5 pb-24">
-      <div class="mb-6 flex items-center justify-between text-white">
-        <div>
-          <p class="text-xs font-medium opacity-80">Sistem Absensi Siswa</p>
-          <h1 class="text-3xl font-extrabold leading-tight">Abzensi</h1>
-          <p class="text-xs opacity-90">MTs. Hidayatullah</p>
+    <section id="view-home" class="view active min-h-screen home-shell pb-8">
+      <div class="home-topbar flex items-center justify-between px-4 text-white">
+        <div class="flex items-center gap-3">
+          <div class="brand-mark" aria-label="Logo aplikasi"></div>
+          <div class="leading-tight">
+            <h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
+            <p class="text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
+          </div>
         </div>
-        <button onclick="openView('view-admin-login')" class="btn rounded-full bg-white/20 px-4 py-2 text-xs font-bold backdrop-blur hover:bg-white/30">
-          <i class="fa-solid fa-user-shield mr-1"></i> Admin
+        <button type="button" class="moon-btn" title="Mode tampilan">
+          <i class="fa-solid fa-moon text-xs"></i>
         </button>
       </div>
 
-      <div class="glass rounded-3xl p-5 shadow-xl">
-        <div class="mb-4 rounded-2xl bg-indigo-50 p-4 text-center">
-          <i class="fa-solid fa-id-card-clip mb-2 text-4xl text-indigo-600"></i>
-          <h2 class="font-extrabold text-slate-800">Scan / Input NISN atau RFID</h2>
-          <p class="mt-1 text-xs text-slate-500">Tekan Enter atau tombol absen untuk menyimpan ke Supabase.</p>
-        </div>
+      <div class="px-4 pt-[18px]">
+        <div class="home-card px-6 pb-6 pt-7">
+          <div class="text-center">
+            <img class="school-logo mx-auto" src="https://i.ibb.co.com/39WQv2Cx/Logo-MTs-Hidayatullah-2023.png" alt="Logo MTs. Hidayatullah" />
+            <div class="mt-2 flex items-center justify-center gap-2 text-[13px] font-extrabold text-[#075176]">
+              <i class="fa-solid fa-star text-[9px] text-amber-400"></i>
+              <span>MTs. Hidayatullah</span>
+              <i class="fa-solid fa-star text-[9px] text-amber-400"></i>
+            </div>
+            <p class="mt-1 text-[10px] font-medium text-slate-500">Arahkan QR Code/Barcode ke Kamera atau tap NFC.</p>
+          </div>
 
-        <form onsubmit="event.preventDefault(); catatAbsensi();">
-          <input id="aksesInput" autocomplete="off" class="w-full rounded-2xl border-2 border-indigo-100 bg-white px-4 py-4 text-center text-xl font-bold tracking-wide outline-none focus:border-indigo-500" placeholder="NISN / RFID" />
-          <button class="btn mt-4 w-full rounded-2xl bg-indigo-600 py-4 font-extrabold text-white shadow-lg hover:bg-indigo-700">
-            <i class="fa-solid fa-fingerprint mr-2"></i> Catat Kehadiran
+          <div class="scanner-frame mx-auto mt-6 max-w-[230px]">
+            <div id="scannerPlaceholder" class="scanner-bars" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div id="scannerReader"></div>
+          </div>
+
+          <div class="mt-6 grid grid-cols-2 gap-3">
+            <button type="button" onclick="startBarcodeScan()" class="scan-btn btn bg-[#069ddb] text-white hover:bg-[#038ac2]">
+              <i class="fa-solid fa-camera mr-1.5 text-[11px]"></i> Scan Barcode
+            </button>
+            <button type="button" onclick="tapNfcOrFocus()" class="scan-btn btn bg-[#5942df] text-white hover:bg-[#4d39c7]">
+              <i class="fa-solid fa-id-card-clip mr-1.5 text-[11px]"></i> Tap NFC/RFID
+            </button>
+          </div>
+
+          <div class="manual-divider my-5">ATAU MANUAL</div>
+
+          <form onsubmit="event.preventDefault(); catatAbsensi();" class="flex items-center gap-2">
+            <input id="aksesInput" autocomplete="off" inputmode="text" class="manual-input flex-1 px-3 text-center font-semibold text-slate-700 outline-none focus:border-sky-400" placeholder="Ketik Nama Siswa atau NISN..." />
+            <button class="send-btn btn" title="Catat kehadiran" aria-label="Catat kehadiran">
+              <i class="fa-solid fa-paper-plane text-sm"></i>
+            </button>
+          </form>
+
+          <div class="absent-panel mt-6 p-3">
+            <div class="mb-2 flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wide text-slate-600">
+              <i class="fa-solid fa-user-minus text-rose-500"></i>
+              <span>Tidak Hadir Hari Ini</span>
+            </div>
+            <div id="absentTodayContainer" class="divide-y divide-slate-100 text-[11px]"></div>
+          </div>
+
+          <div class="my-5 h-px bg-slate-100"></div>
+
+          <button onclick="openView('view-admin-login')" class="admin-outline btn flex w-full items-center justify-center gap-2 py-3 text-xs font-extrabold hover:bg-sky-50">
+            <i class="fa-solid fa-lock"></i> Akses Admin
           </button>
-        </form>
 
-        <div class="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
-          <div class="rounded-xl bg-slate-50 p-3"><p class="text-slate-400">Mulai</p><b id="cfgMulai">06:00</b></div>
-          <div class="rounded-xl bg-slate-50 p-3"><p class="text-slate-400">Tepat</p><b id="cfgTepat">07:00</b></div>
-          <div class="rounded-xl bg-slate-50 p-3"><p class="text-slate-400">Akhir</p><b id="cfgAkhir">08:00</b></div>
+          <div class="hidden">
+            <b id="cfgMulai">06:00</b><b id="cfgTepat">07:00</b><b id="cfgAkhir">08:00</b>
+            <p id="dashHadir">0</p><p id="dashTelat">0</p><div id="recentContainer"></div>
+          </div>
         </div>
-      </div>
 
-      <div class="mt-5 grid grid-cols-2 gap-3">
-        <div class="glass rounded-2xl p-4 text-center text-white shadow-lg">
-          <p class="text-xs text-slate-500">Hadir Hari Ini</p>
-          <p id="dashHadir" class="text-3xl font-extrabold text-green-600">0</p>
-        </div>
-        <div class="glass rounded-2xl p-4 text-center text-white shadow-lg">
-          <p class="text-xs text-slate-500">Terlambat</p>
-          <p id="dashTelat" class="text-3xl font-extrabold text-amber-600">0</p>
-        </div>
-      </div>
-
-      <div class="glass mt-5 rounded-3xl p-4 shadow-xl">
-        <div class="mb-3 flex items-center justify-between">
-          <h3 class="font-extrabold">Riwayat Terbaru</h3>
-          <button onclick="loadRecentAbsensi()" class="rounded-lg bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600"><i class="fa-solid fa-rotate"></i></button>
-        </div>
-        <div id="recentContainer" class="space-y-2 text-sm"></div>
+        <p class="mt-7 text-center text-[11px] font-semibold text-slate-400">Made with <span class="text-rose-300">♥</span> Kabag IT MTs. Hidayatullah</p>
       </div>
     </section>
 
@@ -244,6 +299,9 @@
     let siswaData = [];
     let kelasData = [];
     let realtimeChannel = null;
+    let barcodeScanner = null;
+    let scannerRunning = false;
+    let nfcReader = null;
     const refreshTimers = {};
 
     // Komponen header sederhana agar HTML tetap ringkas.
@@ -279,7 +337,7 @@
     }
 
     async function refreshInitialData() {
-      await Promise.all([loadConfig(), loadKelas(), loadRecentAbsensi()]);
+      await Promise.all([loadConfig(), loadKelas(), loadRecentAbsensi(), loadTidakHadirHariIni()]);
     }
 
     function activeViewId() {
@@ -292,7 +350,7 @@
     }
 
     async function refreshActiveView() {
-      await Promise.all([loadConfig(), loadKelas(), loadRecentAbsensi()]);
+      await Promise.all([loadConfig(), loadKelas(), loadRecentAbsensi(), loadTidakHadirHariIni()]);
       const active = activeViewId();
       if (active === 'view-siswa') await loadSiswa(false);
       if (active === 'view-izin') await prepareIzin(false);
@@ -306,13 +364,14 @@
       realtimeChannel = sb.channel('abzensi-mts-hidayatullah-live')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'absensi' }, () => {
           debounceRefresh('absensi', async () => {
-            await loadRecentAbsensi();
+            await Promise.all([loadRecentAbsensi(), loadTidakHadirHariIni()]);
             if (activeViewId() === 'view-rekap') loadRekapBulanan();
             if (currentAdmin) loadDashboardFromGAS();
           });
         })
         .on('postgres_changes', { event: '*', schema: 'public', table: 'siswa' }, () => {
           debounceRefresh('siswa', async () => {
+            await loadTidakHadirHariIni();
             if (activeViewId() === 'view-siswa') await loadSiswa(false);
             if (activeViewId() === 'view-izin') await prepareIzin(false);
             if (currentAdmin) loadDashboardFromGAS();
@@ -448,6 +507,177 @@
       if (rekapKelasValue === 'Semua' || kelasData.includes(rekapKelasValue)) document.getElementById('rekapKelas').value = rekapKelasValue;
     }
 
+
+    async function startBarcodeScan() {
+      if (!window.Html5Qrcode) {
+        showToast('Library scanner belum termuat. Coba refresh halaman.');
+        return;
+      }
+      if (scannerRunning) {
+        await stopBarcodeScan();
+        return;
+      }
+      const readerEl = document.getElementById('scannerReader');
+      const placeholderEl = document.getElementById('scannerPlaceholder');
+      if (!readerEl || !placeholderEl) return;
+      try {
+        placeholderEl.style.display = 'none';
+        readerEl.style.display = 'block';
+        const supportedFormats = window.Html5QrcodeSupportedFormats;
+        const config = {
+          fps: 10,
+          qrbox: { width: 210, height: 118 },
+          aspectRatio: 1.58
+        };
+        if (supportedFormats) {
+          config.formatsToSupport = [
+            supportedFormats.QR_CODE,
+            supportedFormats.CODE_128,
+            supportedFormats.CODE_39,
+            supportedFormats.EAN_13,
+            supportedFormats.EAN_8,
+            supportedFormats.UPC_A,
+            supportedFormats.UPC_E
+          ].filter(Boolean);
+        }
+        barcodeScanner = new Html5Qrcode('scannerReader');
+        await barcodeScanner.start(
+          { facingMode: 'environment' },
+          config,
+          async decodedText => {
+            const code = String(decodedText || '').trim();
+            if (!code) return;
+            await stopBarcodeScan();
+            document.getElementById('aksesInput').value = code;
+            await catatAbsensi();
+          },
+          () => {}
+        );
+        scannerRunning = true;
+        showToast('Scanner aktif. Arahkan barcode/QR ke kamera.');
+      } catch (err) {
+        await stopBarcodeScan();
+        showToast('Kamera tidak dapat dibuka. Izinkan akses kamera atau input manual.');
+        console.warn(err);
+      }
+    }
+
+    async function stopBarcodeScan() {
+      const readerEl = document.getElementById('scannerReader');
+      const placeholderEl = document.getElementById('scannerPlaceholder');
+      try {
+        if (barcodeScanner && scannerRunning) {
+          await barcodeScanner.stop();
+          await barcodeScanner.clear();
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+      scannerRunning = false;
+      barcodeScanner = null;
+      if (readerEl) {
+        readerEl.innerHTML = '';
+        readerEl.style.display = 'none';
+      }
+      if (placeholderEl) placeholderEl.style.display = 'flex';
+    }
+
+    async function tapNfcOrFocus() {
+      const input = document.getElementById('aksesInput');
+      if (input) input.focus();
+
+      if (!('NDEFReader' in window)) {
+        showToast('Silakan tap kartu RFID ke reader, scan barcode, atau ketik NISN secara manual.');
+        return;
+      }
+
+      try {
+        nfcReader = new NDEFReader();
+        await nfcReader.scan();
+        showToast('NFC aktif. Tempelkan kartu ke perangkat.');
+        nfcReader.onreading = async event => {
+          for (const record of event.message.records) {
+            let value = '';
+            try {
+              value = new TextDecoder(record.encoding || 'utf-8').decode(record.data);
+            } catch (e) {
+              value = String(record.id || '').trim();
+            }
+            if (value) {
+              document.getElementById('aksesInput').value = value.trim();
+              await catatAbsensi();
+              break;
+            }
+          }
+        };
+      } catch (err) {
+        showToast('NFC belum aktif. Fokus input sudah siap untuk RFID reader/manual.');
+        console.warn(err);
+      }
+    }
+
+    async function loadTidakHadirHariIni() {
+      const el = document.getElementById('absentTodayContainer');
+      if (!el) return;
+      const tanggal = todayISO();
+      const [siswaRes, absenRes] = await Promise.all([
+        sb.from('siswa').select('nisn,nama_siswa,kelas').order('nama_siswa'),
+        sb.from('absensi').select('siswa_nisn,status').eq('tanggal', tanggal)
+      ]);
+
+      if (siswaRes.error || absenRes.error) {
+        el.innerHTML = `<p class="py-5 text-center text-[11px] text-red-500">${escapeHtml(siswaRes.error?.message || absenRes.error?.message)}</p>`;
+        return;
+      }
+
+      const statusMap = new Map((absenRes.data || []).map(a => [a.siswa_nisn, a.status]));
+      const hadirStatus = new Set(['Hadir Tepat Waktu', 'Terlambat']);
+      const rows = (siswaRes.data || [])
+        .map(s => ({ ...s, status: statusMap.get(s.nisn) || 'Belum Absen' }))
+        .filter(s => !hadirStatus.has(s.status))
+        .slice(0, 30);
+
+      if (!rows.length) {
+        el.innerHTML = '<p class="py-5 text-center text-[11px] font-semibold text-slate-400">Semua siswa sudah hadir.</p>';
+        return;
+      }
+
+      el.innerHTML = rows.map(s => {
+        const initial = (s.nama_siswa || '?').trim().charAt(0).toUpperCase();
+        const status = String(s.status || 'Belum Absen').toUpperCase();
+        return `<div class="flex items-center justify-between gap-2 py-2">
+          <div class="flex min-w-0 items-center gap-3">
+            <div class="student-avatar">${escapeHtml(initial)}</div>
+            <div class="min-w-0">
+              <b class="block truncate text-[11px] text-slate-700">${escapeHtml(s.nama_siswa)}</b>
+              <span class="block text-[10px] font-semibold text-slate-400">${escapeHtml(s.kelas || '-')}</span>
+            </div>
+          </div>
+          <span class="shrink-0 text-[9px] font-extrabold uppercase text-blue-700">${escapeHtml(status)}</span>
+        </div>`;
+      }).join('');
+    }
+
+
+    async function findSiswaByAkses(akses) {
+      const columns = 'nisn,nama_siswa,kelas,no_wa_ortu';
+
+      let res = await sb.from('siswa').select(columns).eq('nisn', akses).maybeSingle();
+      if (res.error) throw res.error;
+      if (res.data) return { data: res.data };
+
+      res = await sb.from('siswa').select(columns).eq('rfid_uid', akses).maybeSingle();
+      if (res.error) throw res.error;
+      if (res.data) return { data: res.data };
+
+      res = await sb.from('siswa').select(columns).ilike('nama_siswa', `%${akses}%`).limit(2);
+      if (res.error) throw res.error;
+      if (res.data?.length === 1) return { data: res.data[0] };
+      if (res.data?.length > 1) return { ambiguous: true };
+
+      return { data: null };
+    }
+
     async function catatAbsensi() {
       const akses = document.getElementById('aksesInput').value.trim();
       if (!akses) return showToast('NISN/RFID belum diisi.');
@@ -458,14 +688,16 @@
       if (compareHHMM(jam, appConfig.batas_akhir) > 0) return showToast(`Absensi sudah ditutup. Batas akhir jam ${appConfig.batas_akhir}.`);
 
       showLoader('Mencatat absensi...');
-      const { data: siswa, error: siswaError } = await sb.from('siswa')
-        .select('nisn,nama_siswa,kelas,no_wa_ortu')
-        .or(`nisn.eq.${akses},rfid_uid.eq.${akses}`)
-        .limit(1)
-        .maybeSingle();
-
-      if (siswaError) { hideLoader(); return showToast(siswaError.message); }
-      if (!siswa) { hideLoader(); return showToast('Siswa/RFID tidak ditemukan.'); }
+      let siswaResult;
+      try {
+        siswaResult = await findSiswaByAkses(akses);
+      } catch (err) {
+        hideLoader();
+        return showToast(err.message);
+      }
+      if (siswaResult.ambiguous) { hideLoader(); return showToast('Nama siswa ditemukan lebih dari satu. Ketik NISN/RFID agar lebih tepat.'); }
+      const siswa = siswaResult.data;
+      if (!siswa) { hideLoader(); return showToast('Siswa/NISN/RFID tidak ditemukan.'); }
 
       const tanggal = todayISO();
       const { data: existing, error: cekError } = await sb.from('absensi')
@@ -491,7 +723,7 @@
       showToast(`Berhasil: ${siswa.nama_siswa} - ${status}`);
       document.getElementById('aksesInput').value = '';
       document.getElementById('aksesInput').focus();
-      await loadRecentAbsensi();
+      await Promise.all([loadRecentAbsensi(), loadTidakHadirHariIni()]);
       if (ENABLE_WA_BY_GAS) sendWANotification({ nisn: siswa.nisn, nama: siswa.nama_siswa, kelas: siswa.kelas, status });
     }
 
@@ -626,6 +858,7 @@
       hideLoader();
       if (izinError) return showToast(izinError.message);
       document.getElementById('izinKet').value = '';
+      await Promise.all([loadRecentAbsensi(), loadTidakHadirHariIni()]);
       showToast(`Izin ${status} tersimpan untuk ${siswa.nama_siswa}.`);
       if (ENABLE_WA_BY_GAS) sendWANotification({ nisn, nama: siswa.nama_siswa, kelas: siswa.kelas, status: status + (ket ? ' - ' + ket : '') });
     }
