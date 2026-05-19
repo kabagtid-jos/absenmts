@@ -1,683 +1,14 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /><meta name="theme-color" content="#4f46e5" /><meta name="application-name" content="Abzensi Abu Zairi Presensi" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /><meta name="apple-mobile-web-app-title" content="Abzensi" /><meta name="mobile-web-app-capable" content="yes" /><meta name="msapplication-TileColor" content="#075176" /><link rel="manifest" href="./manifest.webmanifest" /><link rel="apple-touch-icon" href="./icons/icon-192.png" /><title>Abzensi Abu Zairi Presensi - Absensi Siswa</title><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" /><meta http-equiv="Pragma" content="no-cache" /><meta http-equiv="Expires" content="0" /><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" /><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" /><style>
-* { font-family: 'Poppins', sans-serif; }
-body { background:var(--home-bg); }
-#app { width:100%; max-width:none !important; min-height:100vh; background:var(--home-bg) !important; box-shadow:none !important; }
-.view { display:none; }
-.view.active { display:block; }
-.glass { background:rgba(255,255,255,.94); backdrop-filter:blur(10px); }
-.btn { transition:.18s ease; }
-.btn:active { transform:scale(.98); }
-:root {
---home-navy: #075176;
---home-blue: #0399d6;
---home-purple: #5d44e8;
---home-bg: #ecf5fa;
---home-muted: #8b98aa;
-}
-.home-shell { background: var(--home-bg); color: #1f2937; width:100%; }
-.home-topbar { background: var(--home-navy); min-height: 72px; box-shadow: 0 3px 12px rgba(2, 60, 90, .18); width:100%; display:flex; align-items:center; position:sticky; top:0; z-index:60; }
-.home-topbar-inner { width:min(100%, 1180px); margin:0 auto; padding:0 18px; display:flex; align-items:center; justify-content:space-between; }
-.home-content { width:min(100%, 480px); margin:0 auto; padding:28px 16px 0; }
-.admin-login-content { width:min(100%, 520px); margin:0 auto; padding:48px 20px 0; }
-.brand-mark { width: 33px; height: 33px; border-radius: 999px; display:flex; align-items:center; justify-content:center; background:#fff url('https://i.ibb.co.com/VY4pcndf/age.png') center/cover no-repeat; box-shadow: 0 0 0 2px rgba(255,255,255,.8); position: relative; overflow:hidden; }
-.brand-mark::after { content:none !important; display:none !important; }
-.moon-btn { width: 29px; height:29px; border-radius:999px; background:rgba(255,255,255,.13); display:flex; align-items:center; justify-content:center; color:#d7f4ff; }
-.topbar-actions { display:flex; align-items:center; gap:8px; }
-.install-btn { min-width:29px; height:29px; border-radius:999px; background:rgba(255,255,255,.13); display:flex; align-items:center; justify-content:center; gap:6px; color:#d7f4ff; padding:0 9px; font-size:11px; font-weight:800; }
-.install-btn:hover, .moon-btn:hover { background:rgba(255,255,255,.22); }
-.install-btn.hidden { display:none !important; }
-.home-card { background:#fff; border-radius: 14px; box-shadow: 0 8px 22px rgba(15, 23, 42, .10); }
-.school-logo { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 5px 9px rgba(15,23,42,.15)); }
-.home-title { color:#0b86bd; font-size:28px; line-height:1; font-weight:800; letter-spacing:.04em; }
-.scanner-frame { width:100%; max-width: 320px; height: 240px; border: 2px solid #08a8ef; border-radius: 16px; background:#fbfcfe; overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative; }
-.scanner-bars { height:44px; display:flex; align-items:center; gap:4px; opacity:.55; }
-.scanner-bars span { display:block; width:5px; border-radius:6px; background:#b8c0cb; }
-.scanner-bars span:nth-child(1){height:38px}.scanner-bars span:nth-child(2){height:39px}.scanner-bars span:nth-child(3){height:41px}.scanner-bars span:nth-child(4){height:38px}.scanner-bars span:nth-child(5){height:42px}.scanner-bars span:nth-child(6){height:40px}.scanner-bars span:nth-child(7){height:39px}.scanner-bars span:nth-child(8){height:41px}
-#scannerReader, #scannerReader video { width:100% !important; height:100% !important; object-fit:cover; border:0 !important; }
-#scannerReader { display:none; }
-.scan-btn { border-radius: 8px; min-height: 42px; font-size: 12px; font-weight: 800; box-shadow: 0 5px 12px rgba(0,0,0,.10); }
-.manual-divider { display:flex; align-items:center; gap:12px; color:#a1a7b2; font-size:9px; font-weight:800; letter-spacing:.12em; }
-.manual-divider::before, .manual-divider::after { content:''; height:1px; flex:1; background:#eef1f5; }
-.manual-input { height: 38px; border: 1px solid #e7ebf1; border-radius: 8px; font-size: 12px; box-shadow: inset 0 1px 2px rgba(0,0,0,.02); }
-.manual-search-wrap { position: relative; min-width: 0; }
-.manual-suggestion-box { position:absolute; left:0; right:0; top:calc(100% + 7px); z-index:35; max-height:238px; overflow-y:auto; background:#fff; border:1px solid #edf1f6; border-radius:10px; box-shadow:0 12px 24px rgba(15,23,42,.14); }
-.manual-suggestion-box::-webkit-scrollbar { width:4px; }
-.manual-suggestion-box::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:8px; }
-.manual-suggestion-item { width:100%; display:flex; align-items:center; gap:10px; padding:9px 12px; text-align:left; border-bottom:1px solid #f0f3f7; background:#fff; transition:.15s ease; }
-.manual-suggestion-item:last-child { border-bottom:0; }
-.manual-suggestion-item:hover, .manual-suggestion-item.active { background:#f7fbff; }
-.manual-suggestion-photo { width:30px; height:30px; border-radius:999px; object-fit:cover; background:#eef4ff; color:#6d8dff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
-.manual-suggestion-name { display:block; color:#0f172a; font-size:12px; font-weight:800; line-height:1.15; }
-.manual-suggestion-meta { display:block; margin-top:3px; color:#0369a1; font-size:10px; font-weight:700; line-height:1.1; }
-.send-btn { width:43px; height:43px; border-radius:9px; background:#1f2937; color:#fff; box-shadow:0 5px 12px rgba(31,41,55,.20); }
-.absent-panel { border:1px solid #eef2f7; border-radius:10px; max-height:168px; overflow-y:auto; background:#fff; }
-.absent-panel::-webkit-scrollbar { width:4px; }
-.absent-panel::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:8px; }
-.student-avatar { width:25px; height:25px; border-radius:999px; background:#f2f5fb; color:#7e9dff; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; flex-shrink:0; }
-.admin-outline { border:1px solid #d9eefc; color:#075176; border-radius:8px; }
-.admin-login-card { background:#fff; border-radius:14px; box-shadow:0 10px 25px rgba(15,23,42,.12); }
-.admin-icon-circle { width:80px; height:80px; border-radius:999px; background:#f1f9fd; color:#0574a5; display:flex; align-items:center; justify-content:center; margin:0 auto; }
-.admin-login-input { height:57px; border:1px solid #e1e7ee; border-radius:12px; background:#fff; box-shadow:inset 0 1px 2px rgba(15,23,42,.04); letter-spacing:.25em; }
-.admin-login-btn { height:51px; border-radius:10px; background:#066b9b; box-shadow:0 10px 20px rgba(6,107,155,.24); }
-.app-footer { color:#7b8797; }
-#view-admin, #view-siswa, #view-izin, #view-rekap, #view-setting { max-width:28rem; margin:0 auto; }
-body.dark-mode { background:#07111d; }
-body.dark-mode #app { background:#071a2a !important; }
-body.dark-mode .home-shell { background:#071a2a; color:#e5edf5; }
-body.dark-mode .home-topbar { background:#042d47; box-shadow:0 3px 14px rgba(0,0,0,.35); }
-body.dark-mode .home-card,
-body.dark-mode .admin-login-card { background:#0f2435; color:#e5edf5; box-shadow:0 10px 25px rgba(0,0,0,.32); border:1px solid rgba(148,163,184,.16); }
-body.dark-mode .school-logo { filter: drop-shadow(0 5px 9px rgba(0,0,0,.35)); }
-body.dark-mode .scanner-frame { background:#10283a; border-color:#18a8e8; }
-body.dark-mode .manual-input,
-body.dark-mode .admin-login-input { background:#10283a; border-color:#2f4c62; color:#edf5ff; }
-body.dark-mode .manual-input::placeholder,
-body.dark-mode .admin-login-input::placeholder { color:#7f91a5; }
-body.dark-mode .manual-suggestion-box { background:#0f2435; border-color:#1f3a4d; box-shadow:0 12px 24px rgba(0,0,0,.36); }
-body.dark-mode .manual-suggestion-item { background:#0f2435; border-color:#1f3a4d; }
-body.dark-mode .manual-suggestion-item:hover,
-body.dark-mode .manual-suggestion-item.active { background:#143249; }
-body.dark-mode .manual-suggestion-photo { background:#193449; color:#9fc7ff; }
-body.dark-mode .manual-suggestion-name { color:#e5edf5; }
-body.dark-mode .manual-suggestion-meta { color:#7dd3fc; }
-body.dark-mode .absent-panel { background:#0f2435; border-color:#1f3a4d; }
-body.dark-mode .student-avatar { background:#193449; color:#9fc7ff; }
-body.dark-mode .admin-outline { background:#10283a; border-color:#1c5574; color:#b7e5ff; }
-body.dark-mode .admin-outline:hover { background:#143249; }
-body.dark-mode .admin-icon-circle { background:#102f46; color:#70d3ff; }
-body.dark-mode .app-footer { color:#9ba9b8; }
-body.dark-mode .text-slate-500 { color:#9ba9b8 !important; }
-body.dark-mode .text-slate-600 { color:#b7c3d0 !important; }
-body.dark-mode .text-slate-700 { color:#d9e2ec !important; }
-body.dark-mode .text-slate-400 { color:#7d8ea1 !important; }
-body.dark-mode .bg-slate-100 { background:#183246 !important; }
-body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color:#1f3a4d !important; }
-/* Tampilan awal versi mobile dibuat lebih besar dan proporsional seperti desain referensi. */
-@media (max-width: 640px) {
-#app { max-width: 100% !important; }
-#view-home .home-topbar { min-height: 78px; }
-#view-home .home-topbar-inner {
-padding-left: clamp(16px, 4.5vw, 24px) !important;
-padding-right: clamp(16px, 4.5vw, 24px) !important;
-}
-#view-home .brand-mark {
-width: clamp(48px, 12vw, 60px);
-height: clamp(48px, 12vw, 60px);
-box-shadow: 0 0 0 4px rgba(255,255,255,.88), 0 8px 18px rgba(0,0,0,.10);
-}
-#view-home .brand-mark::after {
-border-left-width: clamp(8px, 2vw, 11px);
-border-right-width: clamp(8px, 2vw, 11px);
-border-bottom-width: clamp(25px, 6vw, 32px);
-}
-#view-home .home-topbar h1 {
-font-size: clamp(24px, 6.2vw, 32px) !important;
-line-height: 1.05 !important;
-letter-spacing: .03em !important;
-}
-#view-home .home-topbar p {
-margin-top: 4px;
-font-size: clamp(8px, 2.2vw, 11px) !important;
-letter-spacing: .28em !important;
-}
-#view-home .moon-btn {
-width: clamp(46px, 11vw, 58px);
-height: clamp(46px, 11vw, 58px);
-font-size: 18px;
-}
-#view-home .moon-btn i { font-size: 18px !important; }
-#view-home .home-content {
-padding-left: clamp(18px, 5vw, 32px) !important;
-padding-right: clamp(18px, 5vw, 32px) !important;
-padding-top: clamp(26px, 6vw, 46px) !important;
-}
-#view-home .home-card {
-border-radius: clamp(20px, 5vw, 30px);
-padding: clamp(34px, 8vw, 54px) clamp(24px, 7vw, 46px) clamp(28px, 7vw, 44px) !important;
-box-shadow: 0 10px 28px rgba(15, 23, 42, .12);
-}
-#view-home .school-logo {
-width: clamp(76px, 20vw, 106px);
-height: clamp(76px, 20vw, 106px);
-}
-#view-home .home-title {
-margin-top: clamp(16px, 4vw, 24px) !important;
-font-size: clamp(25px, 7vw, 36px) !important;
-}
-#view-home .home-card .text-center .mt-2 {
-margin-top: clamp(14px, 3vw, 22px) !important;
-gap: clamp(8px, 2.5vw, 14px) !important;
-font-size: clamp(18px, 5vw, 26px) !important;
-line-height: 1.22 !important;
-}
-#view-home .home-card .text-center .mt-2 i {
-font-size: clamp(11px, 2.8vw, 16px) !important;
-}
-#view-home .home-card .text-center p {
-margin-top: clamp(8px, 2.4vw, 14px) !important;
-font-size: clamp(13px, 3.4vw, 17px) !important;
-line-height: 1.45 !important;
-}
-#view-home .scanner-frame {
-width: 100%;
-max-width: min(100%, 360px) !important;
-height: clamp(230px, 60vw, 300px);
-margin-top: clamp(34px, 8vw, 52px) !important;
-border-width: 3px;
-border-radius: clamp(24px, 5vw, 34px);
-}
-#view-home .scanner-bars {
-transform: scale(1.55);
-}
-#view-home .mt-6.grid {
-margin-top: clamp(34px, 8vw, 54px) !important;
-gap: clamp(14px, 4vw, 28px) !important;
-}
-#view-home .scan-btn {
-min-height: clamp(58px, 14vw, 72px);
-border-radius: clamp(14px, 4vw, 22px);
-font-size: clamp(14px, 4.1vw, 20px);
-letter-spacing: .04em;
-box-shadow: 0 10px 22px rgba(0,0,0,.13);
-}
-#view-home .scan-btn i {
-margin-right: clamp(7px, 2vw, 12px) !important;
-font-size: clamp(12px, 3.4vw, 17px) !important;
-}
-#view-home .manual-divider {
-margin-top: clamp(28px, 7vw, 42px) !important;
-margin-bottom: clamp(20px, 5vw, 30px) !important;
-gap: clamp(12px, 3vw, 22px);
-font-size: clamp(11px, 3vw, 15px);
-}
-#view-home .manual-input {
-height: clamp(48px, 12vw, 60px);
-border-radius: clamp(12px, 3vw, 18px);
-font-size: clamp(13px, 3.4vw, 16px);
-}
-#view-home .send-btn {
-width: clamp(50px, 12vw, 62px);
-height: clamp(50px, 12vw, 62px);
-border-radius: clamp(12px, 3vw, 18px);
-}
-#view-home .send-btn i { font-size: clamp(14px, 3.6vw, 18px) !important; }
-#view-home .absent-panel {
-margin-top: clamp(28px, 7vw, 42px) !important;
-border-radius: clamp(14px, 4vw, 22px);
-max-height: 190px;
-padding: clamp(13px, 3.8vw, 18px) !important;
-}
-#view-home .absent-panel .mb-2 {
-font-size: clamp(10px, 2.8vw, 13px) !important;
-}
-#view-home .student-avatar {
-width: clamp(30px, 8vw, 38px);
-height: clamp(30px, 8vw, 38px);
-font-size: clamp(11px, 3vw, 14px);
-}
-#view-home #absentTodayContainer b { font-size: clamp(11px, 3.2vw, 14px) !important; }
-#view-home #absentTodayContainer span { font-size: clamp(9px, 2.6vw, 12px) !important; }
-#view-home .my-5 { margin-top: clamp(24px, 6vw, 34px) !important; margin-bottom: clamp(24px, 6vw, 34px) !important; }
-#view-home .admin-outline {
-padding-top: clamp(16px, 4.5vw, 22px) !important;
-padding-bottom: clamp(16px, 4.5vw, 22px) !important;
-border-radius: clamp(14px, 4vw, 20px);
-font-size: clamp(15px, 4.4vw, 21px) !important;
-}
-#view-home .app-footer {
-margin-top: clamp(34px, 8vw, 54px) !important;
-padding-bottom: 18px;
-font-size: clamp(13px, 3.5vw, 17px) !important;
-}
-}
-@media (max-width: 380px) {
-#view-home .home-card { padding-left: 22px !important; padding-right: 22px !important; }
-#view-home .scan-btn { font-size: 13px; letter-spacing: 0; }
-#view-home .scanner-frame { height: 220px; }
-}
-/* Revisi mobile: dibuat proporsional dan pas di layar tanpa memperbesar berlebihan. */
-@media (max-width: 640px) {
-html, body { min-height: 100dvh; overflow-x: hidden; }
-#view-home.home-shell { min-height: 100dvh; padding-bottom: 10px !important; }
-#view-home .home-topbar { min-height: clamp(64px, 9.5vh, 78px) !important; }
-#view-home .home-topbar-inner {
-padding-left: clamp(14px, 4vw, 18px) !important;
-padding-right: clamp(14px, 4vw, 18px) !important;
-}
-#view-home .brand-mark {
-width: clamp(44px, 11vw, 52px) !important;
-height: clamp(44px, 11vw, 52px) !important;
-box-shadow: 0 0 0 4px rgba(255,255,255,.9), 0 7px 16px rgba(0,0,0,.10) !important;
-}
-#view-home .brand-mark::after {
-border-left-width: clamp(7px, 1.8vw, 9px) !important;
-border-right-width: clamp(7px, 1.8vw, 9px) !important;
-border-bottom-width: clamp(23px, 5.6vw, 28px) !important;
-}
-#view-home .home-topbar h1 {
-font-size: clamp(19px, 5vw, 23px) !important;
-line-height: 1.05 !important;
-letter-spacing: .035em !important;
-}
-#view-home .home-topbar p {
-margin-top: 3px !important;
-font-size: clamp(7px, 2vw, 9px) !important;
-letter-spacing: .25em !important;
-}
-#view-home .moon-btn {
-width: clamp(42px, 10.5vw, 50px) !important;
-height: clamp(42px, 10.5vw, 50px) !important;
-}
-#view-home .moon-btn i { font-size: clamp(15px, 4vw, 18px) !important; }
-#view-home .home-content {
-width: 100% !important;
-max-width: 430px !important;
-padding: clamp(16px, 3vh, 24px) 16px 0 !important;
-}
-#view-home .home-card {
-border-radius: clamp(18px, 4.8vw, 24px) !important;
-padding: clamp(20px, 3vh, 28px) clamp(18px, 5vw, 28px) clamp(18px, 3vh, 24px) !important;
-box-shadow: 0 9px 24px rgba(15, 23, 42, .12) !important;
-}
-#view-home .school-logo {
-width: clamp(58px, 15vw, 72px) !important;
-height: clamp(58px, 15vw, 72px) !important;
-}
-#view-home .home-title { display: none !important; }
-#view-home .home-card .text-center .mt-2 {
-margin-top: clamp(12px, 2.8vw, 16px) !important;
-gap: clamp(7px, 2vw, 10px) !important;
-font-size: clamp(16px, 4.3vw, 20px) !important;
-line-height: 1.22 !important;
-}
-#view-home .home-card .text-center .mt-2 i {
-font-size: clamp(9px, 2.4vw, 12px) !important;
-}
-#view-home .home-card .text-center p {
-margin-top: clamp(7px, 2vw, 10px) !important;
-font-size: clamp(12px, 3.2vw, 14px) !important;
-line-height: 1.35 !important;
-}
-#view-home .scanner-frame {
-width: 100% !important;
-max-width: 310px !important;
-height: clamp(190px, 49vw, 230px) !important;
-margin-top: clamp(24px, 6vw, 34px) !important;
-border-width: 3px !important;
-border-radius: clamp(20px, 5vw, 28px) !important;
-}
-#view-home .scanner-bars { transform: scale(1.28) !important; }
-#view-home .mt-6.grid {
-margin-top: clamp(24px, 6vw, 34px) !important;
-gap: clamp(12px, 3.5vw, 18px) !important;
-}
-#view-home .scan-btn {
-min-height: clamp(48px, 11vw, 56px) !important;
-border-radius: clamp(12px, 3.5vw, 16px) !important;
-font-size: clamp(12px, 3.3vw, 14px) !important;
-letter-spacing: .02em !important;
-box-shadow: 0 8px 18px rgba(0,0,0,.13) !important;
-}
-#view-home .scan-btn i {
-margin-right: clamp(5px, 1.6vw, 8px) !important;
-font-size: clamp(11px, 3vw, 14px) !important;
-}
-#view-home .manual-divider {
-margin-top: clamp(18px, 4.8vw, 26px) !important;
-margin-bottom: clamp(14px, 3.8vw, 20px) !important;
-gap: clamp(10px, 2.8vw, 14px) !important;
-font-size: clamp(10px, 2.6vw, 12px) !important;
-}
-#view-home .manual-input {
-height: clamp(42px, 10.5vw, 48px) !important;
-border-radius: clamp(10px, 2.8vw, 14px) !important;
-font-size: clamp(12px, 3.1vw, 14px) !important;
-}
-#view-home .manual-suggestion-box {
-max-height: min(260px, 42vh) !important;
-border-radius: 12px !important;
-}
-#view-home .manual-suggestion-item { padding: 8px 10px !important; }
-#view-home .manual-suggestion-photo {
-width: 30px !important;
-height: 30px !important;
-}
-#view-home .send-btn {
-width: clamp(44px, 10.5vw, 50px) !important;
-height: clamp(44px, 10.5vw, 50px) !important;
-border-radius: clamp(10px, 2.8vw, 14px) !important;
-}
-#view-home .send-btn i { font-size: clamp(13px, 3.4vw, 16px) !important; }
-#view-home .absent-panel {
-margin-top: clamp(16px, 4vw, 22px) !important;
-border-radius: clamp(12px, 3.5vw, 16px) !important;
-max-height: min(128px, 20vh) !important;
-padding: clamp(10px, 3vw, 13px) !important;
-}
-#view-home .absent-panel .mb-2 { font-size: clamp(9px, 2.4vw, 11px) !important; }
-#view-home .student-avatar {
-width: clamp(26px, 7vw, 32px) !important;
-height: clamp(26px, 7vw, 32px) !important;
-font-size: clamp(10px, 2.7vw, 12px) !important;
-}
-#view-home #absentTodayContainer b { font-size: clamp(10px, 2.9vw, 12px) !important; }
-#view-home #absentTodayContainer span { font-size: clamp(9px, 2.4vw, 10px) !important; }
-#view-home .my-5 {
-margin-top: clamp(14px, 3.6vw, 18px) !important;
-margin-bottom: clamp(14px, 3.6vw, 18px) !important;
-}
-#view-home .admin-outline {
-padding-top: clamp(12px, 3.5vw, 15px) !important;
-padding-bottom: clamp(12px, 3.5vw, 15px) !important;
-border-radius: clamp(12px, 3.5vw, 16px) !important;
-font-size: clamp(13px, 3.5vw, 16px) !important;
-}
-#view-home .app-footer {
-margin-top: clamp(16px, 4vh, 28px) !important;
-padding-bottom: max(10px, env(safe-area-inset-bottom)) !important;
-font-size: clamp(11px, 3vw, 13px) !important;
-}
-}
-@media (max-width: 360px), (max-height: 740px) and (max-width: 640px) {
-#view-home .home-content { padding-top: 12px !important; }
-#view-home .home-card { padding-top: 16px !important; padding-bottom: 16px !important; }
-#view-home .school-logo { width: 54px !important; height: 54px !important; }
-#view-home .scanner-frame { height: 176px !important; margin-top: 18px !important; }
-#view-home .mt-6.grid { margin-top: 18px !important; }
-#view-home .manual-divider { margin-top: 14px !important; margin-bottom: 12px !important; }
-#view-home .absent-panel { max-height: 96px !important; }
-#view-home .app-footer { margin-top: 12px !important; }
-}
-.rfid-modal-backdrop { background: rgba(15, 23, 42, .42); backdrop-filter: blur(1px); }
-.rfid-modal-card { width:min(86vw, 410px); border-radius:32px; background:#fff; box-shadow:0 24px 60px rgba(15,23,42,.24); padding:42px 34px 34px; text-align:center; }
-.rfid-info-circle { width:82px; height:82px; border-radius:999px; margin:0 auto; border:4px solid #39c6e8; color:#39c6e8; display:flex; align-items:center; justify-content:center; font-size:44px; font-weight:300; line-height:1; }
-.rfid-modal-title { margin-top:26px; font-size:27px; line-height:1.15; font-weight:700; color:#444; }
-.rfid-modal-text { margin:25px auto 0; max-width:330px; color:#555; font-size:20px; line-height:1.35; font-weight:400; }
-.rfid-modal-actions { margin-top:30px; display:flex; align-items:center; justify-content:center; gap:14px; }
-.rfid-primary-btn, .rfid-secondary-btn { min-height:52px; border-radius:16px; padding:0 26px; font-size:18px; font-weight:600; color:#fff; transition:.18s ease; }
-.rfid-primary-btn { background:#6c54eb; box-shadow:0 8px 18px rgba(108,84,235,.20); }
-.rfid-primary-btn:hover { background:#5e48d8; }
-.rfid-secondary-btn { background:#65717b; box-shadow:0 8px 18px rgba(31,41,55,.16); }
-.rfid-secondary-btn:hover { background:#56616b; }
-.rfid-hidden-input { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; left:-9999px; }
-body.dark-mode .rfid-modal-backdrop { background: rgba(0, 0, 0, .58); }
-body.dark-mode .rfid-modal-card { background:#0f2435; color:#e5edf5; border:1px solid rgba(148,163,184,.18); }
-body.dark-mode .rfid-modal-title { color:#eef6ff; }
-body.dark-mode .rfid-modal-text { color:#cbd5e1; }
-@media (max-width: 640px) {
-.rfid-modal-card { width:min(78vw, 360px); border-radius:28px; padding:38px 26px 28px; }
-.rfid-info-circle { width:78px; height:78px; font-size:42px; border-width:4px; }
-.rfid-modal-title { margin-top:24px; font-size:26px; }
-.rfid-modal-text { margin-top:24px; font-size:20px; line-height:1.35; }
-.rfid-modal-actions { margin-top:28px; gap:12px; }
-.rfid-primary-btn, .rfid-secondary-btn { min-height:50px; border-radius:14px; padding:0 20px; font-size:18px; }
-}
-@media (max-width: 380px) {
-.rfid-modal-card { width:84vw; padding-left:22px; padding-right:22px; }
-.rfid-modal-text { font-size:18px; }
-.rfid-primary-btn, .rfid-secondary-btn { padding:0 16px; font-size:16px; }
-}
-/* Perbaikan kontras teks nama madrasah ketika dark mode aktif. */
-body.dark-mode .school-name-line { color:#c7ecff !important; text-shadow:0 1px 0 rgba(0,0,0,.18); }
-body.dark-mode .brand-subtitle { color:#e0f6ff !important; opacity:.96; }
-/* Popup RFID/NFC khusus mobile dibuat lebih kecil dan lebih rapi. */
-@media (max-width: 640px) {
-.rfid-modal-backdrop {
-padding: 16px !important;
-align-items: center !important;
-}
-.rfid-modal-card {
-width: min(82vw, 320px) !important;
-border-radius: 22px !important;
-padding: 24px 20px 22px !important;
-box-shadow: 0 18px 42px rgba(15,23,42,.24) !important;
-}
-.rfid-info-circle {
-width: 56px !important;
-height: 56px !important;
-border-width: 3px !important;
-font-size: 30px !important;
-}
-.rfid-modal-title {
-margin-top: 16px !important;
-font-size: 20px !important;
-line-height: 1.15 !important;
-}
-.rfid-modal-text {
-margin-top: 14px !important;
-max-width: 250px !important;
-font-size: 14.5px !important;
-line-height: 1.42 !important;
-}
-.rfid-modal-actions {
-margin-top: 20px !important;
-gap: 8px !important;
-}
-.rfid-primary-btn,
-.rfid-secondary-btn {
-min-height: 40px !important;
-border-radius: 11px !important;
-padding: 0 13px !important;
-font-size: 13.5px !important;
-white-space: nowrap !important;
-}
-}
-@media (max-width: 380px) {
-.rfid-modal-card {
-width: min(88vw, 300px) !important;
-padding: 22px 16px 20px !important;
-}
-.rfid-info-circle {
-width: 52px !important;
-height: 52px !important;
-font-size: 28px !important;
-}
-.rfid-modal-title { font-size: 19px !important; }
-.rfid-modal-text { font-size: 13.5px !important; }
-.rfid-primary-btn,
-.rfid-secondary-btn {
-min-height: 38px !important;
-padding: 0 10px !important;
-font-size: 12.5px !important;
-}
-}
-/* Revisi: header dibekukan saat halaman discroll, logo header diganti, dan NFC mobile tidak memunculkan keyboard. */
-.home-topbar {
-position: sticky !important;
-top: 0 !important;
-z-index: 60 !important;
-}
-.brand-mark {
-background: #fff url('https://i.ibb.co.com/VY4pcndf/age.png') center/cover no-repeat !important;
-overflow: hidden !important;
-}
-.brand-mark::after { content: none !important; display: none !important; }
-.rfid-hidden-input { input-mode: none; }
-@media (max-width: 640px) {
-#rfidReaderInput {
-font-size: 16px !important;
-caret-color: transparent !important;
-}
-}
-/* Dashboard admin versi desktop/tablet seperti referensi awal. */
-#view-admin.admin-dashboard-view { max-width:none !important; margin:0 !important; background:#eef5fb; color:#1f2937; }
-.admin-dash-wrap { width:min(100%, 1180px); margin:0 auto; padding:40px 22px 50px; }
-.admin-profile-nav { display:flex; align-items:center; justify-content:space-between; gap:20px; background:#fff; border-radius:16px; padding:18px 20px; box-shadow:0 8px 22px rgba(15,23,42,.08); }
-.admin-profile-left { display:flex; align-items:center; gap:16px; min-width:0; }
-.admin-avatar { width:52px; height:52px; border-radius:999px; background:#eef8ff; color:#0b86bd; display:flex; align-items:center; justify-content:center; font-size:19px; flex:none; }
-.admin-hello { color:#111827; font-size:17px; line-height:1.15; font-weight:800; }
-.admin-role { margin-top:4px; color:#0b86bd; font-size:10px; line-height:1; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
-.admin-nav-pills { display:flex; align-items:center; gap:6px; border:1px solid #e5eaf0; background:#f8fafc; border-radius:13px; padding:7px; box-shadow:inset 0 1px 3px rgba(15,23,42,.04); }
-.admin-tab { min-height:38px; border-radius:10px; padding:0 15px; display:flex; align-items:center; gap:7px; color:#667085; font-size:13px; font-weight:800; white-space:nowrap; }
-.admin-tab:hover, .admin-tab.active { background:#fff; color:#0b6fa4; box-shadow:0 6px 14px rgba(15,23,42,.08); }
-.logout-tab { color:#ef4444; padding:0 13px; }
-.dash-title-row { margin-top:28px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
-.dash-title-left { display:flex; align-items:center; gap:10px; }
-.dash-title-left h2 { display:flex; align-items:center; gap:9px; color:#1f2937; font-size:24px; line-height:1; font-weight:800; }
-.dash-title-left h2 i { color:#0ea5e9; }
-.dash-refresh { width:35px; height:35px; border-radius:9px; background:#f1f5f9; color:#94a3b8; display:flex; align-items:center; justify-content:center; border:1px solid #e6edf4; }
-.dash-refresh:hover { background:#e9f3fb; color:#0b86bd; }
-.dash-year-select { height:38px; min-width:98px; border-radius:10px; background:#fff; border:1px solid #e5eaf0; color:#475569; font-size:14px; font-weight:800; padding:0 14px; box-shadow:0 4px 12px rgba(15,23,42,.07); outline:none; }
-.dashboard-card-grid { margin-top:24px; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:20px; }
-.dash-stat-card { position:relative; min-height:145px; border-radius:16px; padding:28px 26px 20px; color:#fff; box-shadow:0 12px 24px rgba(15,23,42,.12); overflow:hidden; }
-.dash-stat-card::after { content:''; position:absolute; right:-38px; bottom:-54px; width:160px; height:160px; border-radius:999px; background:rgba(255,255,255,.08); }
-.card-blue { background:linear-gradient(135deg, #3b82f6, #0369a1); }
-.card-green { background:linear-gradient(135deg, #17c983, #0b8f43); }
-.card-red { background:linear-gradient(135deg, #fb466d, #dc2626); }
-.dash-main-number { font-size:34px; line-height:1; font-weight:800; letter-spacing:-.04em; }
-.dash-main-label { margin-top:9px; font-size:13px; font-weight:800; opacity:.92; }
-.dash-card-icon { position:absolute; top:25px; right:24px; width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.18); font-size:18px; }
-.dash-period { position:absolute; left:26px; right:24px; bottom:18px; display:flex; align-items:center; justify-content:space-between; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; opacity:.9; }
-.dash-period span { display:flex; align-items:center; gap:7px; }
-.quick-action-card { margin-top:24px; display:flex; align-items:center; justify-content:space-between; gap:18px; border:1.5px solid #f59e0b; background:#fff; border-radius:14px; padding:18px 21px; box-shadow:0 6px 16px rgba(15,23,42,.05); }
-.quick-action-card h3 { display:flex; align-items:center; gap:8px; color:#1f2937; font-size:16px; font-weight:800; }
-.quick-action-card h3 i { color:#f59e0b; }
-.quick-action-card p { margin-top:3px; color:#7b8794; font-size:12px; font-weight:500; }
-.quick-action-btn { min-height:40px; border-radius:10px; padding:0 18px; background:#f59e0b; color:#fff; font-size:13px; font-weight:800; box-shadow:0 7px 14px rgba(245,158,11,.25); }
-.quick-action-btn:hover { background:#e28b00; }
-.mini-stat-grid { margin-top:22px; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:16px; }
-.mini-stat { background:#fff; border-radius:14px; padding:19px 18px; min-height:86px; box-shadow:0 7px 18px rgba(15,23,42,.06); }
-.mini-stat span { display:block; color:#7b8794; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.10em; }
-.mini-stat b { display:block; margin-top:7px; color:#0b86bd; font-size:25px; line-height:1; font-weight:800; }
-.dashboard-chart-grid { margin-top:24px; display:grid; grid-template-columns:minmax(300px, .95fr) minmax(0, 1.95fr); gap:20px; align-items:stretch; }
-.dashboard-chart-card { background:#fff; border-radius:16px; padding:24px 24px 20px; min-height:285px; box-shadow:0 7px 18px rgba(15,23,42,.06); }
-.dashboard-chart-card h3 { display:flex; align-items:center; gap:8px; color:#1f2937; font-size:16px; font-weight:800; }
-.dashboard-chart-card h3 i { color:#0ea5e9; }
-.presence-donut-wrap { margin-top:18px; min-height:170px; display:flex; align-items:center; justify-content:center; }
-.donut-ring { width:170px; height:170px; border-radius:999px; display:flex; align-items:center; justify-content:center; }
-.donut-hole { width:82px; height:82px; border-radius:999px; background:#fff; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#64748b; font-size:11px; font-weight:800; box-shadow:inset 0 0 0 1px rgba(226,232,240,.9); }
-.donut-hole b { color:#0f172a; font-size:19px; line-height:1; }
-.presence-legend { margin-top:12px; display:flex; justify-content:center; flex-wrap:wrap; gap:10px 16px; color:#64748b; font-size:11px; font-weight:700; }
-.presence-legend span { display:flex; align-items:center; gap:6px; }
-.legend-dot { width:10px; height:10px; border-radius:3px; display:inline-block; }
-.monthly-trend-chart { margin-top:18px; min-height:210px; }
-.trend-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:14px; color:#64748b; font-size:11px; font-weight:700; margin-bottom:12px; }
-.trend-bars { height:182px; display:grid; grid-template-columns:repeat(12, minmax(0, 1fr)); gap:10px; align-items:end; border-left:1px solid #e5e7eb; border-bottom:1px solid #e5e7eb; padding:6px 8px 0; background:repeating-linear-gradient(to top, transparent 0, transparent 29px, #edf2f7 30px); }
-.trend-month { min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:6px; }
-.trend-stack { width:min(34px, 78%); height:150px; display:flex; flex-direction:column-reverse; justify-content:flex-start; border-radius:6px 6px 0 0; overflow:hidden; }
-.trend-stack span { display:block; min-height:0; }
-.trend-label { color:#64748b; font-size:12px; line-height:1; }
-.bar-hadir { background:#3b82f6; }
-.bar-tepat { background:#86efac; }
-.bar-telat { background:#facc15; }
-.bar-izin { background:#fdba74; }
-.bar-alpa { background:#fb7185; }
-.dash-empty { color:#94a3b8; font-size:13px; font-weight:700; text-align:center; padding:52px 0; }
-body.dark-mode #view-admin.admin-dashboard-view { background:#071a2a; color:#e5edf5; }
-body.dark-mode .admin-profile-nav,
-body.dark-mode .quick-action-card,
-body.dark-mode .mini-stat,
-body.dark-mode .dashboard-chart-card { background:#0f2435; border-color:#1f3a4d; box-shadow:0 10px 25px rgba(0,0,0,.32); }
-body.dark-mode .admin-nav-pills { background:#10283a; border-color:#24465c; }
-body.dark-mode .admin-tab:hover, body.dark-mode .admin-tab.active { background:#143249; color:#7dd3fc; }
-body.dark-mode .admin-hello,
-body.dark-mode .dash-title-left h2,
-body.dark-mode .quick-action-card h3,
-body.dark-mode .dashboard-chart-card h3 { color:#eef6ff; }
-body.dark-mode .dash-refresh,
-body.dark-mode .dash-year-select { background:#10283a; border-color:#24465c; color:#cbd5e1; }
-body.dark-mode .mini-stat span,
-body.dark-mode .quick-action-card p,
-body.dark-mode .presence-legend,
-body.dark-mode .trend-legend,
-body.dark-mode .trend-label { color:#9ba9b8; }
-body.dark-mode .donut-hole { background:#0f2435; color:#9ba9b8; box-shadow:inset 0 0 0 1px rgba(148,163,184,.18); }
-body.dark-mode .donut-hole b { color:#e5edf5; }
-body.dark-mode .trend-bars { border-color:#24465c; background:repeating-linear-gradient(to top, transparent 0, transparent 29px, rgba(148,163,184,.14) 30px); }
-@media (max-width: 980px) {
-.admin-profile-nav { align-items:flex-start; flex-direction:column; }
-.admin-nav-pills { width:100%; overflow-x:auto; justify-content:flex-start; }
-.dashboard-card-grid { grid-template-columns:1fr; }
-.mini-stat-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
-.dashboard-chart-grid { grid-template-columns:1fr; }
-}
-@media (max-width: 640px) {
-.admin-dash-wrap { padding:22px 14px 36px; }
-.admin-profile-nav { padding:15px; border-radius:14px; }
-.admin-avatar { width:46px; height:46px; }
-.admin-hello { font-size:15px; }
-.admin-tab { min-height:35px; padding:0 12px; font-size:12px; }
-.dash-title-row { margin-top:22px; align-items:flex-start; }
-.dash-title-left h2 { font-size:21px; }
-.dashboard-card-grid { gap:14px; margin-top:18px; }
-.dash-stat-card { min-height:130px; padding:22px 20px 18px; border-radius:14px; }
-.dash-main-number { font-size:30px; }
-.dash-card-icon { width:42px; height:42px; top:20px; right:20px; }
-.dash-period { left:20px; right:20px; }
-.quick-action-card { flex-direction:column; align-items:stretch; padding:16px; }
-.quick-action-btn { width:100%; }
-.mini-stat-grid { gap:12px; }
-.mini-stat { padding:16px 14px; min-height:74px; }
-.mini-stat b { font-size:22px; }
-.dashboard-chart-card { padding:19px 16px; min-height:250px; }
-.donut-ring { width:148px; height:148px; }
-.donut-hole { width:70px; height:70px; }
-.trend-bars { gap:4px; padding-left:5px; padding-right:5px; }
-.trend-label { font-size:10px; }
-}
-@media print {
-.no-print { display:none !important; }
-body { background:white !important; }
-#app { max-width:100% !important; box-shadow:none !important; }
-.print-card { box-shadow:none !important; border:0 !important; }
-}
-/* Tampilan menu siswa versi master table seperti dashboard awal. */
-#view-siswa.admin-student-view{max-width:none!important;margin:0!important;background:#eef5fb;color:#1f2937;}
-.student-master-wrap{width:min(100%,1180px);margin:0 auto;padding:40px 22px 50px;}
-.student-master-card{margin-top:24px;background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(15,23,42,.07);padding:24px;}
-.student-master-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;}
-.student-master-title{display:flex;align-items:center;gap:10px;margin:0;color:#111827;font-size:24px;font-weight:900;line-height:1;}
-.student-master-title i{color:#0b9bd7;font-size:20px;}
-.student-add-btn{min-height:40px;border-radius:10px;background:#0693cf;color:#fff;padding:0 18px;font-weight:900;font-size:14px;box-shadow:0 8px 18px rgba(6,147,207,.22);}
-.student-add-btn:hover{background:#047fb4;}
-.student-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}
-.student-search{width:320px;max-width:100%;height:40px;border:1px solid #e5eaf0;border-radius:10px;background:#f8fafc;padding:0 14px;font-size:13px;font-weight:700;color:#334155;outline:none;}
-.student-search:focus{border-color:#38bdf8;background:#fff;box-shadow:0 0 0 3px rgba(14,165,233,.12);}
-.student-count{font-size:12px;font-weight:800;color:#64748b;}
-.student-table-wrap{overflow:auto;border:1px solid #e5eaf0;border-radius:12px;background:#fff;}
-.student-table{width:100%;min-width:980px;border-collapse:collapse;}
-.student-table thead th{height:54px;background:#f3f4f6;color:#4b5563;font-size:12px;font-weight:900;text-align:left;text-transform:uppercase;letter-spacing:.02em;border-bottom:1px solid #e5e7eb;padding:0 16px;white-space:nowrap;}
-.student-table tbody td{height:62px;border-bottom:1px solid #eef2f7;padding:0 16px;color:#334155;font-size:14px;vertical-align:middle;}
-.student-table tbody tr:last-child td{border-bottom:none;}
-.student-table tbody tr:hover td{background:#f8fbfe;}
-.student-check{width:16px;height:16px;border-radius:3px;accent-color:#0ea5e9;}
-.student-photo{width:42px;height:42px;border-radius:999px;object-fit:cover;background:#e0f2fe;box-shadow:0 0 0 1px #dbeafe;}
-.student-photo-fallback{width:42px;height:42px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#e0f2fe;color:#0369a1;font-size:14px;font-weight:900;}
-.student-name-cell{font-weight:900;color:#1f2937;}
-.student-nisn-cell{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13px;color:#475569;}
-.student-wa-cell{font-size:15px;color:#475569;}
-.student-action-cell{display:flex;align-items:center;gap:8px;}
-.student-action-btn{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;}
-.student-edit-btn{background:#eaf7ff;color:#0ea5e9;}
-.student-edit-btn:hover{background:#d9f0ff;}
-.student-delete-btn{background:#ffecef;color:#f43f5e;}
-.student-delete-btn:hover{background:#ffe1e7;}
-.student-empty{padding:44px 16px;text-align:center;color:#94a3b8;font-size:13px;font-weight:800;}
-body.dark-mode #view-siswa.admin-student-view{background:#071a2a;color:#e5edf5;}
-body.dark-mode .student-master-card,body.dark-mode .student-table-wrap{background:#0f2435;border-color:#1f3a4d;box-shadow:0 10px 25px rgba(0,0,0,.32);}
-body.dark-mode .student-master-title,body.dark-mode .student-name-cell{color:#eef6ff;}
-body.dark-mode .student-search{background:#10283a;border-color:#24465c;color:#e5edf5;}
-body.dark-mode .student-table thead th{background:#10283a;color:#cbd5e1;border-color:#1f3a4d;}
-body.dark-mode .student-table tbody td{border-color:#1f3a4d;color:#cbd5e1;}
-body.dark-mode .student-table tbody tr:hover td{background:#143249;}
-body.dark-mode .student-nisn-cell,body.dark-mode .student-wa-cell,body.dark-mode .student-count{color:#9ba9b8;}
-body.dark-mode .student-photo,body.dark-mode .student-photo-fallback{background:#183246;box-shadow:0 0 0 1px #24465c;color:#7dd3fc;}
-@media (max-width:980px){.student-master-wrap{padding:22px 14px 36px;}.student-master-card{padding:18px 14px;}.student-master-head{align-items:flex-start;flex-direction:column;}.student-add-btn{width:100%;}.student-toolbar{align-items:stretch;flex-direction:column;}.student-search{width:100%;}.student-table{min-width:860px;}.student-master-title{font-size:20px;}}
-@media (max-width:640px){#view-siswa .home-topbar{min-height:72px;}.student-master-wrap{padding-top:18px;}.student-master-card{margin-top:16px;border-radius:16px;}.student-table thead th{font-size:11px;padding:0 12px;}.student-table tbody td{height:58px;padding:0 12px;font-size:13px;}.student-photo,.student-photo-fallback{width:36px;height:36px;}.student-action-btn{width:32px;height:32px;}.student-table{min-width:760px;}}
-</style></head><body class="min-h-screen text-slate-800"><script>
-const SUPABASE_URL = "https://euxawjyekgthzrjrhhmp.supabase.co";
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /><meta name="theme-color" content="#4f46e5" /><meta name="application-name" content="Abzensi Abu Zairi Presensi" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /><meta name="apple-mobile-web-app-title" content="Abzensi" /><meta name="mobile-web-app-capable" content="yes" /><meta name="msapplication-TileColor" content="#075176" /><link rel="manifest" href="./manifest.webmanifest" /><link rel="apple-touch-icon" href="./icons/icon-192.png" /><title>Abzensi Abu Zairi Presensi - Absensi Siswa</title><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" /><meta http-equiv="Pragma" content="no-cache" /><meta http-equiv="Expires" content="0" /><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" /><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" /><style>*{font-family:'Poppins',sans-serif;}body{background:var(--home-bg);}#app{width:100%;max-width:none !important;min-height:100vh;background:var(--home-bg) !important;box-shadow:none !important;}.view{display:none;}.view.active{display:block;}.glass{background:rgba(255,255,255,.94);backdrop-filter:blur(10px);}.btn{transition:.18s ease;}.btn:active{transform:scale(.98);}:root{--home-navy:#075176;--home-blue:#0399d6;--home-purple:#5d44e8;--home-bg:#ecf5fa;--home-muted:#8b98aa;}.home-shell{background:var(--home-bg);color:#1f2937;width:100%;}.home-topbar{background:var(--home-navy);min-height:72px;box-shadow:0 3px 12px rgba(2,60,90,.18);width:100%;display:flex;align-items:center;position:sticky;top:0;z-index:60;}.home-topbar-inner{width:min(100%,1180px);margin:0 auto;padding:0 18px;display:flex;align-items:center;justify-content:space-between;}.home-content{width:min(100%,480px);margin:0 auto;padding:28px 16px 0;}.admin-login-content{width:min(100%,520px);margin:0 auto;padding:48px 20px 0;}.brand-mark{width:33px;height:33px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#fff url('https://i.ibb.co.com/VY4pcndf/age.png') center/cover no-repeat;box-shadow:0 0 0 2px rgba(255,255,255,.8);position:relative;overflow:hidden;}.brand-mark::after{content:none !important;display:none !important;}.moon-btn{width:29px;height:29px;border-radius:999px;background:rgba(255,255,255,.13);display:flex;align-items:center;justify-content:center;color:#d7f4ff;}.topbar-actions{display:flex;align-items:center;gap:8px;}.install-btn{min-width:29px;height:29px;border-radius:999px;background:rgba(255,255,255,.13);display:flex;align-items:center;justify-content:center;gap:6px;color:#d7f4ff;padding:0 9px;font-size:11px;font-weight:800;}.install-btn:hover,.moon-btn:hover{background:rgba(255,255,255,.22);}.install-btn.hidden{display:none !important;}.home-card{background:#fff;border-radius:14px;box-shadow:0 8px 22px rgba(15,23,42,.10);}.school-logo{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 5px 9px rgba(15,23,42,.15));}.home-title{color:#0b86bd;font-size:28px;line-height:1;font-weight:800;letter-spacing:.04em;}.scanner-frame{width:100%;max-width:320px;height:240px;border:2px solid #08a8ef;border-radius:16px;background:#fbfcfe;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;}.scanner-bars{height:44px;display:flex;align-items:center;gap:4px;opacity:.55;}.scanner-bars span{display:block;width:5px;border-radius:6px;background:#b8c0cb;}.scanner-bars span:nth-child(1){height:38px}.scanner-bars span:nth-child(2){height:39px}.scanner-bars span:nth-child(3){height:41px}.scanner-bars span:nth-child(4){height:38px}.scanner-bars span:nth-child(5){height:42px}.scanner-bars span:nth-child(6){height:40px}.scanner-bars span:nth-child(7){height:39px}.scanner-bars span:nth-child(8){height:41px}#scannerReader,#scannerReader video{width:100% !important;height:100% !important;object-fit:cover;border:0 !important;}#scannerReader{display:none;}.scan-btn{border-radius:8px;min-height:42px;font-size:12px;font-weight:800;box-shadow:0 5px 12px rgba(0,0,0,.10);}.manual-divider{display:flex;align-items:center;gap:12px;color:#a1a7b2;font-size:9px;font-weight:800;letter-spacing:.12em;}.manual-divider::before,.manual-divider::after{content:'';height:1px;flex:1;background:#eef1f5;}.manual-input{height:38px;border:1px solid #e7ebf1;border-radius:8px;font-size:12px;box-shadow:inset 0 1px 2px rgba(0,0,0,.02);}.manual-search-wrap{position:relative;min-width:0;}.manual-suggestion-box{position:absolute;left:0;right:0;top:calc(100% + 7px);z-index:35;max-height:238px;overflow-y:auto;background:#fff;border:1px solid #edf1f6;border-radius:10px;box-shadow:0 12px 24px rgba(15,23,42,.14);}.manual-suggestion-box::-webkit-scrollbar{width:4px;}.manual-suggestion-box::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px;}.manual-suggestion-item{width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;text-align:left;border-bottom:1px solid #f0f3f7;background:#fff;transition:.15s ease;}.manual-suggestion-item:last-child{border-bottom:0;}.manual-suggestion-item:hover,.manual-suggestion-item.active{background:#f7fbff;}.manual-suggestion-photo{width:30px;height:30px;border-radius:999px;object-fit:cover;background:#eef4ff;color:#6d8dff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}.manual-suggestion-name{display:block;color:#0f172a;font-size:12px;font-weight:800;line-height:1.15;}.manual-suggestion-meta{display:block;margin-top:3px;color:#0369a1;font-size:10px;font-weight:700;line-height:1.1;}.send-btn{width:43px;height:43px;border-radius:9px;background:#1f2937;color:#fff;box-shadow:0 5px 12px rgba(31,41,55,.20);}.absent-panel{border:1px solid #eef2f7;border-radius:10px;max-height:168px;overflow-y:auto;background:#fff;}.absent-panel::-webkit-scrollbar{width:4px;}.absent-panel::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px;}.student-avatar{width:25px;height:25px;border-radius:999px;background:#f2f5fb;color:#7e9dff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;}.admin-outline{border:1px solid #d9eefc;color:#075176;border-radius:8px;}.admin-login-card{background:#fff;border-radius:14px;box-shadow:0 10px 25px rgba(15,23,42,.12);}.admin-icon-circle{width:80px;height:80px;border-radius:999px;background:#f1f9fd;color:#0574a5;display:flex;align-items:center;justify-content:center;margin:0 auto;}.admin-login-input{height:57px;border:1px solid #e1e7ee;border-radius:12px;background:#fff;box-shadow:inset 0 1px 2px rgba(15,23,42,.04);letter-spacing:.25em;}.admin-login-btn{height:51px;border-radius:10px;background:#066b9b;box-shadow:0 10px 20px rgba(6,107,155,.24);}.app-footer{color:#7b8797;}#view-admin,#view-siswa,#view-izin,#view-rekap,#view-setting{max-width:28rem;margin:0 auto;}body.dark-mode{background:#07111d;}body.dark-mode #app{background:#071a2a !important;}body.dark-mode .home-shell{background:#071a2a;color:#e5edf5;}body.dark-mode .home-topbar{background:#042d47;box-shadow:0 3px 14px rgba(0,0,0,.35);}body.dark-mode .home-card,body.dark-mode .admin-login-card{background:#0f2435;color:#e5edf5;box-shadow:0 10px 25px rgba(0,0,0,.32);border:1px solid rgba(148,163,184,.16);}body.dark-mode .school-logo{filter:drop-shadow(0 5px 9px rgba(0,0,0,.35));}body.dark-mode .scanner-frame{background:#10283a;border-color:#18a8e8;}body.dark-mode .manual-input,body.dark-mode .admin-login-input{background:#10283a;border-color:#2f4c62;color:#edf5ff;}body.dark-mode .manual-input::placeholder,body.dark-mode .admin-login-input::placeholder{color:#7f91a5;}body.dark-mode .manual-suggestion-box{background:#0f2435;border-color:#1f3a4d;box-shadow:0 12px 24px rgba(0,0,0,.36);}body.dark-mode .manual-suggestion-item{background:#0f2435;border-color:#1f3a4d;}body.dark-mode .manual-suggestion-item:hover,body.dark-mode .manual-suggestion-item.active{background:#143249;}body.dark-mode .manual-suggestion-photo{background:#193449;color:#9fc7ff;}body.dark-mode .manual-suggestion-name{color:#e5edf5;}body.dark-mode .manual-suggestion-meta{color:#7dd3fc;}body.dark-mode .absent-panel{background:#0f2435;border-color:#1f3a4d;}body.dark-mode .student-avatar{background:#193449;color:#9fc7ff;}body.dark-mode .admin-outline{background:#10283a;border-color:#1c5574;color:#b7e5ff;}body.dark-mode .admin-outline:hover{background:#143249;}body.dark-mode .admin-icon-circle{background:#102f46;color:#70d3ff;}body.dark-mode .app-footer{color:#9ba9b8;}body.dark-mode .text-slate-500{color:#9ba9b8 !important;}body.dark-mode .text-slate-600{color:#b7c3d0 !important;}body.dark-mode .text-slate-700{color:#d9e2ec !important;}body.dark-mode .text-slate-400{color:#7d8ea1 !important;}body.dark-mode .bg-slate-100{background:#183246 !important;}body.dark-mode .divide-slate-100>:not([hidden]) ~:not([hidden]){border-color:#1f3a4d !important;}@media (max-width:640px){#app{max-width:100% !important;}#view-home .home-topbar{min-height:78px;}#view-home .home-topbar-inner{padding-left:clamp(16px,4.5vw,24px) !important;padding-right:clamp(16px,4.5vw,24px) !important;}#view-home .brand-mark{width:clamp(48px,12vw,60px);height:clamp(48px,12vw,60px);box-shadow:0 0 0 4px rgba(255,255,255,.88),0 8px 18px rgba(0,0,0,.10);}#view-home .brand-mark::after{border-left-width:clamp(8px,2vw,11px);border-right-width:clamp(8px,2vw,11px);border-bottom-width:clamp(25px,6vw,32px);}#view-home .home-topbar h1{font-size:clamp(24px,6.2vw,32px) !important;line-height:1.05 !important;letter-spacing:.03em !important;}#view-home .home-topbar p{margin-top:4px;font-size:clamp(8px,2.2vw,11px) !important;letter-spacing:.28em !important;}#view-home .moon-btn{width:clamp(46px,11vw,58px);height:clamp(46px,11vw,58px);font-size:18px;}#view-home .moon-btn i{font-size:18px !important;}#view-home .home-content{padding-left:clamp(18px,5vw,32px) !important;padding-right:clamp(18px,5vw,32px) !important;padding-top:clamp(26px,6vw,46px) !important;}#view-home .home-card{border-radius:clamp(20px,5vw,30px);padding:clamp(34px,8vw,54px) clamp(24px,7vw,46px) clamp(28px,7vw,44px) !important;box-shadow:0 10px 28px rgba(15,23,42,.12);}#view-home .school-logo{width:clamp(76px,20vw,106px);height:clamp(76px,20vw,106px);}#view-home .home-title{margin-top:clamp(16px,4vw,24px) !important;font-size:clamp(25px,7vw,36px) !important;}#view-home .home-card .text-center .mt-2{margin-top:clamp(14px,3vw,22px) !important;gap:clamp(8px,2.5vw,14px) !important;font-size:clamp(18px,5vw,26px) !important;line-height:1.22 !important;}#view-home .home-card .text-center .mt-2 i{font-size:clamp(11px,2.8vw,16px) !important;}#view-home .home-card .text-center p{margin-top:clamp(8px,2.4vw,14px) !important;font-size:clamp(13px,3.4vw,17px) !important;line-height:1.45 !important;}#view-home .scanner-frame{width:100%;max-width:min(100%,360px) !important;height:clamp(230px,60vw,300px);margin-top:clamp(34px,8vw,52px) !important;border-width:3px;border-radius:clamp(24px,5vw,34px);}#view-home .scanner-bars{transform:scale(1.55);}#view-home .mt-6.grid{margin-top:clamp(34px,8vw,54px) !important;gap:clamp(14px,4vw,28px) !important;}#view-home .scan-btn{min-height:clamp(58px,14vw,72px);border-radius:clamp(14px,4vw,22px);font-size:clamp(14px,4.1vw,20px);letter-spacing:.04em;box-shadow:0 10px 22px rgba(0,0,0,.13);}#view-home .scan-btn i{margin-right:clamp(7px,2vw,12px) !important;font-size:clamp(12px,3.4vw,17px) !important;}#view-home .manual-divider{margin-top:clamp(28px,7vw,42px) !important;margin-bottom:clamp(20px,5vw,30px) !important;gap:clamp(12px,3vw,22px);font-size:clamp(11px,3vw,15px);}#view-home .manual-input{height:clamp(48px,12vw,60px);border-radius:clamp(12px,3vw,18px);font-size:clamp(13px,3.4vw,16px);}#view-home .send-btn{width:clamp(50px,12vw,62px);height:clamp(50px,12vw,62px);border-radius:clamp(12px,3vw,18px);}#view-home .send-btn i{font-size:clamp(14px,3.6vw,18px) !important;}#view-home .absent-panel{margin-top:clamp(28px,7vw,42px) !important;border-radius:clamp(14px,4vw,22px);max-height:190px;padding:clamp(13px,3.8vw,18px) !important;}#view-home .absent-panel .mb-2{font-size:clamp(10px,2.8vw,13px) !important;}#view-home .student-avatar{width:clamp(30px,8vw,38px);height:clamp(30px,8vw,38px);font-size:clamp(11px,3vw,14px);}#view-home #absentTodayContainer b{font-size:clamp(11px,3.2vw,14px) !important;}#view-home #absentTodayContainer span{font-size:clamp(9px,2.6vw,12px) !important;}#view-home .my-5{margin-top:clamp(24px,6vw,34px) !important;margin-bottom:clamp(24px,6vw,34px) !important;}#view-home .admin-outline{padding-top:clamp(16px,4.5vw,22px) !important;padding-bottom:clamp(16px,4.5vw,22px) !important;border-radius:clamp(14px,4vw,20px);font-size:clamp(15px,4.4vw,21px) !important;}#view-home .app-footer{margin-top:clamp(34px,8vw,54px) !important;padding-bottom:18px;font-size:clamp(13px,3.5vw,17px) !important;}}@media (max-width:380px){#view-home .home-card{padding-left:22px !important;padding-right:22px !important;}#view-home .scan-btn{font-size:13px;letter-spacing:0;}#view-home .scanner-frame{height:220px;}}@media (max-width:640px){html,body{min-height:100dvh;overflow-x:hidden;}#view-home.home-shell{min-height:100dvh;padding-bottom:10px !important;}#view-home .home-topbar{min-height:clamp(64px,9.5vh,78px) !important;}#view-home .home-topbar-inner{padding-left:clamp(14px,4vw,18px) !important;padding-right:clamp(14px,4vw,18px) !important;}#view-home .brand-mark{width:clamp(44px,11vw,52px) !important;height:clamp(44px,11vw,52px) !important;box-shadow:0 0 0 4px rgba(255,255,255,.9),0 7px 16px rgba(0,0,0,.10) !important;}#view-home .brand-mark::after{border-left-width:clamp(7px,1.8vw,9px) !important;border-right-width:clamp(7px,1.8vw,9px) !important;border-bottom-width:clamp(23px,5.6vw,28px) !important;}#view-home .home-topbar h1{font-size:clamp(19px,5vw,23px) !important;line-height:1.05 !important;letter-spacing:.035em !important;}#view-home .home-topbar p{margin-top:3px !important;font-size:clamp(7px,2vw,9px) !important;letter-spacing:.25em !important;}#view-home .moon-btn{width:clamp(42px,10.5vw,50px) !important;height:clamp(42px,10.5vw,50px) !important;}#view-home .moon-btn i{font-size:clamp(15px,4vw,18px) !important;}#view-home .home-content{width:100% !important;max-width:430px !important;padding:clamp(16px,3vh,24px) 16px 0 !important;}#view-home .home-card{border-radius:clamp(18px,4.8vw,24px) !important;padding:clamp(20px,3vh,28px) clamp(18px,5vw,28px) clamp(18px,3vh,24px) !important;box-shadow:0 9px 24px rgba(15,23,42,.12) !important;}#view-home .school-logo{width:clamp(58px,15vw,72px) !important;height:clamp(58px,15vw,72px) !important;}#view-home .home-title{display:none !important;}#view-home .home-card .text-center .mt-2{margin-top:clamp(12px,2.8vw,16px) !important;gap:clamp(7px,2vw,10px) !important;font-size:clamp(16px,4.3vw,20px) !important;line-height:1.22 !important;}#view-home .home-card .text-center .mt-2 i{font-size:clamp(9px,2.4vw,12px) !important;}#view-home .home-card .text-center p{margin-top:clamp(7px,2vw,10px) !important;font-size:clamp(12px,3.2vw,14px) !important;line-height:1.35 !important;}#view-home .scanner-frame{width:100% !important;max-width:310px !important;height:clamp(190px,49vw,230px) !important;margin-top:clamp(24px,6vw,34px) !important;border-width:3px !important;border-radius:clamp(20px,5vw,28px) !important;}#view-home .scanner-bars{transform:scale(1.28) !important;}#view-home .mt-6.grid{margin-top:clamp(24px,6vw,34px) !important;gap:clamp(12px,3.5vw,18px) !important;}#view-home .scan-btn{min-height:clamp(48px,11vw,56px) !important;border-radius:clamp(12px,3.5vw,16px) !important;font-size:clamp(12px,3.3vw,14px) !important;letter-spacing:.02em !important;box-shadow:0 8px 18px rgba(0,0,0,.13) !important;}#view-home .scan-btn i{margin-right:clamp(5px,1.6vw,8px) !important;font-size:clamp(11px,3vw,14px) !important;}#view-home .manual-divider{margin-top:clamp(18px,4.8vw,26px) !important;margin-bottom:clamp(14px,3.8vw,20px) !important;gap:clamp(10px,2.8vw,14px) !important;font-size:clamp(10px,2.6vw,12px) !important;}#view-home .manual-input{height:clamp(42px,10.5vw,48px) !important;border-radius:clamp(10px,2.8vw,14px) !important;font-size:clamp(12px,3.1vw,14px) !important;}#view-home .manual-suggestion-box{max-height:min(260px,42vh) !important;border-radius:12px !important;}#view-home .manual-suggestion-item{padding:8px 10px !important;}#view-home .manual-suggestion-photo{width:30px !important;height:30px !important;}#view-home .send-btn{width:clamp(44px,10.5vw,50px) !important;height:clamp(44px,10.5vw,50px) !important;border-radius:clamp(10px,2.8vw,14px) !important;}#view-home .send-btn i{font-size:clamp(13px,3.4vw,16px) !important;}#view-home .absent-panel{margin-top:clamp(16px,4vw,22px) !important;border-radius:clamp(12px,3.5vw,16px) !important;max-height:min(128px,20vh) !important;padding:clamp(10px,3vw,13px) !important;}#view-home .absent-panel .mb-2{font-size:clamp(9px,2.4vw,11px) !important;}#view-home .student-avatar{width:clamp(26px,7vw,32px) !important;height:clamp(26px,7vw,32px) !important;font-size:clamp(10px,2.7vw,12px) !important;}#view-home #absentTodayContainer b{font-size:clamp(10px,2.9vw,12px) !important;}#view-home #absentTodayContainer span{font-size:clamp(9px,2.4vw,10px) !important;}#view-home .my-5{margin-top:clamp(14px,3.6vw,18px) !important;margin-bottom:clamp(14px,3.6vw,18px) !important;}#view-home .admin-outline{padding-top:clamp(12px,3.5vw,15px) !important;padding-bottom:clamp(12px,3.5vw,15px) !important;border-radius:clamp(12px,3.5vw,16px) !important;font-size:clamp(13px,3.5vw,16px) !important;}#view-home .app-footer{margin-top:clamp(16px,4vh,28px) !important;padding-bottom:max(10px,env(safe-area-inset-bottom)) !important;font-size:clamp(11px,3vw,13px) !important;}}@media (max-width:360px),(max-height:740px) and (max-width:640px){#view-home .home-content{padding-top:12px !important;}#view-home .home-card{padding-top:16px !important;padding-bottom:16px !important;}#view-home .school-logo{width:54px !important;height:54px !important;}#view-home .scanner-frame{height:176px !important;margin-top:18px !important;}#view-home .mt-6.grid{margin-top:18px !important;}#view-home .manual-divider{margin-top:14px !important;margin-bottom:12px !important;}#view-home .absent-panel{max-height:96px !important;}#view-home .app-footer{margin-top:12px !important;}}.rfid-modal-backdrop{background:rgba(15,23,42,.42);backdrop-filter:blur(1px);}.rfid-modal-card{width:min(86vw,410px);border-radius:32px;background:#fff;box-shadow:0 24px 60px rgba(15,23,42,.24);padding:42px 34px 34px;text-align:center;}.rfid-info-circle{width:82px;height:82px;border-radius:999px;margin:0 auto;border:4px solid #39c6e8;color:#39c6e8;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:300;line-height:1;}.rfid-modal-title{margin-top:26px;font-size:27px;line-height:1.15;font-weight:700;color:#444;}.rfid-modal-text{margin:25px auto 0;max-width:330px;color:#555;font-size:20px;line-height:1.35;font-weight:400;}.rfid-modal-actions{margin-top:30px;display:flex;align-items:center;justify-content:center;gap:14px;}.rfid-primary-btn,.rfid-secondary-btn{min-height:52px;border-radius:16px;padding:0 26px;font-size:18px;font-weight:600;color:#fff;transition:.18s ease;}.rfid-primary-btn{background:#6c54eb;box-shadow:0 8px 18px rgba(108,84,235,.20);}.rfid-primary-btn:hover{background:#5e48d8;}.rfid-secondary-btn{background:#65717b;box-shadow:0 8px 18px rgba(31,41,55,.16);}.rfid-secondary-btn:hover{background:#56616b;}.rfid-hidden-input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;}body.dark-mode .rfid-modal-backdrop{background:rgba(0,0,0,.58);}body.dark-mode .rfid-modal-card{background:#0f2435;color:#e5edf5;border:1px solid rgba(148,163,184,.18);}body.dark-mode .rfid-modal-title{color:#eef6ff;}body.dark-mode .rfid-modal-text{color:#cbd5e1;}@media (max-width:640px){.rfid-modal-card{width:min(78vw,360px);border-radius:28px;padding:38px 26px 28px;}.rfid-info-circle{width:78px;height:78px;font-size:42px;border-width:4px;}.rfid-modal-title{margin-top:24px;font-size:26px;}.rfid-modal-text{margin-top:24px;font-size:20px;line-height:1.35;}.rfid-modal-actions{margin-top:28px;gap:12px;}.rfid-primary-btn,.rfid-secondary-btn{min-height:50px;border-radius:14px;padding:0 20px;font-size:18px;}}@media (max-width:380px){.rfid-modal-card{width:84vw;padding-left:22px;padding-right:22px;}.rfid-modal-text{font-size:18px;}.rfid-primary-btn,.rfid-secondary-btn{padding:0 16px;font-size:16px;}}body.dark-mode .school-name-line{color:#c7ecff !important;text-shadow:0 1px 0 rgba(0,0,0,.18);}body.dark-mode .brand-subtitle{color:#e0f6ff !important;opacity:.96;}@media (max-width:640px){.rfid-modal-backdrop{padding:16px !important;align-items:center !important;}.rfid-modal-card{width:min(82vw,320px) !important;border-radius:22px !important;padding:24px 20px 22px !important;box-shadow:0 18px 42px rgba(15,23,42,.24) !important;}.rfid-info-circle{width:56px !important;height:56px !important;border-width:3px !important;font-size:30px !important;}.rfid-modal-title{margin-top:16px !important;font-size:20px !important;line-height:1.15 !important;}.rfid-modal-text{margin-top:14px !important;max-width:250px !important;font-size:14.5px !important;line-height:1.42 !important;}.rfid-modal-actions{margin-top:20px !important;gap:8px !important;}.rfid-primary-btn,.rfid-secondary-btn{min-height:40px !important;border-radius:11px !important;padding:0 13px !important;font-size:13.5px !important;white-space:nowrap !important;}}@media (max-width:380px){.rfid-modal-card{width:min(88vw,300px) !important;padding:22px 16px 20px !important;}.rfid-info-circle{width:52px !important;height:52px !important;font-size:28px !important;}.rfid-modal-title{font-size:19px !important;}.rfid-modal-text{font-size:13.5px !important;}.rfid-primary-btn,.rfid-secondary-btn{min-height:38px !important;padding:0 10px !important;font-size:12.5px !important;}}.home-topbar{position:sticky !important;top:0 !important;z-index:60 !important;}.brand-mark{background:#fff url('https://i.ibb.co.com/VY4pcndf/age.png') center/cover no-repeat !important;overflow:hidden !important;}.brand-mark::after{content:none !important;display:none !important;}.rfid-hidden-input{input-mode:none;}@media (max-width:640px){#rfidReaderInput{font-size:16px !important;caret-color:transparent !important;}}#view-admin.admin-dashboard-view{max-width:none !important;margin:0 !important;background:#eef5fb;color:#1f2937;}.admin-dash-wrap{width:min(100%,1180px);margin:0 auto;padding:40px 22px 50px;}.admin-profile-nav{display:flex;align-items:center;justify-content:space-between;gap:20px;background:#fff;border-radius:16px;padding:18px 20px;box-shadow:0 8px 22px rgba(15,23,42,.08);}.admin-profile-left{display:flex;align-items:center;gap:16px;min-width:0;}.admin-avatar{width:52px;height:52px;border-radius:999px;background:#eef8ff;color:#0b86bd;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;}.admin-hello{color:#111827;font-size:17px;line-height:1.15;font-weight:800;}.admin-role{margin-top:4px;color:#0b86bd;font-size:10px;line-height:1;font-weight:800;letter-spacing:.16em;text-transform:uppercase;}.admin-nav-pills{display:flex;align-items:center;gap:6px;border:1px solid #e5eaf0;background:#f8fafc;border-radius:13px;padding:7px;box-shadow:inset 0 1px 3px rgba(15,23,42,.04);}.admin-tab{min-height:38px;border-radius:10px;padding:0 15px;display:flex;align-items:center;gap:7px;color:#667085;font-size:13px;font-weight:800;white-space:nowrap;}.admin-tab:hover,.admin-tab.active{background:#fff;color:#0b6fa4;box-shadow:0 6px 14px rgba(15,23,42,.08);}.logout-tab{color:#ef4444;padding:0 13px;}.dash-title-row{margin-top:28px;display:flex;align-items:center;justify-content:space-between;gap:16px;}.dash-title-left{display:flex;align-items:center;gap:10px;}.dash-title-left h2{display:flex;align-items:center;gap:9px;color:#1f2937;font-size:24px;line-height:1;font-weight:800;}.dash-title-left h2 i{color:#0ea5e9;}.dash-refresh{width:35px;height:35px;border-radius:9px;background:#f1f5f9;color:#94a3b8;display:flex;align-items:center;justify-content:center;border:1px solid #e6edf4;}.dash-refresh:hover{background:#e9f3fb;color:#0b86bd;}.dash-year-select{height:38px;min-width:98px;border-radius:10px;background:#fff;border:1px solid #e5eaf0;color:#475569;font-size:14px;font-weight:800;padding:0 14px;box-shadow:0 4px 12px rgba(15,23,42,.07);outline:none;}.dashboard-card-grid{margin-top:24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;}.dash-stat-card{position:relative;min-height:145px;border-radius:16px;padding:28px 26px 20px;color:#fff;box-shadow:0 12px 24px rgba(15,23,42,.12);overflow:hidden;}.dash-stat-card::after{content:'';position:absolute;right:-38px;bottom:-54px;width:160px;height:160px;border-radius:999px;background:rgba(255,255,255,.08);}.card-blue{background:linear-gradient(135deg,#3b82f6,#0369a1);}.card-green{background:linear-gradient(135deg,#17c983,#0b8f43);}.card-red{background:linear-gradient(135deg,#fb466d,#dc2626);}.dash-main-number{font-size:34px;line-height:1;font-weight:800;letter-spacing:-.04em;}.dash-main-label{margin-top:9px;font-size:13px;font-weight:800;opacity:.92;}.dash-card-icon{position:absolute;top:25px;right:24px;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);font-size:18px;}.dash-period{position:absolute;left:26px;right:24px;bottom:18px;display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;opacity:.9;}.dash-period span{display:flex;align-items:center;gap:7px;}.quick-action-card{margin-top:24px;display:flex;align-items:center;justify-content:space-between;gap:18px;border:1.5px solid #f59e0b;background:#fff;border-radius:14px;padding:18px 21px;box-shadow:0 6px 16px rgba(15,23,42,.05);}.quick-action-card h3{display:flex;align-items:center;gap:8px;color:#1f2937;font-size:16px;font-weight:800;}.quick-action-card h3 i{color:#f59e0b;}.quick-action-card p{margin-top:3px;color:#7b8794;font-size:12px;font-weight:500;}.quick-action-btn{min-height:40px;border-radius:10px;padding:0 18px;background:#f59e0b;color:#fff;font-size:13px;font-weight:800;box-shadow:0 7px 14px rgba(245,158,11,.25);}.quick-action-btn:hover{background:#e28b00;}.mini-stat-grid{margin-top:22px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;}.mini-stat{background:#fff;border-radius:14px;padding:19px 18px;min-height:86px;box-shadow:0 7px 18px rgba(15,23,42,.06);}.mini-stat span{display:block;color:#7b8794;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.10em;}.mini-stat b{display:block;margin-top:7px;color:#0b86bd;font-size:25px;line-height:1;font-weight:800;}.dashboard-chart-grid{margin-top:24px;display:grid;grid-template-columns:minmax(300px,.95fr) minmax(0,1.95fr);gap:20px;align-items:stretch;}.dashboard-chart-card{background:#fff;border-radius:16px;padding:24px 24px 20px;min-height:285px;box-shadow:0 7px 18px rgba(15,23,42,.06);}.dashboard-chart-card h3{display:flex;align-items:center;gap:8px;color:#1f2937;font-size:16px;font-weight:800;}.dashboard-chart-card h3 i{color:#0ea5e9;}.presence-donut-wrap{margin-top:18px;min-height:170px;display:flex;align-items:center;justify-content:center;}.donut-ring{width:170px;height:170px;border-radius:999px;display:flex;align-items:center;justify-content:center;}.donut-hole{width:82px;height:82px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#64748b;font-size:11px;font-weight:800;box-shadow:inset 0 0 0 1px rgba(226,232,240,.9);}.donut-hole b{color:#0f172a;font-size:19px;line-height:1;}.presence-legend{margin-top:12px;display:flex;justify-content:center;flex-wrap:wrap;gap:10px 16px;color:#64748b;font-size:11px;font-weight:700;}.presence-legend span{display:flex;align-items:center;gap:6px;}.legend-dot{width:10px;height:10px;border-radius:3px;display:inline-block;}.monthly-trend-chart{margin-top:18px;min-height:210px;}.trend-legend{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;color:#64748b;font-size:11px;font-weight:700;margin-bottom:12px;}.trend-bars{height:182px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:10px;align-items:end;border-left:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;padding:6px 8px 0;background:repeating-linear-gradient(to top,transparent 0,transparent 29px,#edf2f7 30px);}.trend-month{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;}.trend-stack{width:min(34px,78%);height:150px;display:flex;flex-direction:column-reverse;justify-content:flex-start;border-radius:6px 6px 0 0;overflow:hidden;}.trend-stack span{display:block;min-height:0;}.trend-label{color:#64748b;font-size:12px;line-height:1;}.bar-hadir{background:#3b82f6;}.bar-tepat{background:#86efac;}.bar-telat{background:#facc15;}.bar-izin{background:#fdba74;}.bar-alpa{background:#fb7185;}.dash-empty{color:#94a3b8;font-size:13px;font-weight:700;text-align:center;padding:52px 0;}body.dark-mode #view-admin.admin-dashboard-view{background:#071a2a;color:#e5edf5;}body.dark-mode .admin-profile-nav,body.dark-mode .quick-action-card,body.dark-mode .mini-stat,body.dark-mode .dashboard-chart-card{background:#0f2435;border-color:#1f3a4d;box-shadow:0 10px 25px rgba(0,0,0,.32);}body.dark-mode .admin-nav-pills{background:#10283a;border-color:#24465c;}body.dark-mode .admin-tab:hover,body.dark-mode .admin-tab.active{background:#143249;color:#7dd3fc;}body.dark-mode .admin-hello,body.dark-mode .dash-title-left h2,body.dark-mode .quick-action-card h3,body.dark-mode .dashboard-chart-card h3{color:#eef6ff;}body.dark-mode .dash-refresh,body.dark-mode .dash-year-select{background:#10283a;border-color:#24465c;color:#cbd5e1;}body.dark-mode .mini-stat span,body.dark-mode .quick-action-card p,body.dark-mode .presence-legend,body.dark-mode .trend-legend,body.dark-mode .trend-label{color:#9ba9b8;}body.dark-mode .donut-hole{background:#0f2435;color:#9ba9b8;box-shadow:inset 0 0 0 1px rgba(148,163,184,.18);}body.dark-mode .donut-hole b{color:#e5edf5;}body.dark-mode .trend-bars{border-color:#24465c;background:repeating-linear-gradient(to top,transparent 0,transparent 29px,rgba(148,163,184,.14) 30px);}@media (max-width:980px){.admin-profile-nav{align-items:flex-start;flex-direction:column;}.admin-nav-pills{width:100%;overflow-x:auto;justify-content:flex-start;}.dashboard-card-grid{grid-template-columns:1fr;}.mini-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.dashboard-chart-grid{grid-template-columns:1fr;}}@media (max-width:640px){.admin-dash-wrap{padding:22px 14px 36px;}.admin-profile-nav{padding:15px;border-radius:14px;}.admin-avatar{width:46px;height:46px;}.admin-hello{font-size:15px;}.admin-tab{min-height:35px;padding:0 12px;font-size:12px;}.dash-title-row{margin-top:22px;align-items:flex-start;}.dash-title-left h2{font-size:21px;}.dashboard-card-grid{gap:14px;margin-top:18px;}.dash-stat-card{min-height:130px;padding:22px 20px 18px;border-radius:14px;}.dash-main-number{font-size:30px;}.dash-card-icon{width:42px;height:42px;top:20px;right:20px;}.dash-period{left:20px;right:20px;}.quick-action-card{flex-direction:column;align-items:stretch;padding:16px;}.quick-action-btn{width:100%;}.mini-stat-grid{gap:12px;}.mini-stat{padding:16px 14px;min-height:74px;}.mini-stat b{font-size:22px;}.dashboard-chart-card{padding:19px 16px;min-height:250px;}.donut-ring{width:148px;height:148px;}.donut-hole{width:70px;height:70px;}.trend-bars{gap:4px;padding-left:5px;padding-right:5px;}.trend-label{font-size:10px;}}@media print{.no-print{display:none !important;}body{background:white !important;}#app{max-width:100% !important;box-shadow:none !important;}.print-card{box-shadow:none !important;border:0 !important;}}#view-siswa.admin-student-view{max-width:none!important;margin:0!important;background:#eef5fb;color:#1f2937;}.student-master-wrap{width:min(100%,1180px);margin:0 auto;padding:40px 22px 50px;}.student-master-card{margin-top:24px;background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(15,23,42,.07);padding:24px;}.student-master-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;}.student-master-title{display:flex;align-items:center;gap:10px;margin:0;color:#111827;font-size:24px;font-weight:900;line-height:1;}.student-master-title i{color:#0b9bd7;font-size:20px;}.student-add-btn{min-height:40px;border-radius:10px;background:#0693cf;color:#fff;padding:0 18px;font-weight:900;font-size:14px;box-shadow:0 8px 18px rgba(6,147,207,.22);}.student-add-btn:hover{background:#047fb4;}.student-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}.student-search{width:320px;max-width:100%;height:40px;border:1px solid #e5eaf0;border-radius:10px;background:#f8fafc;padding:0 14px;font-size:13px;font-weight:700;color:#334155;outline:none;}.student-search:focus{border-color:#38bdf8;background:#fff;box-shadow:0 0 0 3px rgba(14,165,233,.12);}.student-count{font-size:12px;font-weight:800;color:#64748b;}.student-table-wrap{overflow:auto;border:1px solid #e5eaf0;border-radius:12px;background:#fff;}.student-table{width:100%;min-width:980px;border-collapse:collapse;}.student-table thead th{height:54px;background:#f3f4f6;color:#4b5563;font-size:12px;font-weight:900;text-align:left;text-transform:uppercase;letter-spacing:.02em;border-bottom:1px solid #e5e7eb;padding:0 16px;white-space:nowrap;}.student-table tbody td{height:62px;border-bottom:1px solid #eef2f7;padding:0 16px;color:#334155;font-size:14px;vertical-align:middle;}.student-table tbody tr:last-child td{border-bottom:none;}.student-table tbody tr:hover td{background:#f8fbfe;}.student-check{width:16px;height:16px;border-radius:3px;accent-color:#0ea5e9;}.student-photo{width:42px;height:42px;border-radius:999px;object-fit:cover;background:#e0f2fe;box-shadow:0 0 0 1px #dbeafe;}.student-photo-fallback{width:42px;height:42px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#e0f2fe;color:#0369a1;font-size:14px;font-weight:900;}.student-name-cell{font-weight:900;color:#1f2937;}.student-nisn-cell{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13px;color:#475569;}.student-wa-cell{font-size:15px;color:#475569;}.student-action-cell{display:flex;align-items:center;gap:8px;}.student-action-btn{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;}.student-edit-btn{background:#eaf7ff;color:#0ea5e9;}.student-edit-btn:hover{background:#d9f0ff;}.student-delete-btn{background:#ffecef;color:#f43f5e;}.student-delete-btn:hover{background:#ffe1e7;}.student-empty{padding:44px 16px;text-align:center;color:#94a3b8;font-size:13px;font-weight:800;}body.dark-mode #view-siswa.admin-student-view{background:#071a2a;color:#e5edf5;}body.dark-mode .student-master-card,body.dark-mode .student-table-wrap{background:#0f2435;border-color:#1f3a4d;box-shadow:0 10px 25px rgba(0,0,0,.32);}body.dark-mode .student-master-title,body.dark-mode .student-name-cell{color:#eef6ff;}body.dark-mode .student-search{background:#10283a;border-color:#24465c;color:#e5edf5;}body.dark-mode .student-table thead th{background:#10283a;color:#cbd5e1;border-color:#1f3a4d;}body.dark-mode .student-table tbody td{border-color:#1f3a4d;color:#cbd5e1;}body.dark-mode .student-table tbody tr:hover td{background:#143249;}body.dark-mode .student-nisn-cell,body.dark-mode .student-wa-cell,body.dark-mode .student-count{color:#9ba9b8;}body.dark-mode .student-photo,body.dark-mode .student-photo-fallback{background:#183246;box-shadow:0 0 0 1px #24465c;color:#7dd3fc;}@media (max-width:980px){.student-master-wrap{padding:22px 14px 36px;}.student-master-card{padding:18px 14px;}.student-master-head{align-items:flex-start;flex-direction:column;}.student-add-btn{width:100%;}.student-toolbar{align-items:stretch;flex-direction:column;}.student-search{width:100%;}.student-table{min-width:860px;}.student-master-title{font-size:20px;}}@media (max-width:640px){#view-siswa .home-topbar{min-height:72px;}.student-master-wrap{padding-top:18px;}.student-master-card{margin-top:16px;border-radius:16px;}.student-table thead th{font-size:11px;padding:0 12px;}.student-table tbody td{height:58px;padding:0 12px;font-size:13px;}.student-photo,.student-photo-fallback{width:36px;height:36px;}.student-action-btn{width:32px;height:32px;}.student-table{min-width:760px;}}#view-rekap.admin-rekap-view{max-width:none!important;margin:0!important;background:#eef5fb;color:#1f2937;}.rekap-wrap{width:min(100%,1180px);margin:0 auto;padding:40px 22px 56px;}.rekap-tab-row{margin-top:24px;display:inline-flex;align-items:center;gap:6px;background:#f1f5f9;border:1px solid #dfe7ef;border-radius:12px;padding:6px;}.rekap-tab-btn{min-height:36px;border-radius:9px;padding:0 20px;font-size:13px;font-weight:900;color:#64748b;}.rekap-tab-btn.active{background:#fff;color:#0b6fa4;box-shadow:0 6px 14px rgba(15,23,42,.08);}.rekap-tab-btn[disabled]{opacity:.65;cursor:not-allowed;}.rekap-highlight-grid{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:20px;}.rekap-highlight-card{border-radius:14px;padding:24px 28px;display:flex;align-items:center;gap:22px;min-height:104px;box-shadow:0 6px 16px rgba(15,23,42,.04);}.rekap-highlight-card.month{background:#fff8d9;border:1px solid #facc15;}.rekap-highlight-card.year{background:#eaf7ff;border:1px solid #93d9ff;}.rekap-highlight-icon{width:58px;height:58px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:24px;flex:none;}.rekap-highlight-card.month .rekap-highlight-icon{background:#fff0b8;color:#d97706;}.rekap-highlight-card.year .rekap-highlight-icon{background:#d9f2ff;color:#0b86bd;}.rekap-highlight-kicker{font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#92400e;}.rekap-highlight-card.year .rekap-highlight-kicker{color:#0b6fa4;}.rekap-highlight-name{margin-top:5px;color:#1f2937;font-size:22px;line-height:1.1;font-weight:900;}.rekap-highlight-sub{margin-top:6px;color:#475569;font-size:13px;font-weight:700;}.rekap-card{margin-top:24px;background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(15,23,42,.07);padding:24px;}.rekap-card-title{display:flex;align-items:center;gap:10px;color:#1f2937;font-size:24px;font-weight:900;line-height:1;}.rekap-card-title i{color:#0ea5e9;font-size:20px;}.rekap-filter-card{margin-top:24px;border:1px solid #e5eaf0;border-radius:12px;background:#fff;padding:22px;box-shadow:0 4px 12px rgba(15,23,42,.03);}.rekap-filter-grid{display:grid;grid-template-columns:1.15fr 1.15fr 1.15fr .95fr auto;gap:12px;align-items:end;}.rekap-filter-field label{display:block;margin-bottom:8px;color:#64748b;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;}.rekap-select{height:42px;width:100%;border:1px solid #d7dee8;border-radius:8px;background:#fff;color:#111827;padding:0 14px;font-size:14px;font-weight:700;outline:none;}.rekap-select:focus{border-color:#38bdf8;box-shadow:0 0 0 3px rgba(14,165,233,.12);}.rekap-show-btn{height:42px;border-radius:8px;background:#078dca;color:#fff;padding:0 34px;font-size:14px;font-weight:900;box-shadow:0 8px 18px rgba(7,141,202,.18);}.rekap-show-btn:hover{background:#087db3;}.rekap-print-btn,.rekap-export-btn{height:42px;border-radius:8px;background:#1f2937;color:#fff;padding:0 16px;font-size:13px;font-weight:900;display:inline-flex;align-items:center;gap:8px;}.rekap-export-btn{background:#0f766e;}.rekap-export-row{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px;}.rekap-legend{margin-top:24px;border:1px solid #d7e2ee;background:#f8fbff;border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;color:#64748b;font-size:12px;font-weight:700;}.rekap-legend b{color:#1f2937;}.legend-dot{width:13px;height:13px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-2px;border:1px solid transparent;}.legend-h{background:#bbf7d0;border-color:#86efac;}.legend-tl{background:#fed7aa;border-color:#fdba74;}.legend-i{background:#fed7aa;border-color:#fdba74;}.legend-s{background:#bfdbfe;border-color:#93c5fd;}.legend-a{background:#fecdd3;border-color:#fda4af;}.legend-libur{background:#fee2e2;border-color:#fecaca;}.rekap-table-title{margin:22px 0 12px;color:#075176;font-size:17px;font-weight:900;}.rekap-table-scroll{overflow:auto;border:1px solid #dfe7ef;border-radius:10px;background:#fff;box-shadow:0 4px 12px rgba(15,23,42,.04);}.monthly-presence-table,.yearly-presence-table{width:100%;border-collapse:separate;border-spacing:0;min-width:1120px;font-size:12px;}.monthly-presence-table th,.monthly-presence-table td,.yearly-presence-table th,.yearly-presence-table td{border-right:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;padding:0 8px;height:34px;text-align:center;color:#334155;white-space:nowrap;}.monthly-presence-table th,.yearly-presence-table th{background:#f3f4f6;color:#4b5563;font-weight:900;}.monthly-presence-table tbody tr:hover td,.yearly-presence-table tbody tr:hover td{background:#f8fbfe;}.rekap-col-no{width:48px;min-width:48px;}.rekap-col-name{width:210px;min-width:210px;text-align:left!important;}.rekap-sticky-no{position:sticky;left:0;z-index:4;background:#fff;}.rekap-sticky-name{position:sticky;left:48px;z-index:4;background:#fff;box-shadow:1px 0 0 #e5e7eb;}thead .rekap-sticky-no,thead .rekap-sticky-name{background:#f3f4f6;z-index:5;}.rekap-name-text{display:block;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800;text-align:left;}.rekap-cell{font-weight:900;min-width:28px;}.rekap-cell.status-v{background:#bbf7d0;color:#166534;}.rekap-cell.status-tl,.rekap-cell.status-i{background:#fed7aa;color:#9a3412;}.rekap-cell.status-s{background:#bfdbfe;color:#1d4ed8;}.rekap-cell.status-a{background:#fecdd3;color:#be123c;}.rekap-cell.libur{background:#fff1f2;color:#e11d48;}.rekap-cell.libur.status-v{background:linear-gradient(90deg,#fff1f2 0 36%,#bbf7d0 36%);}.rekap-cell.libur.status-s{background:linear-gradient(90deg,#fff1f2 0 36%,#bfdbfe 36%);}.rekap-cell.libur.status-i,.rekap-cell.libur.status-tl{background:linear-gradient(90deg,#fff1f2 0 36%,#fed7aa 36%);}.rekap-cell.libur.status-a{background:linear-gradient(90deg,#fff1f2 0 36%,#fecdd3 36%);}.rekap-total-head{background:#eaf7ff!important;color:#075176!important;}.rekap-total-year-head{background:#e8f8ef!important;color:#0f766e!important;}.total-h{color:#0369a1!important;font-weight:900;}.total-tl,.total-i{color:#c2410c!important;font-weight:900;}.total-s{color:#0369a1!important;font-weight:900;}.total-a{color:#be123c!important;font-weight:900;}.year-month-cell{text-align:left!important;vertical-align:top;padding:6px 9px!important;min-width:72px;height:48px!important;}.year-mini{display:block;line-height:1.25;font-size:11px;font-weight:900;}.year-mini.h{color:#047857;}.year-mini.tl,.year-mini.i{color:#c2410c;}.year-mini.s{color:#0369a1;}.year-mini.a{color:#be123c;}.year-empty{color:#cbd5e1;font-weight:900;}.rekap-empty{padding:34px 18px;text-align:center;color:#94a3b8;font-weight:800;}body.dark-mode #view-rekap.admin-rekap-view{background:#071a2a;color:#e5edf5;}body.dark-mode .rekap-tab-row{background:#10283a;border-color:#1f3a4d;}body.dark-mode .rekap-tab-btn.active,body.dark-mode .rekap-card,body.dark-mode .rekap-filter-card,body.dark-mode .rekap-table-scroll{background:#0f2435;border-color:#1f3a4d;color:#e5edf5;box-shadow:0 10px 25px rgba(0,0,0,.32);}body.dark-mode .rekap-card-title,body.dark-mode .rekap-highlight-name,body.dark-mode .rekap-legend b{color:#eef6ff;}body.dark-mode .rekap-select{background:#10283a;border-color:#24465c;color:#e5edf5;}body.dark-mode .rekap-legend{background:#10283a;border-color:#24465c;color:#cbd5e1;}body.dark-mode .monthly-presence-table th,body.dark-mode .yearly-presence-table th,body.dark-mode thead .rekap-sticky-no,body.dark-mode thead .rekap-sticky-name{background:#10283a;color:#cbd5e1;border-color:#1f3a4d;}body.dark-mode .monthly-presence-table td,body.dark-mode .yearly-presence-table td{border-color:#1f3a4d;color:#cbd5e1;}body.dark-mode .rekap-sticky-no,body.dark-mode .rekap-sticky-name{background:#0f2435;}body.dark-mode .rekap-highlight-card.month{background:#332b12;border-color:#a16207;}body.dark-mode .rekap-highlight-card.year{background:#08283d;border-color:#0b86bd;}@media (max-width:980px){.rekap-wrap{padding:22px 14px 40px;}.rekap-highlight-grid{grid-template-columns:1fr;gap:12px;}.rekap-filter-grid{grid-template-columns:1fr 1fr;}.rekap-show-btn,.rekap-print-btn,.rekap-export-btn{width:100%;justify-content:center}.rekap-export-row{justify-content:stretch}.rekap-card{padding:18px 14px}.rekap-card-title{font-size:20px}.rekap-highlight-card{padding:18px 20px}.rekap-highlight-name{font-size:19px}.rekap-table-scroll{border-radius:9px}.monthly-presence-table,.yearly-presence-table{min-width:980px;}}@media (max-width:640px){#view-rekap .home-topbar{min-height:72px;}.rekap-wrap{padding-top:18px}.rekap-tab-row{display:grid;grid-template-columns:1fr 1fr;width:100%;}.rekap-tab-btn{padding:0 10px}.rekap-filter-grid{grid-template-columns:1fr}.rekap-highlight-icon{width:48px;height:48px;font-size:20px}.rekap-highlight-card{gap:14px}.rekap-card{margin-top:16px}.rekap-legend{gap:10px;font-size:11px}.monthly-presence-table,.yearly-presence-table{min-width:900px}.rekap-col-name{width:170px;min-width:170px}.rekap-name-text{max-width:150px}.rekap-sticky-name{left:48px}}</style></head><body class="min-h-screen text-slate-800"><script>const SUPABASE_URL = "https://euxawjyekgthzrjrhhmp.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eGF3anlla2d0aHpyanJoaG1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxOTg2MTUsImV4cCI6MjA5NDc3NDYxNX0.6Kumg3mlrD7hOXniTgoq16kCwlcGl3C7q88qIPf9DW8";
 const GAS_REKAP_URL = "https://script.google.com/macros/s/AKfycbxXX8EzRJ0UgU8AiTSoznev2V6me76w0cE-ck8pS-CzdOa_4ETPR-uNGXcRzVgc1Xyp/exec";
 // Jika ingin Apps Script mengirim WA setelah absen/izin, ubah jadi true
 // dan isi FONNTE_TOKEN di Script Properties Apps Script.
 const ENABLE_WA_BY_GAS = false;
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-</script><div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden max-w-[92%] rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-xl"></div><div id="loader" class="fixed inset-0 z-40 hidden items-center justify-center bg-white/70 backdrop-blur-sm"><div class="rounded-2xl bg-white px-5 py-4 text-center shadow-xl"><i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-600"></i><p id="loaderText" class="mt-2 text-sm font-semibold text-indigo-700">Memproses...</p></div></div><main id="app" class="mx-auto min-h-screen max-w-md bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-700 shadow-2xl"><section id="view-home" class="view active min-h-screen home-shell pb-8"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="home-content"><div class="home-card px-6 pb-6 pt-7"><div class="text-center"><img class="school-logo mx-auto" src="https://i.ibb.co.com/39WQv2Cx/Logo-MTs-Hidayatullah-2023.png" alt="Logo MTs. Hidayatullah" /><h2 class="home-title mt-4">ABZENSI</h2><div class="school-name-line mt-2 flex items-center justify-center gap-2 text-[13px] font-extrabold text-[#075176]"><i class="fa-solid fa-star text-[9px] text-amber-400"></i><span>Abu Zairi Presensi</span><i class="fa-solid fa-star text-[9px] text-amber-400"></i></div><p class="mt-1 text-[10px] font-medium text-slate-500">Arahkan QR Code ke Kamera atau tap NFC.</p></div><div class="scanner-frame mx-auto mt-6"><div id="scannerPlaceholder" class="scanner-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div id="scannerReader"></div></div><div class="mt-6 grid grid-cols-2 gap-3"><button type="button" onclick="startBarcodeScan()" class="scan-btn btn bg-[#069ddb] text-white hover:bg-[#038ac2]"><i class="fa-solid fa-camera mr-1.5 text-[11px]"></i> Scan QR Code
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);</script><div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden max-w-[92%] rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-xl"></div><div id="loader" class="fixed inset-0 z-40 hidden items-center justify-center bg-white/70 backdrop-blur-sm"><div class="rounded-2xl bg-white px-5 py-4 text-center shadow-xl"><i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-600"></i><p id="loaderText" class="mt-2 text-sm font-semibold text-indigo-700">Memproses...</p></div></div><main id="app" class="mx-auto min-h-screen max-w-md bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-700 shadow-2xl"><section id="view-home" class="view active min-h-screen home-shell pb-8"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="home-content"><div class="home-card px-6 pb-6 pt-7"><div class="text-center"><img class="school-logo mx-auto" src="https://i.ibb.co.com/39WQv2Cx/Logo-MTs-Hidayatullah-2023.png" alt="Logo MTs. Hidayatullah" /><h2 class="home-title mt-4">ABZENSI</h2><div class="school-name-line mt-2 flex items-center justify-center gap-2 text-[13px] font-extrabold text-[#075176]"><i class="fa-solid fa-star text-[9px] text-amber-400"></i><span>Abu Zairi Presensi</span><i class="fa-solid fa-star text-[9px] text-amber-400"></i></div><p class="mt-1 text-[10px] font-medium text-slate-500">Arahkan QR Code ke Kamera atau tap NFC.</p></div><div class="scanner-frame mx-auto mt-6"><div id="scannerPlaceholder" class="scanner-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div id="scannerReader"></div></div><div class="mt-6 grid grid-cols-2 gap-3"><button type="button" onclick="startBarcodeScan()" class="scan-btn btn bg-[#069ddb] text-white hover:bg-[#038ac2]"><i class="fa-solid fa-camera mr-1.5 text-[11px]"></i> Scan QR Code
 </button><button type="button" onclick="tapNfcOrFocus()" class="scan-btn btn bg-[#5942df] text-white hover:bg-[#4d39c7]"><i class="fa-solid fa-id-card-clip mr-1.5 text-[11px]"></i> Tap NFC/RFID
 </button></div><div class="manual-divider my-5">ATAU MANUAL</div><form onsubmit="event.preventDefault(); catatAbsensi();" class="relative flex items-center gap-2"><div class="manual-search-wrap flex-1"><input id="aksesInput" autocomplete="off" inputmode="text" onfocus="openManualSuggestions()" oninput="debounceManualSuggestions()" onkeydown="handleManualSuggestionKey(event)" class="manual-input w-full px-3 text-center font-semibold text-slate-700 outline-none focus:border-sky-400" placeholder="Ketik Nama Siswa atau NISN..." /><div id="manualSuggestionBox" class="manual-suggestion-box hidden"></div></div><button class="send-btn btn" title="Catat kehadiran" aria-label="Catat kehadiran"><i class="fa-solid fa-paper-plane text-sm"></i></button></form><div class="absent-panel mt-6 p-3"><div class="mb-2 flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wide text-slate-600"><i class="fa-solid fa-user-minus text-rose-500"></i><span>Siswa Tidak Masuk Hari Ini</span></div><div id="absentTodayContainer" class="divide-y divide-slate-100 text-[11px]"></div></div><div class="my-5 h-px bg-slate-100"></div><button onclick="openView('view-admin-login')" class="admin-outline btn flex w-full items-center justify-center gap-2 py-3 text-xs font-extrabold hover:bg-sky-50"><i class="fa-solid fa-lock"></i> Akses Admin
 </button><div class="hidden"><b id="cfgMulai">06:00</b><b id="cfgTepat">07:00</b><b id="cfgAkhir">08:00</b><p id="dashHadir">0</p><p id="dashTelat">0</p><div id="recentContainer"></div></div></div><p class="app-footer mt-7 text-center text-[11px] font-semibold">Made With Love <span class="text-rose-400">♥</span> Biro IT P2S Abu Zairi</p></div></section><section id="view-admin-login" class="view min-h-screen home-shell pb-8"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="admin-login-content"><div class="admin-login-card px-8 pb-9 pt-9"><div class="mb-8 text-center"><div class="admin-icon-circle"><i class="fa-solid fa-user-shield text-[30px]"></i></div><h2 class="mt-5 text-[26px] font-extrabold leading-tight text-slate-800">Akses Admin</h2><p class="mt-2 text-[14px] font-medium text-slate-500">Sistem Rekapitulasi &amp; Manajemen</p></div><form onsubmit="event.preventDefault(); loginAdmin();"><label class="mb-2 block text-[12px] font-extrabold uppercase tracking-wide text-slate-600">Nomor Induk Yayasan (NIY)</label><input id="adminNiy" type="password" inputmode="text" class="admin-login-input mb-6 w-full px-4 text-center text-lg font-extrabold outline-none focus:border-sky-500" autocomplete="off" /><button class="admin-login-btn btn w-full font-extrabold text-white hover:bg-[#075f89]">Masuk Dashboard</button></form><button onclick="openView('view-home')" class="btn mt-7 flex w-full items-center justify-center gap-2 text-[13px] font-extrabold uppercase text-slate-400 hover:text-slate-600"><i class="fa-solid fa-arrow-left"></i> Kembali
-</button></div><p class="app-footer mt-[240px] text-center text-[12px] font-semibold">Made With Love <span class="text-rose-400">♥</span> Biro IT P2S Abu Zairi</p></div></section><section id="view-admin" class="view admin-dashboard-view min-h-screen pb-10"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="admin-dash-wrap"><div class="admin-profile-nav"><div class="admin-profile-left"><div class="admin-avatar"><i class="fa-solid fa-user-tie"></i></div><div><p class="admin-hello">Halo, <span id="adminName">Admin</span></p><p id="adminRole" class="admin-role">SUPER ADMIN</p></div></div><div class="admin-nav-pills"><button type="button" class="admin-tab active" onclick="openView('view-admin'); loadDashboardFromGAS();"><i class="fa-solid fa-chart-pie"></i> Dashboard</button><button type="button" class="admin-tab" onclick="openView('view-siswa'); loadSiswa();"><i class="fa-solid fa-users"></i> Siswa</button><button type="button" class="admin-tab" onclick="openView('view-rekap'); prepareRekap();"><i class="fa-solid fa-clipboard-list"></i> Rekap Absen</button><button type="button" class="admin-tab" onclick="openView('view-setting'); loadConfigToForm();"><i class="fa-solid fa-gear"></i> Set up</button><button type="button" class="admin-tab logout-tab" onclick="logoutAdmin()" title="Logout"><i class="fa-solid fa-power-off"></i></button></div></div><div class="dash-title-row"><div class="dash-title-left"><h2><i class="fa-solid fa-chart-pie"></i> Dashboard</h2><button type="button" onclick="loadDashboardFromGAS()" class="dash-refresh" title="Refresh dashboard"><i class="fa-solid fa-rotate-right"></i></button></div><select id="dashboardYear" onchange="loadDashboardFromGAS()" class="dash-year-select"></select></div><div class="dashboard-card-grid"><div class="dash-stat-card card-blue"><div><p class="dash-main-number"><span id="dashTepatCount">0</span>/<span id="dashTepatDenom">0</span></p><p id="dashTepatPercent" class="dash-main-label">Presensi Tepat Waktu 0%</p></div><span class="dash-card-icon"><i class="fa-solid fa-check-double"></i></span><div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div></div><div class="dash-stat-card card-green"><div><p class="dash-main-number"><span id="dashTelatCount">0</span>/<span id="dashTelatDenom">0</span></p><p id="dashTelatPercent" class="dash-main-label">Terlambat Masuk 0%</p></div><span class="dash-card-icon"><i class="fa-solid fa-clock"></i></span><div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div></div><div class="dash-stat-card card-red"><div><p class="dash-main-number"><span id="dashTidakCount">0</span>/<span id="dashTidakDenom">0</span></p><p id="dashTidakPercent" class="dash-main-label">Tidak Absen 0%</p></div><span class="dash-card-icon"><i class="fa-solid fa-user-xmark"></i></span><div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div></div></div><div class="quick-action-card"><div><h3><i class="fa-solid fa-bolt"></i> Aksi Cepat</h3><p>Input izin atau sakit siswa secara manual</p></div><button type="button" onclick="openView('view-izin'); prepareIzin();" class="quick-action-btn"><i class="fa-solid fa-square-plus"></i> Input Manual</button></div><div class="mini-stat-grid"><div class="mini-stat"><span>Total Siswa</span><b id="sumSiswa">0</b></div><div class="mini-stat"><span>Total Kelas</span><b id="sumKelas" class="text-orange-500">0</b></div><div class="mini-stat"><span>Siswa Putra</span><b id="dashPutra" class="text-sky-600">0</b></div><div class="mini-stat"><span>Siswa Putri</span><b id="dashPutri" class="text-pink-600">0</b></div></div><div class="dashboard-chart-grid"><div class="dashboard-chart-card"><h3><i class="fa-solid fa-chart-pie"></i> Komposisi Presensi</h3><div id="presenceDonut" class="presence-donut-wrap"></div><div id="presenceLegend" class="presence-legend"></div></div><div class="dashboard-chart-card trend-card"><h3><i class="fa-solid fa-chart-column"></i> Tren Kehadiran Bulanan</h3><div id="monthlyTrendChart" class="monthly-trend-chart"></div></div></div></div></section><section id="view-siswa" class="view admin-student-view min-h-screen pb-10"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="student-master-wrap"><div class="admin-profile-nav"><div class="admin-profile-left"><div class="admin-avatar"><i class="fa-solid fa-user-tie"></i></div><div><p class="admin-hello">Halo, <span id="adminNameSiswa">Admin</span></p><p id="adminRoleSiswa" class="admin-role">SUPER ADMIN</p></div></div><div class="admin-nav-pills"><button type="button" class="admin-tab" onclick="openView('view-admin'); loadDashboardFromGAS();"><i class="fa-solid fa-chart-pie"></i> Dashboard</button><button type="button" class="admin-tab active" onclick="openView('view-siswa'); loadSiswa();"><i class="fa-solid fa-users"></i> Siswa</button><button type="button" class="admin-tab" onclick="openView('view-rekap'); prepareRekap();"><i class="fa-solid fa-clipboard-list"></i> Rekap Absen</button><button type="button" class="admin-tab" onclick="openView('view-setting'); loadConfigToForm();"><i class="fa-solid fa-gear"></i> Set up</button><button type="button" class="admin-tab logout-tab" onclick="logoutAdmin()" title="Logout"><i class="fa-solid fa-power-off"></i></button></div></div><div class="student-master-card"><div class="student-master-head"><h2 class="student-master-title"><i class="fa-solid fa-users"></i> Data Master Siswa</h2><button type="button" onclick="openSiswaForm()" class="student-add-btn btn"><i class="fa-solid fa-plus mr-1.5"></i> Tambah Siswa</button></div><div class="student-toolbar"><input id="searchSiswa" oninput="renderSiswa()" class="student-search" placeholder="Cari nama, NISN, kelas, atau nomor WA" autocomplete="off" /><div id="studentCount" class="student-count">0 data siswa</div></div><div class="student-table-wrap"><table class="student-table"><thead><tr><th style="width:56px"><input type="checkbox" class="student-check" aria-label="Pilih semua siswa" /></th><th style="width:90px">Foto</th><th style="width:150px">NISN</th><th>Nama Lengkap</th><th style="width:100px">Kelas</th><th style="width:190px">No. Whatsapp</th><th style="width:120px">Aksi</th></tr></thead><tbody id="siswaList"></tbody></table></div></div></div></section><section id="view-izin" class="view min-h-screen bg-slate-50 p-5 pb-24"><Header title="Input Izin Siswa"></Header><div class="rounded-3xl bg-white p-5 shadow"><label class="text-xs font-bold text-slate-500">Siswa</label><select id="izinNisn" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"></select><label class="text-xs font-bold text-slate-500">Status</label><select id="izinStatus" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"><option value="Sakit">Sakit</option><option value="Izin">Izin</option><option value="Alpa">Alpa</option></select><label class="text-xs font-bold text-slate-500">Keterangan</label><textarea id="izinKet" rows="3" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="Opsional"></textarea><button onclick="inputIzinSiswa()" class="btn w-full rounded-2xl bg-amber-500 py-4 font-extrabold text-white shadow hover:bg-amber-600">Simpan Izin</button></div></section><section id="view-rekap" class="view min-h-screen bg-slate-50 p-5 pb-24"><Header title="Rekap Laporan"></Header><div class="no-print rounded-3xl bg-white p-5 shadow"><p class="mb-3 text-xs text-slate-500">Data rekap ini dibaca oleh <b>Apps Script</b> dari Supabase REST API memakai service role key.</p><div class="grid grid-cols-2 gap-2"><input type="month" id="rekapMonth" class="rounded-xl border px-3 py-3 text-sm" /><select id="rekapKelas" class="rounded-xl border px-3 py-3 text-sm"><option>Semua</option></select></div><button onclick="loadRekapBulanan()" class="btn mt-3 w-full rounded-2xl bg-green-600 py-4 font-extrabold text-white shadow hover:bg-green-700"><i class="fa-solid fa-file-lines mr-2"></i> Ambil Rekap Bulanan</button></div><div id="rekapResult" class="print-card mt-4 rounded-3xl bg-white p-4 shadow"></div></section><section id="view-setting" class="view min-h-screen bg-slate-50 p-5 pb-24"><Header title="Pengaturan Jam"></Header><div class="rounded-3xl bg-white p-5 shadow"><p class="mb-4 text-xs text-slate-500">Aplikasi selalu mengambil data terbaru dari Supabase. Token Fonnte tetap disimpan di Apps Script Properties.</p><label class="text-xs font-bold text-slate-500">Batas Mulai</label><input type="time" id="setMulai" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3" /><label class="text-xs font-bold text-slate-500">Batas Tepat Waktu</label><input type="time" id="setTepat" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3" /><label class="text-xs font-bold text-slate-500">Batas Akhir</label><input type="time" id="setAkhir" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3" /><button onclick="saveConfig()" class="btn w-full rounded-2xl bg-slate-900 py-4 font-extrabold text-white shadow">Simpan Pengaturan</button></div></section></main><div id="siswaModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"><div class="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl"><div class="mb-4 flex items-center justify-between"><h3 id="siswaModalTitle" class="text-lg font-extrabold">Tambah Siswa</h3><button onclick="closeSiswaForm()" class="rounded-full bg-slate-100 px-3 py-2"><i class="fa-solid fa-xmark"></i></button></div><input type="hidden" id="nisnLama" /><label class="text-xs font-bold text-slate-500">NISN</label><input id="formNisn" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" /><label class="text-xs font-bold text-slate-500">Nama Siswa</label><input id="formNama" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" /><label class="text-xs font-bold text-slate-500">Jenis Kelamin</label><select id="formJenisKelamin" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"><option value="">Pilih jenis kelamin</option><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select><label class="text-xs font-bold text-slate-500">Kelas</label><select id="formKelas" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"></select><label class="text-xs font-bold text-slate-500">No WA Orang Tua</label><input id="formWa" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="08xxxx" /><label class="text-xs font-bold text-slate-500">Link Foto Siswa <span class="font-medium text-slate-400">(Opsional)</span></label><input id="formFoto" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="https://contoh.com/foto-siswa.jpg" /><label class="text-xs font-bold text-slate-500">RFID UID</label><input id="formRfid" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="Opsional" /><button onclick="saveSiswa()" class="btn w-full rounded-2xl bg-indigo-600 py-4 font-extrabold text-white shadow">Simpan Data</button></div></div><div id="rfidModal" class="rfid-modal-backdrop fixed inset-0 z-[70] hidden items-center justify-center p-6"><div class="rfid-modal-card"><div class="rfid-info-circle">i</div><h3 class="rfid-modal-title">Siap Membaca</h3><p class="rfid-modal-text">Silakan tempelkan Kartu RFID / NFC ke bagian belakang HP Anda.</p><input id="rfidReaderInput" class="rfid-hidden-input" autocomplete="off" inputmode="none" enterkeyhint="done" autocapitalize="off" spellcheck="false" onkeydown="handleRfidKeyboard(event)" /><div class="rfid-modal-actions"><button type="button" onclick="cancelNfcReading()" class="rfid-primary-btn btn">Batal Membaca</button><button type="button" onclick="cancelNfcReading()" class="rfid-secondary-btn btn">Cancel</button></div></div></div><script>
-let currentAdmin = null;
+</button></div><p class="app-footer mt-[240px] text-center text-[12px] font-semibold">Made With Love <span class="text-rose-400">♥</span> Biro IT P2S Abu Zairi</p></div></section><section id="view-admin" class="view admin-dashboard-view min-h-screen pb-10"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="admin-dash-wrap"><div class="admin-profile-nav"><div class="admin-profile-left"><div class="admin-avatar"><i class="fa-solid fa-user-tie"></i></div><div><p class="admin-hello">Halo, <span id="adminName">Admin</span></p><p id="adminRole" class="admin-role">SUPER ADMIN</p></div></div><div class="admin-nav-pills"><button type="button" class="admin-tab active" onclick="openView('view-admin'); loadDashboardFromGAS();"><i class="fa-solid fa-chart-pie"></i> Dashboard</button><button type="button" class="admin-tab" onclick="openView('view-siswa'); loadSiswa();"><i class="fa-solid fa-users"></i> Siswa</button><button type="button" class="admin-tab" onclick="openView('view-rekap'); prepareRekap();"><i class="fa-solid fa-clipboard-list"></i> Rekap Absen</button><button type="button" class="admin-tab" onclick="openView('view-setting'); loadConfigToForm();"><i class="fa-solid fa-gear"></i> Set up</button><button type="button" class="admin-tab logout-tab" onclick="logoutAdmin()" title="Logout"><i class="fa-solid fa-power-off"></i></button></div></div><div class="dash-title-row"><div class="dash-title-left"><h2><i class="fa-solid fa-chart-pie"></i> Dashboard</h2><button type="button" onclick="loadDashboardFromGAS()" class="dash-refresh" title="Refresh dashboard"><i class="fa-solid fa-rotate-right"></i></button></div><select id="dashboardYear" onchange="loadDashboardFromGAS()" class="dash-year-select"></select></div><div class="dashboard-card-grid"><div class="dash-stat-card card-blue"><div><p class="dash-main-number"><span id="dashTepatCount">0</span>/<span id="dashTepatDenom">0</span></p><p id="dashTepatPercent" class="dash-main-label">Presensi Tepat Waktu 0%</p></div><span class="dash-card-icon"><i class="fa-solid fa-check-double"></i></span><div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div></div><div class="dash-stat-card card-green"><div><p class="dash-main-number"><span id="dashTelatCount">0</span>/<span id="dashTelatDenom">0</span></p><p id="dashTelatPercent" class="dash-main-label">Terlambat Masuk 0%</p></div><span class="dash-card-icon"><i class="fa-solid fa-clock"></i></span><div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div></div><div class="dash-stat-card card-red"><div><p class="dash-main-number"><span id="dashTidakCount">0</span>/<span id="dashTidakDenom">0</span></p><p id="dashTidakPercent" class="dash-main-label">Tidak Absen 0%</p></div><span class="dash-card-icon"><i class="fa-solid fa-user-xmark"></i></span><div class="dash-period"><span><i class="fa-solid fa-calendar-days"></i> Periode Tahun</span><b class="dashSelectedYear">2026</b></div></div></div><div class="quick-action-card"><div><h3><i class="fa-solid fa-bolt"></i> Aksi Cepat</h3><p>Input izin atau sakit siswa secara manual</p></div><button type="button" onclick="openView('view-izin'); prepareIzin();" class="quick-action-btn"><i class="fa-solid fa-square-plus"></i> Input Manual</button></div><div class="mini-stat-grid"><div class="mini-stat"><span>Total Siswa</span><b id="sumSiswa">0</b></div><div class="mini-stat"><span>Total Kelas</span><b id="sumKelas" class="text-orange-500">0</b></div><div class="mini-stat"><span>Siswa Putra</span><b id="dashPutra" class="text-sky-600">0</b></div><div class="mini-stat"><span>Siswa Putri</span><b id="dashPutri" class="text-pink-600">0</b></div></div><div class="dashboard-chart-grid"><div class="dashboard-chart-card"><h3><i class="fa-solid fa-chart-pie"></i> Komposisi Presensi</h3><div id="presenceDonut" class="presence-donut-wrap"></div><div id="presenceLegend" class="presence-legend"></div></div><div class="dashboard-chart-card trend-card"><h3><i class="fa-solid fa-chart-column"></i> Tren Kehadiran Bulanan</h3><div id="monthlyTrendChart" class="monthly-trend-chart"></div></div></div></div></section><section id="view-siswa" class="view admin-student-view min-h-screen pb-10"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="student-master-wrap"><div class="admin-profile-nav"><div class="admin-profile-left"><div class="admin-avatar"><i class="fa-solid fa-user-tie"></i></div><div><p class="admin-hello">Halo, <span id="adminNameSiswa">Admin</span></p><p id="adminRoleSiswa" class="admin-role">SUPER ADMIN</p></div></div><div class="admin-nav-pills"><button type="button" class="admin-tab" onclick="openView('view-admin'); loadDashboardFromGAS();"><i class="fa-solid fa-chart-pie"></i> Dashboard</button><button type="button" class="admin-tab active" onclick="openView('view-siswa'); loadSiswa();"><i class="fa-solid fa-users"></i> Siswa</button><button type="button" class="admin-tab" onclick="openView('view-rekap'); prepareRekap();"><i class="fa-solid fa-clipboard-list"></i> Rekap Absen</button><button type="button" class="admin-tab" onclick="openView('view-setting'); loadConfigToForm();"><i class="fa-solid fa-gear"></i> Set up</button><button type="button" class="admin-tab logout-tab" onclick="logoutAdmin()" title="Logout"><i class="fa-solid fa-power-off"></i></button></div></div><div class="student-master-card"><div class="student-master-head"><h2 class="student-master-title"><i class="fa-solid fa-users"></i> Data Master Siswa</h2><button type="button" onclick="openSiswaForm()" class="student-add-btn btn"><i class="fa-solid fa-plus mr-1.5"></i> Tambah Siswa</button></div><div class="student-toolbar"><input id="searchSiswa" oninput="renderSiswa()" class="student-search" placeholder="Cari nama, NISN, kelas, atau nomor WA" autocomplete="off" /><div id="studentCount" class="student-count">0 data siswa</div></div><div class="student-table-wrap"><table class="student-table"><thead><tr><th style="width:56px"><input type="checkbox" class="student-check" aria-label="Pilih semua siswa" /></th><th style="width:90px">Foto</th><th style="width:150px">NISN</th><th>Nama Lengkap</th><th style="width:100px">Kelas</th><th style="width:190px">No. Whatsapp</th><th style="width:120px">Aksi</th></tr></thead><tbody id="siswaList"></tbody></table></div></div></div></section><section id="view-izin" class="view min-h-screen bg-slate-50 p-5 pb-24"><Header title="Input Izin Siswa"></Header><div class="rounded-3xl bg-white p-5 shadow"><label class="text-xs font-bold text-slate-500">Siswa</label><select id="izinNisn" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"></select><label class="text-xs font-bold text-slate-500">Status</label><select id="izinStatus" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"><option value="Sakit">Sakit</option><option value="Izin">Izin</option><option value="Alpa">Alpa</option></select><label class="text-xs font-bold text-slate-500">Keterangan</label><textarea id="izinKet" rows="3" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="Opsional"></textarea><button onclick="inputIzinSiswa()" class="btn w-full rounded-2xl bg-amber-500 py-4 font-extrabold text-white shadow hover:bg-amber-600">Simpan Izin</button></div></section><section id="view-rekap" class="view admin-rekap-view min-h-screen pb-10"><div class="home-topbar text-white"><div class="home-topbar-inner"><div class="flex items-center gap-3"><div class="brand-mark" aria-label="Logo aplikasi"></div><div class="leading-tight"><h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1><p class="brand-subtitle text-[8px] font-bold tracking-[.18em] text-sky-100">Abu Zairi Presensi</p></div></div><div class="topbar-actions"><button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan"><i class="fa-solid fa-moon text-xs"></i></button></div></div></div><div class="rekap-wrap"><div class="admin-profile-nav"><div class="admin-profile-left"><div class="admin-avatar"><i class="fa-solid fa-user-tie"></i></div><div><p class="admin-hello">Halo, <span id="adminNameRekap">Admin</span></p><p id="adminRoleRekap" class="admin-role">SUPER ADMIN</p></div></div><div class="admin-nav-pills"><button type="button" class="admin-tab" onclick="openView('view-admin'); loadDashboardFromGAS();"><i class="fa-solid fa-chart-pie"></i> Dashboard</button><button type="button" class="admin-tab" onclick="openView('view-siswa'); loadSiswa();"><i class="fa-solid fa-users"></i> Siswa</button><button type="button" class="admin-tab active" onclick="openView('view-rekap'); prepareRekap();"><i class="fa-solid fa-clipboard-list"></i> Rekap Absen</button><button type="button" class="admin-tab" onclick="openView('view-setting'); loadConfigToForm();"><i class="fa-solid fa-gear"></i> Set up</button><button type="button" class="admin-tab logout-tab" onclick="logoutAdmin()" title="Logout"><i class="fa-solid fa-power-off"></i></button></div></div><div class="rekap-tab-row no-print"><button type="button" class="rekap-tab-btn active">Rekap Kelas</button><button type="button" class="rekap-tab-btn" disabled>Rekap Individu (Per Siswa)</button></div><div class="rekap-highlight-grid"><div class="rekap-highlight-card month"><div class="rekap-highlight-icon"><i class="fa-solid fa-trophy"></i></div><div><p class="rekap-highlight-kicker">Terajin Bulan Ini</p><h3 id="rekapTopMonthName" class="rekap-highlight-name">-</h3><p id="rekapTopMonthSub" class="rekap-highlight-sub">0 Hari Hadir Tepat Waktu</p></div></div><div class="rekap-highlight-card year"><div class="rekap-highlight-icon"><i class="fa-solid fa-medal"></i></div><div><p class="rekap-highlight-kicker">Terajin Tahun Ini</p><h3 id="rekapTopYearName" class="rekap-highlight-name">-</h3><p id="rekapTopYearSub" class="rekap-highlight-sub">0 Hari Hadir Tepat Waktu</p></div></div></div><div class="rekap-card print-card"><h2 class="rekap-card-title"><i class="fa-solid fa-calendar-days"></i> Rekapitulasi Kelas</h2><div class="rekap-filter-card no-print"><div class="rekap-filter-grid"><div class="rekap-filter-field"><label>Pilih Kelas</label><select id="rekapKelas" class="rekap-select"><option>Semua</option></select></div><div class="rekap-filter-field"><label>Pilih Periode</label><select id="rekapBulan" class="rekap-select"></select></div><div class="rekap-filter-field"><label>Tahun</label><select id="rekapTahun" class="rekap-select"></select></div><button type="button" onclick="loadRekapBulanan()" class="rekap-show-btn btn">Tampilkan</button><button type="button" onclick="window.print()" class="rekap-print-btn btn"><i class="fa-solid fa-print"></i><span class="hidden sm:inline">Cetak</span></button></div><div class="rekap-export-row"><button type="button" onclick="exportRekapGrid('bulan')" class="rekap-export-btn btn"><i class="fa-solid fa-file-excel"></i> Export Bulanan via Apps Script</button><button type="button" onclick="exportRekapGrid('tahun')" class="rekap-export-btn btn"><i class="fa-solid fa-file-export"></i> Export Tahunan via Apps Script</button></div></div><div class="rekap-legend"><span><b><i class="fa-solid fa-circle-info text-sky-500"></i> Petunjuk:</b></span><span><b>V</b> = Hadir</span><span><b>TL</b> = Terlambat</span><span><b>I</b> = Izin</span><span><b>S</b> = Sakit</span><span><b>A</b> = Alpa</span><span><i class="legend-dot legend-libur"></i> Libur (Jumat)</span></div><div id="rekapResult" class="mt-4"></div></div></div></section><section id="view-setting" class="view min-h-screen bg-slate-50 p-5 pb-24"><Header title="Pengaturan Jam"></Header><div class="rounded-3xl bg-white p-5 shadow"><p class="mb-4 text-xs text-slate-500">Aplikasi selalu mengambil data terbaru dari Supabase. Token Fonnte tetap disimpan di Apps Script Properties.</p><label class="text-xs font-bold text-slate-500">Batas Mulai</label><input type="time" id="setMulai" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3" /><label class="text-xs font-bold text-slate-500">Batas Tepat Waktu</label><input type="time" id="setTepat" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3" /><label class="text-xs font-bold text-slate-500">Batas Akhir</label><input type="time" id="setAkhir" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3" /><button onclick="saveConfig()" class="btn w-full rounded-2xl bg-slate-900 py-4 font-extrabold text-white shadow">Simpan Pengaturan</button></div></section></main><div id="siswaModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"><div class="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl"><div class="mb-4 flex items-center justify-between"><h3 id="siswaModalTitle" class="text-lg font-extrabold">Tambah Siswa</h3><button onclick="closeSiswaForm()" class="rounded-full bg-slate-100 px-3 py-2"><i class="fa-solid fa-xmark"></i></button></div><input type="hidden" id="nisnLama" /><label class="text-xs font-bold text-slate-500">NISN</label><input id="formNisn" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" /><label class="text-xs font-bold text-slate-500">Nama Siswa</label><input id="formNama" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" /><label class="text-xs font-bold text-slate-500">Jenis Kelamin</label><select id="formJenisKelamin" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"><option value="">Pilih jenis kelamin</option><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select><label class="text-xs font-bold text-slate-500">Kelas</label><select id="formKelas" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm"></select><label class="text-xs font-bold text-slate-500">No WA Orang Tua</label><input id="formWa" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="08xxxx" /><label class="text-xs font-bold text-slate-500">Link Foto Siswa <span class="font-medium text-slate-400">(Opsional)</span></label><input id="formFoto" class="mb-3 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="https://contoh.com/foto-siswa.jpg" /><label class="text-xs font-bold text-slate-500">RFID UID</label><input id="formRfid" class="mb-4 mt-1 w-full rounded-xl border px-3 py-3 text-sm" placeholder="Opsional" /><button onclick="saveSiswa()" class="btn w-full rounded-2xl bg-indigo-600 py-4 font-extrabold text-white shadow">Simpan Data</button></div></div><div id="rfidModal" class="rfid-modal-backdrop fixed inset-0 z-[70] hidden items-center justify-center p-6"><div class="rfid-modal-card"><div class="rfid-info-circle">i</div><h3 class="rfid-modal-title">Siap Membaca</h3><p class="rfid-modal-text">Silakan tempelkan Kartu RFID / NFC ke bagian belakang HP Anda.</p><input id="rfidReaderInput" class="rfid-hidden-input" autocomplete="off" inputmode="none" enterkeyhint="done" autocapitalize="off" spellcheck="false" onkeydown="handleRfidKeyboard(event)" /><div class="rfid-modal-actions"><button type="button" onclick="cancelNfcReading()" class="rfid-primary-btn btn">Batal Membaca</button><button type="button" onclick="cancelNfcReading()" class="rfid-secondary-btn btn">Cancel</button></div></div></div><script>let currentAdmin = null;
 let appConfig = { batas_mulai: '06:00', batas_waktu: '07:00', batas_akhir: '08:00' };
 let deferredPwaPrompt = null;
 let siswaData = [];
@@ -930,8 +261,12 @@ document.getElementById('adminName').textContent = data.nama_admin;
 document.getElementById('adminRole').textContent = data.role || 'Admin';
 const adminNameSiswaEl = document.getElementById('adminNameSiswa');
 const adminRoleSiswaEl = document.getElementById('adminRoleSiswa');
+const adminNameRekapEl = document.getElementById('adminNameRekap');
+const adminRoleRekapEl = document.getElementById('adminRoleRekap');
 if (adminNameSiswaEl) adminNameSiswaEl.textContent = data.nama_admin;
 if (adminRoleSiswaEl) adminRoleSiswaEl.textContent = data.role || 'Admin';
+if (adminNameRekapEl) adminNameRekapEl.textContent = data.nama_admin;
+if (adminRoleRekapEl) adminRoleRekapEl.textContent = data.role || 'Admin';
 openView('view-admin');
 await loadDashboardFromGAS();
 }
@@ -950,10 +285,12 @@ function fillKelasSelects() {
 const formKelasValue = document.getElementById('formKelas')?.value || '';
 const rekapKelasValue = document.getElementById('rekapKelas')?.value || 'Semua';
 const options = kelasData.map(k => `<option value="${escapeHtml(k)}">${escapeHtml(k)}</option>`).join('');
-document.getElementById('formKelas').innerHTML = options || '<option value="">Belum ada kelas</option>';
-document.getElementById('rekapKelas').innerHTML = '<option>Semua</option>' + options;
-if (kelasData.includes(formKelasValue)) document.getElementById('formKelas').value = formKelasValue;
-if (rekapKelasValue === 'Semua' || kelasData.includes(rekapKelasValue)) document.getElementById('rekapKelas').value = rekapKelasValue;
+const formKelasEl = document.getElementById('formKelas');
+const rekapKelasEl = document.getElementById('rekapKelas');
+if (formKelasEl) formKelasEl.innerHTML = options || '<option value="">Belum ada kelas</option>';
+if (rekapKelasEl) rekapKelasEl.innerHTML = '<option>Semua</option>' + options;
+if (formKelasEl && kelasData.includes(formKelasValue)) formKelasEl.value = formKelasValue;
+if (rekapKelasEl && (rekapKelasValue === 'Semua' || kelasData.includes(rekapKelasValue))) rekapKelasEl.value = rekapKelasValue;
 }
 async function startBarcodeScan() {
 if (!window.Html5Qrcode) {
@@ -1467,49 +804,219 @@ await Promise.all([loadRecentAbsensi(), loadTidakHadirHariIni()]);
 showToast(`Izin ${status} tersimpan untuk ${siswa.nama_siswa}.`);
 if (ENABLE_WA_BY_GAS) sendWANotification({ nisn, nama: siswa.nama_siswa, kelas: siswa.kelas, status: status + (ket ? ' - ' + ket : '') });
 }
-async function prepareRekap() {
+async function prepareRekap(showLoading = true) {
 setDefaultMonth();
 await loadKelas();
+if (currentAdmin) {
+const n = document.getElementById('adminNameRekap');
+const r = document.getElementById('adminRoleRekap');
+if (n) n.textContent = currentAdmin.nama_admin || 'Admin';
+if (r) r.textContent = currentAdmin.role || 'Admin';
+}
+initRekapSelectors();
+await loadRekapBulanan(showLoading);
 }
 function setDefaultMonth() {
-const m = todayISO().slice(0, 7);
-const el = document.getElementById('rekapMonth');
-if (el && !el.value) el.value = m;
+const now = todayISO().split('-');
+const bulan = document.getElementById('rekapBulan');
+const tahun = document.getElementById('rekapTahun');
+if (bulan && !bulan.value) bulan.value = String(Number(now[1]));
+if (tahun && !tahun.value) tahun.value = now[0];
+}
+function initRekapSelectors() {
+const bulanEl = document.getElementById('rekapBulan');
+const tahunEl = document.getElementById('rekapTahun');
+if (bulanEl && !bulanEl.options.length) {
+bulanEl.innerHTML = REKAP_MONTH_NAMES_FULL.map((m, i) => `<option value="${i + 1}">${m}</option>`).join('');
+bulanEl.value = String(new Date().getMonth() + 1);
+}
+if (tahunEl && !tahunEl.options.length) {
+const y = new Date().getFullYear();
+tahunEl.innerHTML = [y, y - 1, y - 2, y - 3].map(v => `<option value="${v}">${v}</option>`).join('');
+tahunEl.value = String(y);
+}
 }
 async function callGAS(action, args=[]) {
 if (GAS_REKAP_URL.includes('ISI_')) throw new Error('GAS_REKAP_URL belum diisi di index.html');
-const res = await fetch(GAS_REKAP_URL, {
-method: 'POST',
-headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-body: JSON.stringify({ action, args })
-});
+const res = await fetch(GAS_REKAP_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, args }) });
 return res.json();
 }
-async function loadRekapBulanan() {
-const bulanValue = document.getElementById('rekapMonth').value;
-if (!bulanValue) return showToast('Pilih bulan dulu.');
-const [tahun, bulan] = bulanValue.split('-').map(Number);
-const kelas = document.getElementById('rekapKelas').value;
-showLoader('Mengambil laporan dari Apps Script...');
+const REKAP_MONTH_NAMES = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const REKAP_MONTH_NAMES_FULL = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+function rekapPad(n) { return String(n).padStart(2, '0'); }
+function rekapRangeForMonth(tahun, bulan) {
+const lastDay = new Date(tahun, bulan, 0).getDate();
+return { start: `${tahun}-${rekapPad(bulan)}-01`, end: `${tahun}-${rekapPad(bulan)}-${rekapPad(lastDay)}`, lastDay };
+}
+async function fetchRekapSiswa(kelas) {
+let query = sb.from('siswa').select('nisn,nama_siswa,kelas,jenis_kelamin,no_wa_ortu,url_foto,rfid_uid').order('nama_siswa').range(0, 4999);
+if (kelas && kelas !== 'Semua') query = query.eq('kelas', kelas);
+let { data, error } = await query;
+if (error && String(error.message || '').toLowerCase().includes('jenis_kelamin')) {
+query = sb.from('siswa').select('nisn,nama_siswa,kelas,no_wa_ortu,url_foto,rfid_uid').order('nama_siswa').range(0, 4999);
+if (kelas && kelas !== 'Semua') query = query.eq('kelas', kelas);
+({ data, error } = await query);
+}
+if (error) throw error;
+return data || [];
+}
+async function fetchRekapAbsensi(start, end, kelas) {
+let query = sb.from('absensi').select('tanggal,siswa_nisn,nama_siswa,kelas,status,waktu').gte('tanggal', start).lte('tanggal', end).order('tanggal', { ascending: true }).range(0, 9999);
+if (kelas && kelas !== 'Semua') query = query.eq('kelas', kelas);
+const { data, error } = await query;
+if (error) throw error;
+return data || [];
+}
+async function loadRekapBulanan(showLoading = true) {
+initRekapSelectors();
+const tahun = Number(document.getElementById('rekapTahun')?.value || new Date().getFullYear());
+const bulan = Number(document.getElementById('rekapBulan')?.value || (new Date().getMonth() + 1));
+const kelas = document.getElementById('rekapKelas')?.value || 'Semua';
+const { start, end } = rekapRangeForMonth(tahun, bulan);
+if (showLoading) showLoader('Menyusun rekap grid absensi...');
 try {
-const res = await callGAS('getRekapBulanan', [bulan, tahun, kelas]);
+const [siswa, absensiBulan, absensiTahun] = await Promise.all([
+fetchRekapSiswa(kelas),
+fetchRekapAbsensi(start, end, kelas),
+fetchRekapAbsensi(`${tahun}-01-01`, `${tahun}-12-31`, kelas)
+]);
+if (showLoading) hideLoader();
+renderRekapBulanan({ siswa, absensiBulan, absensiTahun }, bulan, tahun, kelas);
+} catch (err) {
+if (showLoading) hideLoader();
+showToast(err.message || 'Gagal mengambil rekap.');
+}
+}
+function rekapStatusCode(status) {
+const s = normalizeStatus(status);
+if (!s) return '';
+if (s.includes('terlambat')) return 'TL';
+if (s.includes('sakit')) return 'S';
+if (s.includes('izin') || s.includes('ijin')) return 'I';
+if (s.includes('alpa') || s.includes('alpha') || s.includes('tidak')) return 'A';
+if (s.includes('hadir') || s.includes('tepat')) return 'V';
+return s.slice(0, 2).toUpperCase();
+}
+function rekapEmptyStats() { return { H: 0, TL: 0, I: 0, S: 0, A: 0 }; }
+function rekapAddStat(stats, code) {
+if (code === 'V') stats.H++;
+else if (code === 'TL') stats.TL++;
+else if (code === 'I') stats.I++;
+else if (code === 'S') stats.S++;
+else if (code === 'A') stats.A++;
+}
+function rekapBuildMap(absensi) {
+const map = new Map();
+(absensi || []).forEach(r => {
+const key = `${r.siswa_nisn || ''}|${r.tanggal || ''}`;
+if (!key.startsWith('|') && r.tanggal) map.set(key, r);
+});
+return map;
+}
+function rekapBestStudent(siswa, absensi) {
+const siswaMap = new Map((siswa || []).map(s => [String(s.nisn), s]));
+const counts = new Map();
+(absensi || []).forEach(r => {
+const code = rekapStatusCode(r.status);
+if (code !== 'V') return;
+const nisn = String(r.siswa_nisn || '');
+counts.set(nisn, (counts.get(nisn) || 0) + 1);
+});
+let bestNisn = '', bestCount = -1;
+counts.forEach((count, nisn) => { if (count > bestCount) { bestNisn = nisn; bestCount = count; } });
+const s = siswaMap.get(bestNisn) || null;
+return { name: s?.nama_siswa || '-', count: Math.max(bestCount, 0) };
+}
+function renderRekapTopCards(siswa, absensiBulan, absensiTahun) {
+const monthBest = rekapBestStudent(siswa, absensiBulan);
+const yearBest = rekapBestStudent(siswa, absensiTahun);
+setText('rekapTopMonthName', monthBest.name);
+setText('rekapTopMonthSub', `${monthBest.count} Hari Hadir Tepat Waktu`);
+setText('rekapTopYearName', yearBest.name);
+setText('rekapTopYearSub', `${yearBest.count} Hari Hadir Tepat Waktu`);
+}
+function rekapDayIsFriday(tahun, bulan, day) { return new Date(tahun, bulan - 1, day).getDay() === 5; }
+function rekapCellClass(code, isFriday) {
+const codeClass = code ? ` status-${code.toLowerCase()}` : '';
+return `rekap-cell${isFriday ? ' libur' : ''}${codeClass}`;
+}
+function renderRekapBulanan(payload, bulan, tahun, kelas) {
+const el = document.getElementById('rekapResult');
+if (!el) return;
+const siswa = payload?.siswa || [];
+const absensiBulan = payload?.absensiBulan || [];
+const absensiTahun = payload?.absensiTahun || [];
+renderRekapTopCards(siswa, absensiBulan, absensiTahun);
+if (!siswa.length) {
+el.innerHTML = '<div class="rekap-empty">Belum ada data siswa untuk filter ini.</div>';
+return;
+}
+const monthlyHtml = renderMonthlyGrid(siswa, absensiBulan, bulan, tahun);
+const yearlyHtml = renderYearlyGrid(siswa, absensiTahun, tahun);
+el.innerHTML = `<h3 class="rekap-table-title">Tabel Detail Bulanan</h3>${monthlyHtml}<h3 class="rekap-table-title">Tabel Total Tahunan (12 Bulan)</h3>${yearlyHtml}`;
+}
+function renderMonthlyGrid(siswa, absensi, bulan, tahun) {
+const { lastDay } = rekapRangeForMonth(tahun, bulan);
+const map = rekapBuildMap(absensi);
+const dayHeads = Array.from({ length: lastDay }, (_, i) => {
+const d = i + 1;
+return `<th class="${rekapDayIsFriday(tahun, bulan, d) ? 'rekap-cell libur' : ''}">${d}</th>`;
+}).join('');
+const rows = siswa.map((s, idx) => {
+const totals = rekapEmptyStats();
+const cells = Array.from({ length: lastDay }, (_, i) => {
+const day = i + 1;
+const date = `${tahun}-${rekapPad(bulan)}-${rekapPad(day)}`;
+const rec = map.get(`${s.nisn}|${date}`);
+const code = rec ? rekapStatusCode(rec.status) : '';
+if (code) rekapAddStat(totals, code);
+return `<td class="${rekapCellClass(code, rekapDayIsFriday(tahun, bulan, day))}">${escapeHtml(code)}</td>`;
+}).join('');
+return `<tr><td class="rekap-sticky-no rekap-col-no">${idx + 1}</td><td class="rekap-sticky-name rekap-col-name"><span class="rekap-name-text" title="${escapeAttr(s.nama_siswa || '-')}">${escapeHtml(s.nama_siswa || '-')}</span></td>${cells}<td class="total-h">${totals.H}</td><td class="total-tl">${totals.TL}</td><td class="total-i">${totals.I}</td><td class="total-s">${totals.S}</td><td class="total-a">${totals.A}</td></tr>`;
+}).join('');
+return `<div class="rekap-table-scroll"><table class="monthly-presence-table"><thead><tr><th class="rekap-sticky-no rekap-col-no" rowspan="2">No</th><th class="rekap-sticky-name rekap-col-name" rowspan="2">Nama Siswa</th><th colspan="${lastDay}">${REKAP_MONTH_NAMES_FULL[bulan - 1]} ${tahun}</th><th colspan="5" class="rekap-total-head">Total Bulan Ini</th></tr><tr>${dayHeads}<th class="rekap-total-head">H</th><th class="rekap-total-head">TL</th><th class="rekap-total-head">I</th><th class="rekap-total-head">S</th><th class="rekap-total-head">A</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function renderYearlyGrid(siswa, absensi, tahun) {
+const monthMaps = Array.from({ length: 12 }, () => new Map());
+(absensi || []).forEach(r => {
+const date = String(r.tanggal || '');
+const m = Number(date.slice(5, 7));
+if (!m) return;
+const code = rekapStatusCode(r.status);
+if (!code) return;
+const nisn = String(r.siswa_nisn || '');
+const stats = monthMaps[m - 1].get(nisn) || rekapEmptyStats();
+rekapAddStat(stats, code);
+monthMaps[m - 1].set(nisn, stats);
+});
+const monthHeads = REKAP_MONTH_NAMES.map(m => `<th>${m}</th>`).join('');
+const rows = siswa.map((s, idx) => {
+const yearTotal = rekapEmptyStats();
+const monthCells = monthMaps.map(mm => {
+const stats = mm.get(String(s.nisn)) || rekapEmptyStats();
+Object.keys(yearTotal).forEach(k => yearTotal[k] += stats[k] || 0);
+const minis = [ ['H','h'], ['TL','tl'], ['I','i'], ['S','s'], ['A','a'] ].filter(([k]) => stats[k]).map(([k, cls]) => `<span class="year-mini ${cls}">${k}:${stats[k]}</span>`).join('');
+return `<td class="year-month-cell">${minis || '<span class="year-empty">-</span>'}</td>`;
+}).join('');
+return `<tr><td class="rekap-sticky-no rekap-col-no">${idx + 1}</td><td class="rekap-sticky-name rekap-col-name"><span class="rekap-name-text" title="${escapeAttr(s.nama_siswa || '-')}">${escapeHtml(s.nama_siswa || '-')}</span></td>${monthCells}<td class="total-h">${yearTotal.H}</td><td class="total-tl">${yearTotal.TL}</td><td class="total-i">${yearTotal.I}</td><td class="total-s">${yearTotal.S}</td><td class="total-a">${yearTotal.A}</td></tr>`;
+}).join('');
+return `<div class="rekap-table-scroll"><table class="yearly-presence-table"><thead><tr><th class="rekap-sticky-no rekap-col-no" rowspan="2">No</th><th class="rekap-sticky-name rekap-col-name" rowspan="2">Nama Siswa</th><th colspan="12">Rekap Per Bulan (Tahun ${tahun})</th><th colspan="5" class="rekap-total-year-head">Total ${tahun}</th></tr><tr>${monthHeads}<th class="rekap-total-year-head">Hadir</th><th class="rekap-total-year-head">Lambat</th><th class="rekap-total-year-head">Izin</th><th class="rekap-total-year-head">Sakit</th><th class="rekap-total-year-head">Alpa</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+async function exportRekapGrid(mode) {
+const tahun = Number(document.getElementById('rekapTahun')?.value || new Date().getFullYear());
+const bulan = Number(document.getElementById('rekapBulan')?.value || (new Date().getMonth() + 1));
+const kelas = document.getElementById('rekapKelas')?.value || 'Semua';
+showLoader('Menghubungkan ke Apps Script...');
+try {
+const action = mode === 'tahun' ? 'exportRekapTahunanGrid' : 'exportRekapBulananGrid';
+const res = await callGAS(action, [{ bulan, tahun, kelas }]);
 hideLoader();
-if (res.status !== 'success') return showToast(res.message || 'Gagal mengambil rekap.');
-renderRekapBulanan(res.data, bulan, tahun, kelas);
+if (res?.url) window.open(res.url, '_blank');
+else showToast(res?.message || 'Fitur export grid di Apps Script belum disiapkan. Gunakan tombol Cetak dulu.');
 } catch (err) {
 hideLoader();
-showToast(err.message);
+showToast('Fitur export Apps Script belum tersedia: ' + (err.message || err));
 }
-}
-function renderRekapBulanan(data, bulan, tahun, kelas) {
-const el = document.getElementById('rekapResult');
-if (!data || !data.length) { el.innerHTML = '<p class="text-center text-sm text-slate-400">Tidak ada data.</p>'; return; }
-const title = new Date(tahun, bulan - 1, 1).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-let html = `<div class="mb-4 flex items-start justify-between gap-2"><div><h3 class="text-lg font-extrabold">Rekap Bulanan ${title}</h3><p class="text-xs text-slate-500">Kelas: ${escapeHtml(kelas || 'Semua')}</p></div><button onclick="window.print()" class="no-print rounded-xl bg-slate-900 px-3 py-2 text-xs font-bold text-white"><i class="fa-solid fa-print mr-1"></i>Cetak</button></div>`;
-html += '<div class="overflow-x-auto"><table class="w-full min-w-[680px] border-collapse text-xs"><thead><tr class="bg-slate-100"><th class="border p-2 text-left">Nama</th><th class="border p-2">Kelas</th><th class="border p-2">H</th><th class="border p-2">TL</th><th class="border p-2">S</th><th class="border p-2">I</th><th class="border p-2">A</th></tr></thead><tbody>';
-html += data.map(r => `<tr><td class="border p-2 font-semibold">${escapeHtml(r.nama)}</td><td class="border p-2 text-center">${escapeHtml(r.kelas)}</td><td class="border p-2 text-center">${r.statBulan?.H || 0}</td><td class="border p-2 text-center">${r.statBulan?.TL || 0}</td><td class="border p-2 text-center">${r.statBulan?.S || 0}</td><td class="border p-2 text-center">${r.statBulan?.I || 0}</td><td class="border p-2 text-center">${r.statBulan?.A || 0}</td></tr>`).join('');
-html += '</tbody></table></div>';
-el.innerHTML = html;
 }
 async function loadDashboardFromGAS() {
 const select = document.getElementById('dashboardYear');
@@ -1670,5 +1177,4 @@ try { await callGAS('sendWANotification', [payload]); } catch(e) { console.warn(
 function escapeHtml(v) {
 return String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 }
-function escapeAttr(v) { return escapeHtml(v).replace(/`/g, '&#96;'); }
-</script></body></html>
+function escapeAttr(v) { return escapeHtml(v).replace(/`/g, '&#96;'); }</script></body></html>
