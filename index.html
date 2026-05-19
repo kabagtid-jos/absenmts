@@ -442,6 +442,74 @@
       .rfid-primary-btn, .rfid-secondary-btn { padding:0 16px; font-size:16px; }
     }
 
+
+    /* Perbaikan kontras teks nama madrasah ketika dark mode aktif. */
+    body.dark-mode .school-name-line { color:#c7ecff !important; text-shadow:0 1px 0 rgba(0,0,0,.18); }
+    body.dark-mode .brand-subtitle { color:#e0f6ff !important; opacity:.96; }
+
+    /* Popup RFID/NFC khusus mobile dibuat lebih kecil dan lebih rapi. */
+    @media (max-width: 640px) {
+      .rfid-modal-backdrop {
+        padding: 16px !important;
+        align-items: center !important;
+      }
+      .rfid-modal-card {
+        width: min(82vw, 320px) !important;
+        border-radius: 22px !important;
+        padding: 24px 20px 22px !important;
+        box-shadow: 0 18px 42px rgba(15,23,42,.24) !important;
+      }
+      .rfid-info-circle {
+        width: 56px !important;
+        height: 56px !important;
+        border-width: 3px !important;
+        font-size: 30px !important;
+      }
+      .rfid-modal-title {
+        margin-top: 16px !important;
+        font-size: 20px !important;
+        line-height: 1.15 !important;
+      }
+      .rfid-modal-text {
+        margin-top: 14px !important;
+        max-width: 250px !important;
+        font-size: 14.5px !important;
+        line-height: 1.42 !important;
+      }
+      .rfid-modal-actions {
+        margin-top: 20px !important;
+        gap: 8px !important;
+      }
+      .rfid-primary-btn,
+      .rfid-secondary-btn {
+        min-height: 40px !important;
+        border-radius: 11px !important;
+        padding: 0 13px !important;
+        font-size: 13.5px !important;
+        white-space: nowrap !important;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .rfid-modal-card {
+        width: min(88vw, 300px) !important;
+        padding: 22px 16px 20px !important;
+      }
+      .rfid-info-circle {
+        width: 52px !important;
+        height: 52px !important;
+        font-size: 28px !important;
+      }
+      .rfid-modal-title { font-size: 19px !important; }
+      .rfid-modal-text { font-size: 13.5px !important; }
+      .rfid-primary-btn,
+      .rfid-secondary-btn {
+        min-height: 38px !important;
+        padding: 0 10px !important;
+        font-size: 12.5px !important;
+      }
+    }
+
     @media print {
       .no-print { display:none !important; }
       body { background:white !important; }
@@ -486,7 +554,7 @@
             <div class="brand-mark" aria-label="Logo aplikasi"></div>
             <div class="leading-tight">
               <h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
-              <p class="text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
+              <p class="brand-subtitle text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
             </div>
           </div>
           <button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
@@ -500,7 +568,7 @@
           <div class="text-center">
             <img class="school-logo mx-auto" src="https://i.ibb.co.com/39WQv2Cx/Logo-MTs-Hidayatullah-2023.png" alt="Logo MTs. Hidayatullah" />
             <h2 class="home-title mt-4">ABZENSI</h2>
-            <div class="mt-2 flex items-center justify-center gap-2 text-[13px] font-extrabold text-[#075176]">
+            <div class="school-name-line mt-2 flex items-center justify-center gap-2 text-[13px] font-extrabold text-[#075176]">
               <i class="fa-solid fa-star text-[9px] text-amber-400"></i>
               <span>MTs. Hidayatullah</span>
               <i class="fa-solid fa-star text-[9px] text-amber-400"></i>
@@ -568,7 +636,7 @@
             <div class="brand-mark" aria-label="Logo aplikasi"></div>
             <div class="leading-tight">
               <h1 class="text-[15px] font-extrabold tracking-wide">ABZENSI</h1>
-              <p class="text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
+              <p class="brand-subtitle text-[8px] font-bold uppercase tracking-[.22em] text-sky-100">MTs. Hidayatullah</p>
             </div>
           </div>
           <button type="button" onclick="toggleTheme()" class="moon-btn theme-toggle" title="Mode tampilan" aria-label="Mode tampilan">
@@ -1291,8 +1359,8 @@
         .slice(0, 30);
 
       if (!rows.length) {
-        if (panel) panel.classList.add('hidden');
-        el.innerHTML = '';
+        if (panel) panel.classList.remove('hidden');
+        el.innerHTML = '<p class="py-5 text-center text-[11px] font-semibold text-slate-400">Belum ada siswa sakit, izin, atau alpa hari ini.</p>';
         return;
       }
 
