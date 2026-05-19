@@ -31,12 +31,12 @@
       --home-muted: #8b98aa;
     }
     .home-shell { background: var(--home-bg); color: #1f2937; width:100%; }
-    .home-topbar { background: var(--home-navy); min-height: 72px; box-shadow: 0 3px 12px rgba(2, 60, 90, .18); width:100%; display:flex; align-items:center; }
+    .home-topbar { background: var(--home-navy); min-height: 72px; box-shadow: 0 3px 12px rgba(2, 60, 90, .18); width:100%; display:flex; align-items:center; position:sticky; top:0; z-index:60; }
     .home-topbar-inner { width:min(100%, 1180px); margin:0 auto; padding:0 18px; display:flex; align-items:center; justify-content:space-between; }
     .home-content { width:min(100%, 480px); margin:0 auto; padding:28px 16px 0; }
     .admin-login-content { width:min(100%, 520px); margin:0 auto; padding:48px 20px 0; }
-    .brand-mark { width: 33px; height: 33px; border-radius: 999px; display:flex; align-items:center; justify-content:center; background: radial-gradient(circle at 30% 25%, #fff 0 38%, #f4e8ff 40% 63%, #b983ff 64% 100%); box-shadow: 0 0 0 2px rgba(255,255,255,.8); position: relative; }
-    .brand-mark::after { content:''; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 18px solid #f6a33a; transform: rotate(-12deg) translateY(-1px); filter: drop-shadow(0 1px 1px rgba(0,0,0,.15)); }
+    .brand-mark { width: 33px; height: 33px; border-radius: 999px; display:flex; align-items:center; justify-content:center; background:#fff url('https://i.ibb.co.com/VY4pcndf/age.png') center/cover no-repeat; box-shadow: 0 0 0 2px rgba(255,255,255,.8); position: relative; overflow:hidden; }
+    .brand-mark::after { content:none !important; display:none !important; }
     .moon-btn { width: 29px; height:29px; border-radius:999px; background:rgba(255,255,255,.13); display:flex; align-items:center; justify-content:center; color:#d7f4ff; }
     .home-card { background:#fff; border-radius: 14px; box-shadow: 0 8px 22px rgba(15, 23, 42, .10); }
     .school-logo { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 5px 9px rgba(15,23,42,.15)); }
@@ -510,6 +510,27 @@
       }
     }
 
+
+
+    /* Revisi: header dibekukan saat halaman discroll, logo header diganti, dan NFC mobile tidak memunculkan keyboard. */
+    .home-topbar {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 60 !important;
+    }
+    .brand-mark {
+      background: #fff url('https://i.ibb.co.com/VY4pcndf/age.png') center/cover no-repeat !important;
+      overflow: hidden !important;
+    }
+    .brand-mark::after { content: none !important; display: none !important; }
+    .rfid-hidden-input { input-mode: none; }
+    @media (max-width: 640px) {
+      #rfidReaderInput {
+        font-size: 16px !important;
+        caret-color: transparent !important;
+      }
+    }
+
     @media print {
       .no-print { display:none !important; }
       body { background:white !important; }
@@ -788,7 +809,7 @@
       <div class="rfid-info-circle">i</div>
       <h3 class="rfid-modal-title">Siap Membaca</h3>
       <p class="rfid-modal-text">Silakan tempelkan Kartu RFID / NFC ke bagian belakang HP Anda.</p>
-      <input id="rfidReaderInput" class="rfid-hidden-input" autocomplete="off" inputmode="text" onkeydown="handleRfidKeyboard(event)" />
+      <input id="rfidReaderInput" class="rfid-hidden-input" autocomplete="off" inputmode="none" enterkeyhint="done" autocapitalize="off" spellcheck="false" onkeydown="handleRfidKeyboard(event)" />
       <div class="rfid-modal-actions">
         <button type="button" onclick="cancelNfcReading()" class="rfid-primary-btn btn">Batal Membaca</button>
         <button type="button" onclick="cancelNfcReading()" class="rfid-secondary-btn btn">Cancel</button>
@@ -810,6 +831,7 @@
     let manualSuggestionTimer = null;
     let manualSuggestionRows = [];
     let manualSuggestionActiveIndex = -1;
+    let suppressNextManualSuggestionOpen = false;
     const refreshTimers = {};
 
     // Komponen header sederhana agar HTML tetap ringkas.
@@ -840,7 +862,6 @@
         const wrap = event.target.closest?.('.manual-search-wrap');
         if (!wrap) hideManualSuggestions();
       });
-      document.getElementById('aksesInput').focus();
     });
 
     function validateConfig() {
@@ -927,10 +948,14 @@
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       window.scrollTo(0,0);
-      setTimeout(() => {
-        const input = document.querySelector('#' + id + ' input');
-        if (input) input.focus();
-      }, 150);
+      if (id !== 'view-home') {
+        setTimeout(() => {
+          const input = document.querySelector('#' + id + ' input');
+          if (input) input.focus();
+        }, 150);
+      } else {
+        hideManualSuggestions();
+      }
     }
 
     function showToast(msg) {
@@ -1152,15 +1177,19 @@
     function openRfidModal() {
       const modal = document.getElementById('rfidModal');
       const readerInput = document.getElementById('rfidReaderInput');
-      const mainInput = document.getElementById('aksesInput');
       if (modal) {
         modal.classList.remove('hidden');
         modal.classList.add('flex');
       }
       if (readerInput) readerInput.value = '';
+
+      // Di HP Android, jangan fokus ke input tersembunyi agar papan ketik tidak menutupi popup NFC.
       setTimeout(() => {
-        if (readerInput) readerInput.focus();
-        else if (mainInput) mainInput.focus();
+        if (isMobileTouchDevice()) {
+          if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+          return;
+        }
+        if (readerInput) readerInput.focus({ preventScroll: true });
       }, 120);
     }
 
@@ -1183,8 +1212,11 @@
       nfcAbortController = null;
       nfcReader = null;
       closeRfidModal();
-      const input = document.getElementById('aksesInput');
-      if (input) input.focus();
+      if (isMobileTouchDevice()) {
+        if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+      } else {
+        focusAksesInputSilently();
+      }
     }
 
     async function processRfidValue(value) {
@@ -1213,7 +1245,23 @@
       manualSuggestionActiveIndex = -1;
     }
 
+    function isMobileTouchDevice() {
+      return window.matchMedia('(max-width: 640px), (pointer: coarse)').matches;
+    }
+
+    function focusAksesInputSilently() {
+      const input = document.getElementById('aksesInput');
+      if (!input) return;
+      suppressNextManualSuggestionOpen = true;
+      input.focus({ preventScroll: true });
+      setTimeout(() => { suppressNextManualSuggestionOpen = false; }, 250);
+    }
+
     async function openManualSuggestions() {
+      if (suppressNextManualSuggestionOpen) {
+        suppressNextManualSuggestionOpen = false;
+        return;
+      }
       await loadManualSuggestions(true);
     }
 
@@ -1447,7 +1495,7 @@
       showToast(`Berhasil: ${siswa.nama_siswa} - ${status}`);
       document.getElementById('aksesInput').value = '';
       hideManualSuggestions();
-      document.getElementById('aksesInput').focus();
+      focusAksesInputSilently();
       await Promise.all([loadRecentAbsensi(), loadTidakHadirHariIni()]);
       if (ENABLE_WA_BY_GAS) sendWANotification({ nisn: siswa.nisn, nama: siswa.nama_siswa, kelas: siswa.kelas, status });
     }
