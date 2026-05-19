@@ -409,6 +409,39 @@
       #view-home .app-footer { margin-top: 12px !important; }
     }
 
+
+    .rfid-modal-backdrop { background: rgba(15, 23, 42, .42); backdrop-filter: blur(1px); }
+    .rfid-modal-card { width:min(86vw, 410px); border-radius:32px; background:#fff; box-shadow:0 24px 60px rgba(15,23,42,.24); padding:42px 34px 34px; text-align:center; }
+    .rfid-info-circle { width:82px; height:82px; border-radius:999px; margin:0 auto; border:4px solid #39c6e8; color:#39c6e8; display:flex; align-items:center; justify-content:center; font-size:44px; font-weight:300; line-height:1; }
+    .rfid-modal-title { margin-top:26px; font-size:27px; line-height:1.15; font-weight:700; color:#444; }
+    .rfid-modal-text { margin:25px auto 0; max-width:330px; color:#555; font-size:20px; line-height:1.35; font-weight:400; }
+    .rfid-modal-actions { margin-top:30px; display:flex; align-items:center; justify-content:center; gap:14px; }
+    .rfid-primary-btn, .rfid-secondary-btn { min-height:52px; border-radius:16px; padding:0 26px; font-size:18px; font-weight:600; color:#fff; transition:.18s ease; }
+    .rfid-primary-btn { background:#6c54eb; box-shadow:0 8px 18px rgba(108,84,235,.20); }
+    .rfid-primary-btn:hover { background:#5e48d8; }
+    .rfid-secondary-btn { background:#65717b; box-shadow:0 8px 18px rgba(31,41,55,.16); }
+    .rfid-secondary-btn:hover { background:#56616b; }
+    .rfid-hidden-input { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; left:-9999px; }
+    body.dark-mode .rfid-modal-backdrop { background: rgba(0, 0, 0, .58); }
+    body.dark-mode .rfid-modal-card { background:#0f2435; color:#e5edf5; border:1px solid rgba(148,163,184,.18); }
+    body.dark-mode .rfid-modal-title { color:#eef6ff; }
+    body.dark-mode .rfid-modal-text { color:#cbd5e1; }
+
+    @media (max-width: 640px) {
+      .rfid-modal-card { width:min(78vw, 360px); border-radius:28px; padding:38px 26px 28px; }
+      .rfid-info-circle { width:78px; height:78px; font-size:42px; border-width:4px; }
+      .rfid-modal-title { margin-top:24px; font-size:26px; }
+      .rfid-modal-text { margin-top:24px; font-size:20px; line-height:1.35; }
+      .rfid-modal-actions { margin-top:28px; gap:12px; }
+      .rfid-primary-btn, .rfid-secondary-btn { min-height:50px; border-radius:14px; padding:0 20px; font-size:18px; }
+    }
+
+    @media (max-width: 380px) {
+      .rfid-modal-card { width:84vw; padding-left:22px; padding-right:22px; }
+      .rfid-modal-text { font-size:18px; }
+      .rfid-primary-btn, .rfid-secondary-btn { padding:0 16px; font-size:16px; }
+    }
+
     @media print {
       .no-print { display:none !important; }
       body { background:white !important; }
@@ -681,6 +714,21 @@
     </div>
   </div>
 
+  <!-- MODAL RFID / NFC -->
+  <div id="rfidModal" class="rfid-modal-backdrop fixed inset-0 z-[70] hidden items-center justify-center p-6">
+    <div class="rfid-modal-card">
+      <div class="rfid-info-circle">i</div>
+      <h3 class="rfid-modal-title">Siap Membaca</h3>
+      <p class="rfid-modal-text">Silakan tempelkan Kartu RFID / NFC ke bagian belakang HP Anda.</p>
+      <input id="rfidReaderInput" class="rfid-hidden-input" autocomplete="off" inputmode="text" onkeydown="handleRfidKeyboard(event)" />
+      <div class="rfid-modal-actions">
+        <button type="button" onclick="cancelNfcReading()" class="rfid-primary-btn btn">Batal Membaca</button>
+        <button type="button" onclick="cancelNfcReading()" class="rfid-secondary-btn btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+
   <script>
     let currentAdmin = null;
     let appConfig = { batas_mulai: '06:00', batas_waktu: '07:00', batas_akhir: '08:00' };
@@ -690,6 +738,7 @@
     let barcodeScanner = null;
     let scannerRunning = false;
     let nfcReader = null;
+    let nfcAbortController = null;
     let manualSuggestionTimer = null;
     let manualSuggestionRows = [];
     let manualSuggestionActiveIndex = -1;
@@ -996,17 +1045,19 @@
     }
 
     async function tapNfcOrFocus() {
-      const input = document.getElementById('aksesInput');
-      if (input) input.focus();
+      await stopBarcodeScan();
+      hideManualSuggestions();
+      openRfidModal();
 
       if (!('NDEFReader' in window)) {
-        showToast('Silakan tap kartu RFID ke reader, scan barcode, atau ketik NISN secara manual.');
+        showToast('Reader RFID siap. Tempelkan kartu ke reader atau gunakan input manual.');
         return;
       }
 
       try {
         nfcReader = new NDEFReader();
-        await nfcReader.scan();
+        nfcAbortController = new AbortController();
+        await nfcReader.scan({ signal: nfcAbortController.signal });
         showToast('NFC aktif. Tempelkan kartu ke perangkat.');
         nfcReader.onreading = async event => {
           for (const record of event.message.records) {
@@ -1017,16 +1068,71 @@
               value = String(record.id || '').trim();
             }
             if (value) {
-              document.getElementById('aksesInput').value = value.trim();
-              await catatAbsensi();
+              await processRfidValue(value);
               break;
             }
           }
         };
       } catch (err) {
-        showToast('NFC belum aktif. Fokus input sudah siap untuk RFID reader/manual.');
+        if (err?.name !== 'AbortError') {
+          showToast('NFC belum aktif. Fokus input sudah siap untuk RFID reader/manual.');
+          console.warn(err);
+        }
+      }
+    }
+
+    function openRfidModal() {
+      const modal = document.getElementById('rfidModal');
+      const readerInput = document.getElementById('rfidReaderInput');
+      const mainInput = document.getElementById('aksesInput');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (readerInput) readerInput.value = '';
+      setTimeout(() => {
+        if (readerInput) readerInput.focus();
+        else if (mainInput) mainInput.focus();
+      }, 120);
+    }
+
+    function closeRfidModal() {
+      const modal = document.getElementById('rfidModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      const readerInput = document.getElementById('rfidReaderInput');
+      if (readerInput) readerInput.value = '';
+    }
+
+    function cancelNfcReading() {
+      try {
+        if (nfcAbortController) nfcAbortController.abort();
+      } catch (err) {
         console.warn(err);
       }
+      nfcAbortController = null;
+      nfcReader = null;
+      closeRfidModal();
+      const input = document.getElementById('aksesInput');
+      if (input) input.focus();
+    }
+
+    async function processRfidValue(value) {
+      const code = String(value || '').trim();
+      if (!code) return;
+      const input = document.getElementById('aksesInput');
+      if (input) input.value = code;
+      closeRfidModal();
+      await catatAbsensi();
+    }
+
+    async function handleRfidKeyboard(event) {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      const code = event.target.value.trim();
+      if (code) await processRfidValue(code);
     }
 
     function isManualSuggestionsOpen() {
