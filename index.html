@@ -33,83 +33,6 @@ body.dark-mode .home-card,body.dark-mode .admin-login-card,body.dark-mode .admin
   .mini-stat-grid{gap:12px!important;}
 }
 </style>
-<style id="mobile-footer-fix">
-/* Perbaikan menu sticky footer versi HP: footer admin dibuat benar-benar fixed di bawah layar. */
-.az-mobile-admin-footer{display:none;}
-@media (max-width:640px){
-  body.az-mobile-footer-ready #view-admin .admin-profile-nav .admin-nav-pills,
-  body.az-mobile-footer-ready #view-siswa .admin-profile-nav .admin-nav-pills,
-  body.az-mobile-footer-ready #view-rekap .admin-profile-nav .admin-nav-pills,
-  body.az-mobile-footer-ready #view-setting .admin-profile-nav .admin-nav-pills{
-    display:none!important;
-  }
-  .az-mobile-admin-footer{
-    position:fixed!important;
-    left:12px!important;
-    right:12px!important;
-    top:auto!important;
-    bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;
-    z-index:2147483000!important;
-    height:66px!important;
-    padding:6px 8px!important;
-    display:none;
-    align-items:center!important;
-    justify-content:space-around!important;
-    gap:4px!important;
-    box-sizing:border-box!important;
-    border-radius:18px!important;
-    border:1px solid rgba(226,232,240,.95)!important;
-    background:rgba(255,255,255,.96)!important;
-    box-shadow:0 14px 36px rgba(15,23,42,.18)!important;
-    backdrop-filter:blur(14px)!important;
-    -webkit-backdrop-filter:blur(14px)!important;
-    transform:none!important;
-  }
-  body.az-admin-area .az-mobile-admin-footer{display:flex!important;}
-  .az-mobile-admin-footer button{
-    height:54px!important;
-    min-width:0!important;
-    flex:1 1 0!important;
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:center!important;
-    justify-content:center!important;
-    gap:4px!important;
-    padding:0!important;
-    margin:0!important;
-    border:0!important;
-    border-radius:14px!important;
-    background:transparent!important;
-    color:#64748b!important;
-    font-size:10px!important;
-    line-height:1!important;
-    font-weight:900!important;
-    white-space:nowrap!important;
-  }
-  .az-mobile-admin-footer button i{font-size:20px!important;line-height:1!important;}
-  .az-mobile-admin-footer button.active{color:#0b86bd!important;background:#eaf7ff!important;}
-  .az-mobile-admin-footer button.danger{color:#ef4444!important;}
-  .az-mobile-admin-footer button.danger.active{background:#fff1f2!important;color:#e11d48!important;}
-  body.az-admin-area #view-admin.admin-dashboard-view,
-  body.az-admin-area #view-siswa.admin-student-view,
-  body.az-admin-area #view-rekap.admin-rekap-view,
-  body.az-admin-area #view-setting.setup-view{
-    padding-bottom:92px!important;
-  }
-  body.az-admin-area .admin-dash-wrap,
-  body.az-admin-area .student-master-wrap,
-  body.az-admin-area .rekap-wrap,
-  body.az-admin-area .setup-wrap{
-    padding-bottom:108px!important;
-  }
-}
-@media (min-width:641px){.az-mobile-admin-footer{display:none!important;}}
-@media print{.az-mobile-admin-footer{display:none!important;}}
-body.dark-mode .az-mobile-admin-footer{background:rgba(15,36,53,.96)!important;border-color:rgba(31,58,77,.95)!important;box-shadow:0 14px 36px rgba(0,0,0,.34)!important;}
-body.dark-mode .az-mobile-admin-footer button{color:#9ba9b8!important;}
-body.dark-mode .az-mobile-admin-footer button.active{color:#7dd3fc!important;background:#143249!important;}
-body.dark-mode .az-mobile-admin-footer button.danger{color:#fb7185!important;}
-</style>
 </head><body class="min-h-screen text-slate-800"><script>const SUPABASE_URL = "https://euxawjyekgthzrjrhhmp.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eGF3anlla2d0aHpyanJoaG1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxOTg2MTUsImV4cCI6MjA5NDc3NDYxNX0.6Kumg3mlrD7hOXniTgoq16kCwlcGl3C7q88qIPf9DW8";
 const GAS_REKAP_URL = "https://script.google.com/macros/s/AKfycbxXX8EzRJ0UgU8AiTSoznev2V6me76w0cE-ck8pS-CzdOa_4ETPR-uNGXcRzVgc1Xyp/exec";
@@ -1896,7 +1819,84 @@ const rows = REKAP_MONTH_NAMES_FULL.map((m, i) => {
 const st = stats.months[i];
 return `<tr><td class="left">${m}</td><td>${st.H || '-'}</td><td>${st.TL || '-'}</td><td>${st.I || '-'}</td><td>${st.S || '-'}</td><td>${st.A || '-'}</td></tr>`;
 }).join('');
-return `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>${escapeHtml(docTitle)}</title><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');@page{size:A4 portrait;margin:12mm;}*{box-sizing:border-box;}body{font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#111;background:#fff;margin:0;font-size:11px;}.sheet{width:100%;max-width:720px;margin:0 auto;}.title{text-align:center;margin:0 0 14px;}.title h1{margin:0 0 5px;font-size:18px;line-height:1.15;font-weight:800;letter-spacing:.02em;}.title h2{margin:0 0 8px;font-size:15px;line-height:1.1;font-weight:800;}.title p{margin:0;font-size:12px;font-weight:800;}.student{display:flex;align-items:center;gap:14px;border:1px solid #d7edf8;border-radius:7px;padding:10px 14px;margin:12px 0 18px;background:#fbfdff;}.photo{width:58px;height:58px;border-radius:4px;background:#e6f4ff;overflow:hidden;display:flex;align-items:center;justify-content:center;flex:0 0 58px;}.photo img{width:100%;height:100%;object-fit:cover;display:block;}.photo-initial{font-size:24px;font-weight:800;color:#075176;}.student h3{font-size:18px;line-height:1.1;margin:0 0 7px;font-weight:800;letter-spacing:.03em;}.meta{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:700;color:#222;}.section-title{font-size:13px;color:#075176;font-weight:800;margin:0 0 7px;border-bottom:1px solid #4bb7e8;padding-bottom:5px;}table{width:100%;border-collapse:collapse;table-layout:fixed;}th,td{border:1px solid #111;text-align:center;vertical-align:middle;padding:5px 6px;height:24px;line-height:1.1;}th{background:#f7f7f7;font-weight:800;}td.left{text-align:left;font-weight:700;}tfoot td{font-weight:800;background:#f9fafb;}.total-h{color:#047857}.total-tl,.total-i{color:#c2410c}.total-s{color:#0369a1}.total-a{color:#be123c}.sign{margin-top:24px;margin-left:auto;width:245px;text-align:center;font-size:11px;font-weight:800;}.sign .place{margin:0 0 44px;text-align:center;}.sign .line{margin:0 auto 5px;width:160px;border-bottom:2px dotted #111;height:1px;}.sign .name{margin:0 0 3px;min-height:14px;}.sign .role{margin:0;}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.sheet{max-width:none;}}</style></head><body><div class="sheet"><div class="title"><h1>BUKU INDUK ABSENSI SISWA</h1><h2>MTs. HIDAYATULLAH</h2><p>Tahun Akademik ${escapeHtml(activeTahunPelajaran())}</p></div><div class="student"><div class="photo">${photo}</div><div><h3>${escapeHtml(nama)}</h3><div class="meta"><span>▣ NISN: ${nisn}</span><span>|</span><span>▦ Kelas: ${kelas}</span></div></div></div><h3 class="section-title">Rekapitulasi 1 Tahun</h3><table><thead><tr><th>Bulan</th><th>Hadir</th><th>Lambat</th><th>Izin</th><th>Sakit</th><th>Alpa</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td>TOTAL</td><td class="total-h">${stats.total.H}</td><td class="total-tl">${stats.total.TL}</td><td class="total-i">${stats.total.I}</td><td class="total-s">${stats.total.S}</td><td class="total-a">${stats.total.A}</td></tr></tfoot></table><div class="sign"><p class="place">Bondowoso, ${rekapTanggalCetak()}</p><div class="line"></div><p class="name">${wali ? escapeHtml(wali) : '....................................'}</p><p class="role">Wali Kelas</p></div></div><script>window.onload=function(){setTimeout(function(){window.focus();window.print();},300)};<\/script></body></html>`;
+return `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>${escapeHtml(docTitle)}</title><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');@page{size:A4 portrait;margin:12mm;}*{box-sizing:border-box;}body{font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#111;background:#fff;margin:0;font-size:11px;}.sheet{width:100%;max-width:720px;margin:0 auto;}.title{text-align:center;margin:0 0 14px;}.title h1{margin:0 0 5px;font-size:18px;line-height:1.15;font-weight:800;letter-spacing:.02em;}.title h2{margin:0 0 8px;font-size:15px;line-height:1.1;font-weight:800;}.title p{margin:0;font-size:12px;font-weight:800;}.student{display:flex;align-items:center;gap:14px;border:1px solid #d7edf8;border-radius:7px;padding:10px 14px;margin:12px 0 18px;background:#fbfdff;}.photo{width:58px;height:58px;border-radius:4px;background:#e6f4ff;overflow:hidden;display:flex;align-items:center;justify-content:center;flex:0 0 58px;}.photo img{width:100%;height:100%;object-fit:cover;display:block;}.photo-initial{font-size:24px;font-weight:800;color:#075176;}.student h3{font-size:18px;line-height:1.1;margin:0 0 7px;font-weight:800;letter-spacing:.03em;}.meta{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:700;color:#222;}.section-title{font-size:13px;color:#075176;font-weight:800;margin:0 0 7px;border-bottom:1px solid #4bb7e8;padding-bottom:5px;}table{width:100%;border-collapse:collapse;table-layout:fixed;}th,td{border:1px solid #111;text-align:center;vertical-align:middle;padding:5px 6px;height:24px;line-height:1.1;}th{background:#f7f7f7;font-weight:800;}td.left{text-align:left;font-weight:700;}tfoot td{font-weight:800;background:#f9fafb;}.total-h{color:#047857}.total-tl,.total-i{color:#c2410c}.total-s{color:#0369a1}.total-a{color:#be123c}.sign{margin-top:24px;margin-left:auto;width:245px;text-align:center;font-size:11px;font-weight:800;}.sign .place{margin:0 0 44px;text-align:center;}.sign .line{margin:0 auto 5px;width:160px;border-bottom:2px dotted #111;height:1px;}.sign .name{margin:0 0 3px;min-height:14px;}.sign .role{margin:0;}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.sheet{max-width:none;}}</style><style id="mobile-footer-fix">
+/* Perbaikan menu sticky footer versi HP: footer admin dibuat benar-benar fixed di bawah layar. */
+.az-mobile-admin-footer{display:none;}
+@media (max-width:640px){
+  body.az-mobile-footer-ready #view-admin .admin-profile-nav .admin-nav-pills,
+  body.az-mobile-footer-ready #view-siswa .admin-profile-nav .admin-nav-pills,
+  body.az-mobile-footer-ready #view-rekap .admin-profile-nav .admin-nav-pills,
+  body.az-mobile-footer-ready #view-setting .admin-profile-nav .admin-nav-pills{
+    display:none!important;
+  }
+  .az-mobile-admin-footer{
+    position:fixed!important;
+    left:12px!important;
+    right:12px!important;
+    top:auto!important;
+    bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;
+    z-index:2147483000!important;
+    height:66px!important;
+    padding:6px 8px!important;
+    display:none;
+    align-items:center!important;
+    justify-content:space-around!important;
+    gap:4px!important;
+    box-sizing:border-box!important;
+    border-radius:18px!important;
+    border:1px solid rgba(226,232,240,.95)!important;
+    background:rgba(255,255,255,.96)!important;
+    box-shadow:0 14px 36px rgba(15,23,42,.18)!important;
+    backdrop-filter:blur(14px)!important;
+    -webkit-backdrop-filter:blur(14px)!important;
+    transform:none!important;
+  }
+  body.az-admin-area .az-mobile-admin-footer{display:flex!important;}
+  .az-mobile-admin-footer button{
+    height:54px!important;
+    min-width:0!important;
+    flex:1 1 0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:4px!important;
+    padding:0!important;
+    margin:0!important;
+    border:0!important;
+    border-radius:14px!important;
+    background:transparent!important;
+    color:#64748b!important;
+    font-size:10px!important;
+    line-height:1!important;
+    font-weight:900!important;
+    white-space:nowrap!important;
+  }
+  .az-mobile-admin-footer button i{font-size:20px!important;line-height:1!important;}
+  .az-mobile-admin-footer button.active{color:#0b86bd!important;background:#eaf7ff!important;}
+  .az-mobile-admin-footer button.danger{color:#ef4444!important;}
+  .az-mobile-admin-footer button.danger.active{background:#fff1f2!important;color:#e11d48!important;}
+  body.az-admin-area #view-admin.admin-dashboard-view,
+  body.az-admin-area #view-siswa.admin-student-view,
+  body.az-admin-area #view-rekap.admin-rekap-view,
+  body.az-admin-area #view-setting.setup-view{
+    padding-bottom:92px!important;
+  }
+  body.az-admin-area .admin-dash-wrap,
+  body.az-admin-area .student-master-wrap,
+  body.az-admin-area .rekap-wrap,
+  body.az-admin-area .setup-wrap{
+    padding-bottom:108px!important;
+  }
+}
+@media (min-width:641px){.az-mobile-admin-footer{display:none!important;}}
+@media print{.az-mobile-admin-footer{display:none!important;}}
+body.dark-mode .az-mobile-admin-footer{background:rgba(15,36,53,.96)!important;border-color:rgba(31,58,77,.95)!important;box-shadow:0 14px 36px rgba(0,0,0,.34)!important;}
+body.dark-mode .az-mobile-admin-footer button{color:#9ba9b8!important;}
+body.dark-mode .az-mobile-admin-footer button.active{color:#7dd3fc!important;background:#143249!important;}
+body.dark-mode .az-mobile-admin-footer button.danger{color:#fb7185!important;}
+</style>
+</head><body><div class="sheet"><div class="title"><h1>BUKU INDUK ABSENSI SISWA</h1><h2>MTs. HIDAYATULLAH</h2><p>Tahun Akademik ${escapeHtml(activeTahunPelajaran())}</p></div><div class="student"><div class="photo">${photo}</div><div><h3>${escapeHtml(nama)}</h3><div class="meta"><span>▣ NISN: ${nisn}</span><span>|</span><span>▦ Kelas: ${kelas}</span></div></div></div><h3 class="section-title">Rekapitulasi 1 Tahun</h3><table><thead><tr><th>Bulan</th><th>Hadir</th><th>Lambat</th><th>Izin</th><th>Sakit</th><th>Alpa</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td>TOTAL</td><td class="total-h">${stats.total.H}</td><td class="total-tl">${stats.total.TL}</td><td class="total-i">${stats.total.I}</td><td class="total-s">${stats.total.S}</td><td class="total-a">${stats.total.A}</td></tr></tfoot></table><div class="sign"><p class="place">Bondowoso, ${rekapTanggalCetak()}</p><div class="line"></div><p class="name">${wali ? escapeHtml(wali) : '....................................'}</p><p class="role">Wali Kelas</p></div></div><script>window.onload=function(){setTimeout(function(){window.focus();window.print();},300)};<\/script></body></html>`;
 }
 async function printRekapDokumen(mode) {
 const menu = document.getElementById('rekapPrintMenu');
@@ -1985,6 +1985,172 @@ function escapeAttr(v) { return escapeHtml(v).replace(/`/g, '&#96;'); }</script>
   window.addEventListener('orientationchange', function(){setTimeout(updateFooter, 250);});
   document.addEventListener('visibilitychange', updateFooter);
   setInterval(updateFooter, 1200);
+})();
+</script>
+
+<style id="az-mobile-compact-override">
+/* Compact mobile admin layout: lebih pas di layar HP tanpa mengubah branding. */
+.az-mobile-admin-meta{display:none}
+@media (max-width:640px){
+  body.az-admin-area{padding-bottom:88px!important}
+  #view-admin,#view-siswa,#view-rekap,#view-setting{max-width:none!important;margin:0!important}
+  #view-admin .home-topbar,
+  #view-siswa .home-topbar,
+  #view-rekap .home-topbar,
+  #view-setting .home-topbar{min-height:84px!important;position:sticky!important;top:0!important;z-index:70!important}
+  #view-admin .home-topbar-inner,
+  #view-siswa .home-topbar-inner,
+  #view-rekap .home-topbar-inner,
+  #view-setting .home-topbar-inner{padding:0 12px!important;gap:10px!important;align-items:center!important}
+  #view-admin .brand-mark,
+  #view-siswa .brand-mark,
+  #view-rekap .brand-mark,
+  #view-setting .brand-mark{width:50px!important;height:50px!important;flex:0 0 50px!important;box-shadow:0 0 0 3px rgba(255,255,255,.88)!important}
+  #view-admin .home-topbar h1,
+  #view-siswa .home-topbar h1,
+  #view-rekap .home-topbar h1,
+  #view-setting .home-topbar h1{font-size:15px!important;line-height:1.05!important;letter-spacing:.04em!important}
+  #view-admin .brand-subtitle,
+  #view-siswa .brand-subtitle,
+  #view-rekap .brand-subtitle,
+  #view-setting .brand-subtitle{font-size:7px!important;line-height:1.2!important;letter-spacing:.18em!important;max-width:120px!important;white-space:normal!important}
+  .az-mobile-admin-meta{display:flex!important;min-width:0!important;flex:1 1 auto!important;justify-content:flex-end!important;align-items:center!important;gap:10px!important;padding-left:8px!important;margin-left:auto!important;border-left:1px solid rgba(255,255,255,.18)!important}
+  .az-mobile-admin-meta-text{min-width:0!important;text-align:right!important;overflow:hidden!important}
+  .az-mobile-admin-meta-name{display:block!important;color:#fff!important;font-size:11px!important;line-height:1.2!important;font-weight:800!important;word-break:break-word!important}
+  .az-mobile-admin-meta-role{display:block!important;margin-top:5px!important;color:rgba(225,245,255,.88)!important;font-size:7px!important;line-height:1!important;font-weight:800!important;letter-spacing:.18em!important;text-transform:uppercase!important;white-space:nowrap!important}
+  #view-admin .topbar-actions,
+  #view-siswa .topbar-actions,
+  #view-rekap .topbar-actions,
+  #view-setting .topbar-actions{gap:8px!important;flex:0 0 auto!important}
+  #view-admin .moon-btn,
+  #view-siswa .moon-btn,
+  #view-rekap .moon-btn,
+  #view-setting .moon-btn{width:48px!important;height:48px!important}
+  #view-admin .admin-profile-nav,
+  #view-siswa .admin-profile-nav,
+  #view-rekap .admin-profile-nav,
+  #view-setting .admin-profile-nav{display:none!important}
+  .admin-dash-wrap,.student-master-wrap,.rekap-wrap,.setup-wrap{padding:16px 14px 100px!important}
+  .dash-title-row{margin-top:0!important;align-items:center!important}
+  .dash-title-left h2,.student-master-title,.rekap-card-title,.individu-title{font-size:19px!important}
+  .dash-refresh{width:40px!important;height:40px!important;border-radius:12px!important}
+  .dash-year-select{height:42px!important;min-width:110px!important;border-radius:14px!important;padding:0 14px!important;font-size:12px!important}
+  .dashboard-card-grid{gap:14px!important;margin-top:16px!important}
+  .dash-stat-card{min-height:110px!important;padding:18px 16px 14px!important;border-radius:18px!important}
+  .dash-main-number{font-size:24px!important;line-height:1.05!important;max-width:96px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+  .dash-main-label{margin-top:8px!important;font-size:11px!important;line-height:1.2!important;max-width:86px!important;white-space:normal!important}
+  .dash-card-icon{width:40px!important;height:40px!important;top:16px!important;right:14px!important;border-radius:12px!important;font-size:16px!important}
+  .dash-period{display:none!important}
+  .quick-action-card{margin-top:18px!important;border-radius:18px!important;padding:16px 16px!important;gap:12px!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important}
+  .quick-action-card h3{font-size:16px!important}
+  .quick-action-card p{font-size:12px!important;line-height:1.35!important;margin-top:6px!important}
+  .quick-action-btn{min-height:56px!important;border-radius:18px!important;padding:0 18px!important;font-size:13px!important;line-height:1.15!important;min-width:120px!important;box-shadow:0 10px 18px rgba(245,158,11,.25)!important}
+  .mini-stat-grid{margin-top:18px!important;gap:14px!important}
+  .mini-stat{border-radius:18px!important;padding:18px 16px!important;min-height:110px!important}
+  .mini-stat span{font-size:10px!important;letter-spacing:.16em!important;line-height:1.2!important}
+  .mini-stat b{margin-top:16px!important;font-size:24px!important}
+  .dashboard-chart-grid{gap:16px!important;margin-top:18px!important}
+  .dashboard-chart-card{padding:18px 16px 14px!important;border-radius:18px!important;min-height:240px!important}
+  .dashboard-chart-card h3{font-size:14px!important}
+  .presence-donut-wrap{min-height:148px!important;margin-top:8px!important}
+  .donut-ring{width:152px!important;height:152px!important}
+  .donut-hole{width:72px!important;height:72px!important}
+  .trend-bars{height:150px!important}
+  .az-mobile-admin-footer{
+    position:fixed!important;
+    left:14px!important;
+    right:14px!important;
+    bottom:calc(12px + env(safe-area-inset-bottom, 0px))!important;
+    z-index:2147483000!important;
+    height:78px!important;
+    padding:8px 10px!important;
+    display:none;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:4px!important;
+    border-radius:24px!important;
+    border:1px solid rgba(226,232,240,.98)!important;
+    background:rgba(255,255,255,.98)!important;
+    box-shadow:0 16px 40px rgba(15,23,42,.20)!important;
+    backdrop-filter:blur(18px)!important;
+    -webkit-backdrop-filter:blur(18px)!important;
+  }
+  body.az-admin-area .az-mobile-admin-footer{display:flex!important}
+  .az-mobile-admin-footer button{
+    height:60px!important;
+    flex:1 1 0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:6px!important;
+    border:0!important;
+    border-radius:16px!important;
+    background:transparent!important;
+    color:#9ca3af!important;
+    font-size:9px!important;
+    line-height:1.05!important;
+    font-weight:900!important;
+    padding:0 2px!important;
+  }
+  .az-mobile-admin-footer button i{font-size:25px!important;line-height:1!important}
+  .az-mobile-admin-footer button.active{color:#0ea5e9!important;background:transparent!important}
+  .az-mobile-admin-footer button.danger,
+  .az-mobile-admin-footer button.logout{color:#fb7185!important}
+  body.dark-mode .az-mobile-admin-footer{background:rgba(15,36,53,.95)!important;border-color:#1f3a4d!important;box-shadow:0 16px 40px rgba(0,0,0,.38)!important}
+  body.dark-mode .az-mobile-admin-footer button{color:#94a3b8!important}
+  body.dark-mode .az-mobile-admin-footer button.active{color:#7dd3fc!important;background:transparent!important}
+  body.dark-mode .az-mobile-admin-footer button.danger,
+  body.dark-mode .az-mobile-admin-footer button.logout{color:#fb7185!important}
+}
+</style>
+<script id="az-mobile-compact-override-script">
+(function(){
+  var adminViews = ['view-admin','view-siswa','view-rekap','view-setting'];
+  function ensureMeta(){
+    adminViews.forEach(function(viewId){
+      var view=document.getElementById(viewId);
+      if(!view) return;
+      var topbarInner=view.querySelector('.home-topbar-inner');
+      var topbarActions=topbarInner ? topbarInner.querySelector('.topbar-actions') : null;
+      if(!topbarInner || !topbarActions) return;
+      if(topbarInner.querySelector('.az-mobile-admin-meta')) return;
+      var meta=document.createElement('div');
+      meta.className='az-mobile-admin-meta';
+      meta.innerHTML='<div class="az-mobile-admin-meta-text"><span class="az-mobile-admin-meta-name">Admin</span><span class="az-mobile-admin-meta-role">SUPER ADMIN</span></div>';
+      topbarInner.insertBefore(meta, topbarActions);
+    });
+    syncMeta();
+  }
+  function syncMeta(){
+    var nameEl=document.getElementById('adminName');
+    var roleEl=document.getElementById('adminRole');
+    var name=(nameEl && nameEl.textContent ? nameEl.textContent : 'Admin').trim();
+    var role=(roleEl && roleEl.textContent ? roleEl.textContent : 'SUPER ADMIN').trim();
+    document.querySelectorAll('.az-mobile-admin-meta-name').forEach(function(el){el.textContent=name || 'Admin';});
+    document.querySelectorAll('.az-mobile-admin-meta-role').forEach(function(el){el.textContent=role || 'SUPER ADMIN';});
+  }
+  function currentView(){
+    var active=document.querySelector('.view.active');
+    return active ? active.id : '';
+  }
+  function sync(){
+    ensureMeta();
+    syncMeta();
+    var v=currentView();
+    var isAdmin=adminViews.indexOf(v)!==-1;
+    document.body.classList.toggle('az-admin-area', isAdmin && window.matchMedia('(max-width:640px)').matches);
+    var footer=document.getElementById('azMobileAdminFooter');
+    if(footer){
+      footer.querySelectorAll('button').forEach(function(btn){
+        btn.classList.toggle('active', btn.dataset.view === v);
+      });
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){setTimeout(sync,60);}); else setTimeout(sync,60);
+  window.addEventListener('load', function(){setTimeout(sync,100); setTimeout(sync,700);});
+  window.addEventListener('resize', sync);
+  setInterval(sync, 1500);
 })();
 </script>
 </body></html>
