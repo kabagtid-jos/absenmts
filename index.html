@@ -1255,7 +1255,7 @@ await Promise.all([loadRecentAbsensi(), loadTidakHadirHariIni()]);
 showToast(`Izin ${status} tersimpan untuk ${siswa.nama_siswa}.`);
 if (ENABLE_WA_BY_GAS) sendWANotification({ nisn, nama: siswa.nama_siswa, kelas: siswa.kelas, status: status + (ket ? ' - ' + ket : '') });
 }
-async function prepareRekap(showLoading = true) {
+async function prepareRekap(showLoading = false) {
 setDefaultMonth();
 await loadKelas();
 if (currentAdmin) {
@@ -1267,7 +1267,10 @@ if (r) r.textContent = currentAdmin.role || 'Admin';
 initRekapSelectors();
 initIndividuRekapSelectors();
 switchRekapMode(rekapMode || 'kelas', false);
-await refreshRekapCurrent(showLoading);
+const el = document.getElementById('rekapResult');
+if (el && !rekapLastPayload) {
+el.innerHTML = '<div class="rekap-empty"><b>Rekap siap ditampilkan.</b><br>Pilih kelas, bulan, dan tahun lalu tekan tombol <b>Tampilkan</b>. Cara ini membuat menu Rekap terbuka lebih cepat di HP.</div>';
+}
 }
 function setDefaultMonth() {
 const now = todayISO().split('-');
@@ -1327,18 +1330,18 @@ const tahun = Number(document.getElementById('rekapTahun')?.value || new Date().
 const bulan = Number(document.getElementById('rekapBulan')?.value || (new Date().getMonth() + 1));
 const kelas = document.getElementById('rekapKelas')?.value || 'Semua';
 const { start, end } = rekapRangeForMonth(tahun, bulan);
-if (showLoading) showLoader('Menyusun rekap grid absensi...');
+if (showLoading) showLoader('Mengambil rekap bulan ini...');
 try {
 const tanggalAcuan = end;
-const [siswa, absensiBulan, absensiTahun, kalenderBulan, kalenderTahun] = await Promise.all([
+// Dibuat ringan untuk HP: menu Rekap hanya mengambil data bulan yang dipilih.
+// Data tahunan tidak diambil otomatis agar tidak timeout saat tabel absensi sudah besar.
+const [siswa, absensiBulan, kalenderBulan] = await Promise.all([
 fetchRekapSiswa(kelas, tanggalAcuan),
 fetchRekapAbsensi(start, end, kelas),
-fetchRekapAbsensi(`${tahun}-01-01`, `${tahun}-12-31`, kelas),
-fetchKalenderPendidikanRange(start, end),
-fetchKalenderPendidikanRange(`${tahun}-01-01`, `${tahun}-12-31`)
+fetchKalenderPendidikanRange(start, end)
 ]);
 if (showLoading) hideLoader();
-renderRekapBulanan({ siswa, absensiBulan, absensiTahun, kalenderBulan, kalenderTahun }, bulan, tahun, kelas);
+renderRekapBulanan({ siswa, absensiBulan, absensiTahun: null, kalenderBulan, kalenderTahun: null, skipYearly: true }, bulan, tahun, kelas);
 } catch (err) {
 if (showLoading) hideLoader();
 showToast(err.message || 'Gagal mengambil rekap.');
@@ -1409,15 +1412,18 @@ const absensiBulan = payload?.absensiBulan || [];
 const absensiTahun = payload?.absensiTahun || [];
 const kalenderBulan = payload?.kalenderBulan || [];
 const kalenderTahun = payload?.kalenderTahun || [];
-rekapLastPayload = { siswa, absensiBulan, absensiTahun, kalenderBulan, kalenderTahun, bulan, tahun, kelas };
+const skipYearly = !!payload?.skipYearly;
+rekapLastPayload = { siswa, absensiBulan, absensiTahun, kalenderBulan, kalenderTahun, bulan, tahun, kelas, skipYearly };
 renderRekapTopCards(siswa, absensiBulan, absensiTahun);
 if (!siswa.length) {
 el.innerHTML = '<div class="rekap-empty">Belum ada data siswa untuk filter ini.</div>';
 return;
 }
 const monthlyHtml = renderMonthlyGrid(siswa, absensiBulan, bulan, tahun, kalenderBulan);
-const yearlyHtml = renderYearlyGrid(siswa, absensiTahun, tahun);
-el.innerHTML = `${calendarInfoHtml(kalenderBulan, tahun, bulan)}<h3 class="rekap-table-title">Tabel Detail Bulanan</h3>${monthlyHtml}<h3 class="rekap-table-title">Tabel Total Tahunan (12 Bulan)</h3>${yearlyHtml}`;
+const yearlyHtml = skipYearly
+  ? '<div class="rekap-empty"><b>Mode cepat aktif.</b><br>Untuk mencegah timeout di HP, tabel tahunan tidak dimuat otomatis. Rekap bulanan dan persentase kehadiran tetap tampil.</div>'
+  : renderYearlyGrid(siswa, absensiTahun, tahun);
+el.innerHTML = `${calendarInfoHtml(kalenderBulan, tahun, bulan)}<h3 class="rekap-table-title">Tabel Detail Bulanan</h3>${monthlyHtml}${skipYearly ? '' : '<h3 class="rekap-table-title">Tabel Total Tahunan (12 Bulan)</h3>'}${yearlyHtml}`;
 }
 
 function renderMonthlyGrid(siswa, absensi, bulan, tahun, kalenderRows = []) {
@@ -1901,10 +1907,29 @@ body.dark-mode .az-mobile-admin-footer button.danger{color:#fb7185!important;}
 async function printRekapDokumen(mode) {
 const menu = document.getElementById('rekapPrintMenu');
 if (menu) menu.classList.remove('open');
-const payload = rekapLastPayload;
+let payload = rekapLastPayload;
 if (!payload || !payload.siswa || !payload.siswa.length) {
 showToast('Tampilkan rekap terlebih dahulu sebelum mencetak.');
 return;
+}
+// Jika pengguna memilih cetak tahunan, data tahunan baru diambil saat dibutuhkan.
+if ((mode === 'tahunan' || mode === 'lengkap') && payload.skipYearly) {
+showLoader('Mengambil data tahunan untuk cetak...');
+try {
+const tahun = Number(payload.tahun);
+const kelas = payload.kelas || 'Semua';
+const [absensiTahun, kalenderTahun] = await Promise.all([
+fetchRekapAbsensi(`${tahun}-01-01`, `${tahun}-12-31`, kelas),
+fetchKalenderPendidikanRange(`${tahun}-01-01`, `${tahun}-12-31`)
+]);
+payload = { ...payload, absensiTahun, kalenderTahun, skipYearly: false };
+rekapLastPayload = payload;
+hideLoader();
+} catch (err) {
+hideLoader();
+showToast(err.message || 'Gagal mengambil data tahunan. Coba cetak bulanan saja.');
+return;
+}
 }
 await loadConfig();
 const html = buildPrintRekapHtml(mode, payload);
@@ -1930,7 +1955,7 @@ function escapeAttr(v) { return escapeHtml(v).replace(/`/g, '&#96;'); }</script>
   const ITEMS = [
     {id:'view-admin', label:'Dashboard', icon:'fa-chart-pie', run:function(){openView('view-admin'); if (typeof loadDashboardFromGAS === 'function') loadDashboardFromGAS();}},
     {id:'view-siswa', label:'Siswa', icon:'fa-users', run:function(){openView('view-siswa'); if (typeof loadSiswa === 'function') loadSiswa();}},
-    {id:'view-rekap', label:'Rekap', icon:'fa-clipboard-list', run:function(){openView('view-rekap'); if (typeof prepareRekap === 'function') prepareRekap();}},
+    {id:'view-rekap', label:'Rekap', icon:'fa-clipboard-list', run:function(){openView('view-rekap'); if (typeof prepareRekap === 'function') prepareRekap(false);}},
     {id:'view-setting', label:'Setup', icon:'fa-gear', run:function(){openView('view-setting'); if (typeof loadConfigToForm === 'function') loadConfigToForm();}},
     {id:'logout', label:'Keluar', icon:'fa-power-off', danger:true, run:function(){if (typeof logoutAdmin === 'function') logoutAdmin(); else openView('view-home');}}
   ];
